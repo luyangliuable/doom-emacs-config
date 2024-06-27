@@ -5,7 +5,10 @@
 (load-file "/Users/blackfish/.config/doom/elisp-functions/functions.el")
 
 ;; Unmap keybindings
-(map! :leader "tl" nil)
+(map!
+ :leader "tm" nil
+ :leader "*" nil
+ :leader "tl" nil)
 
 (map!
  :v "s`" (lambda () (interactive) (wrap-with-char "`"))
@@ -22,6 +25,9 @@
  :n "C-c a" #'org-agenda
  :n "C-c c" #'org-capture
 
+ ;; RET save file i love it!
+ :n "RET" #'save-buffer
+
  ;; Leader keybindings
  :leader
  :desc "Switch to last buffer" "TAB" #'luyangliuable/switch-to-last-buffer
@@ -37,7 +43,10 @@
  :desc "absolute lineno toggle" "tna" #'luyangliuable/toggle-absolute-line-numbers
  :desc "relative lineno toggle" "tnr" #'luyangliuable/toggle-relative-line-numbers
  :desc "toggle mode line" "tmT" #'luyangliuable/toggle-mode-line
+ :desc "toggle minimap" "tmM" #'minimap-mode
  :desc "treemacs" "ft" #'treemacs
+ :desc "projectile find file based on string" "*s" #'helm-projectile-grep
+ :desc "projectile find file based on string" "*f" #'helm-projectile-find-file
 
  ;; Mode-specific keybindings
  (:after python
@@ -52,3 +61,18 @@
    (make-lsp-client :new-connection (lsp-stdio-connection "svelteserver")
                     :activation-fn (lsp-activate-on "svelte")
                     :server-id 'svelte-ls)))
+
+;; Theme
+(setq doom-theme 'doom-tomorrow-night)
+
+;; Other
+(setq blink-cursor-mode t)
+
+;; Projectile
+(after! projectile
+  ;; Add .git directory to the ignored directories
+  (add-to-list 'projectile-globally-ignored-directories ".git")
+  (add-to-list 'projectile-globally-ignored-directories "node_modules")
+  ;; Optionally add more patterns to ignore
+  (add-to-list 'projectile-globally-ignored-file-suffixes ".git"))
+
