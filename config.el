@@ -11,13 +11,13 @@
  :leader "tl" nil)
 
 (map!
- :v "s`" (lambda () (interactive) (wrap-with-char "`"))
- :v "s\"" (lambda () (interactive) (wrap-with-char "\""))
- :v "s'" (lambda () (interactive) (wrap-with-char "'"))
- :v "s(" (lambda () (interactive) (wrap-with-char "("))
- :v "s*" (lambda () (interactive) (wrap-with-char "*"))
- :v "s{" (lambda () (interactive) (wrap-with-char "{"))
- :v "s[" (lambda () (interactive) (wrap-with-char "[")))
+ :v "s`" (lambda () (interactive) (luyangliuable/wrap-with-char "`"))
+ :v "s\"" (lambda () (interactive) (luyangliuable/wrap-with-char "\""))
+ :v "s'" (lambda () (interactive) (luyangliuable/wrap-with-char "'"))
+ :v "s(" (lambda () (interactive) (luyangliuable/wrap-with-char "("))
+ :v "s*" (lambda () (interactive) (luyangliuable/wrap-with-char "*"))
+ :v "s{" (lambda () (interactive) (luyangliuable/wrap-with-char "{"))
+ :v "s[" (lambda () (interactive) (luyangliuable/wrap-with-char "[")))
 
 ;; Map keybindings
 (map!
