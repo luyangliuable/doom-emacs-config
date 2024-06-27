@@ -8,6 +8,7 @@
 (map!
  :leader "tm" nil
  :leader "*" nil
+ :leader ";" nil
  :leader "tl" nil)
 
 (map!
@@ -47,20 +48,7 @@
  :desc "treemacs" "ft" #'treemacs
  :desc "projectile find file based on string" "*s" #'helm-projectile-grep
  :desc "projectile find file based on string" "*f" #'helm-projectile-find-file
-
- ;; Mode-specific keybindings
- (:after python
-   (:map python-mode-map
-    :localleader
-    :desc "Run Python file" "r" #'python-shell-run-file)))
-
-;; Svelte configuration
-(after! lsp-mode
-  (add-to-list 'lsp-language-id-configuration '(svelte-mode . "svelte"))
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection "svelteserver")
-                    :activation-fn (lsp-activate-on "svelte")
-                    :server-id 'svelte-ls)))
+ :desc "evilnc comment operator" ";" #'evilnc-comment-operator)
 
 ;; Theme
 (setq doom-theme 'doom-tomorrow-night)
@@ -76,3 +64,14 @@
   ;; Optionally add more patterns to ignore
   (add-to-list 'projectile-globally-ignored-file-suffixes ".git"))
 
+;; Fonts
+(setq doom-font (font-spec :family "Fira Code" :size 13 :weight 'semi-light))
+
+(setq display-line-numbers-type 'relative)
+
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-code-indent-offset 2))
+
+(add-hook 'web-mode-hook 'my-web-mode-hook)
