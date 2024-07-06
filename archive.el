@@ -16,3 +16,9 @@
    (make-lsp-client :new-connection (lsp-stdio-connection "svelteserver")
                     :activation-fn (lsp-activate-on "svelte")
                     :server-id 'svelte-ls)))
+
+;; shell-mode doesn't work
+(after! shell-mode
+  (map! :map shell-mode-map
+        :localleader
+        :desc "Clear shell" "c" #'comint-clear-buffer))
