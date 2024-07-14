@@ -10,16 +10,17 @@
  :leader "*" nil
  :leader "x" nil
  :leader ";" nil
+ :leader "fy" nil
  :leader "tl" nil)
 
 (map!
- :v "s`" (lambda () (interactive) (luyangliuable/wrap-with-char "`"))
- :v "s\"" (lambda () (interactive) (luyangliuable/wrap-with-char "\""))
- :v "s'" (lambda () (interactive) (luyangliuable/wrap-with-char "'"))
- :v "s(" (lambda () (interactive) (luyangliuable/wrap-with-char "("))
- :v "s*" (lambda () (interactive) (luyangliuable/wrap-with-char "*"))
- :v "s{" (lambda () (interactive) (luyangliuable/wrap-with-char "{"))
- :v "s[" (lambda () (interactive) (luyangliuable/wrap-with-char "[")))
+ :v "s`" (lambda () (interactive) (luyangliuable/wrap-with-char ?`))
+ :v "s\"" (lambda () (interactive) (luyangliuable/wrap-with-char ?\"))
+ :v "s'" (lambda () (interactive) (luyangliuable/wrap-with-char ?'))
+ :v "s(" (lambda () (interactive) (luyangliuable/wrap-with-char ?\())
+ :v "s[" (lambda () (interactive) (luyangliuable/wrap-with-char ?\[))
+ :v "s{" (lambda () (interactive) (luyangliuable/wrap-with-char ?{))
+ :v "s*" (lambda () (interactive) (luyangliuable/wrap-with-char ?*)))
 
 
 ;; Good scroll
@@ -87,9 +88,14 @@
  :desc "projectile find file based on string" "*s" #'helm-projectile-grep
  :desc "projectile find file based on string" "*f" #'helm-projectile-find-file
 
+ ;; file
+ :desc "yank file directory" "fyd" #'luyangliuable/copy-directory-path
+ :desc "yank file name" "fyn" #'luyangliuable/copy-file-name
+ :desc "yank file file path" "fyy" #'luyangliuable/copy-file-path
+ :desc "yank file file path with line number" "fyl" #'luyangliuable/copy-file-path-with-line
+
  ;; Buffer
  :desc "Copy entire buffer to clipboard" "bY" #'luyangliuable/copy-whole-buffer-to-clipboard
-
  :desc "link-hint-copy-link-at-point" "xo" #'link-hint-open-link-at-point
 
  ;; Git
@@ -167,13 +173,8 @@
 (use-package! minimap
   :ensure t
   :init
-
-  ;; Set any initial settings for minimap here if needed
   (setq minimap-window-location 'right) ;; Example: position the minimap on the right
-
-  :config
-  ;; Automatically enable minimap-mode when opening any file
-  (add-hook 'web-mode-hook #'minimap-mode))
+  :config)
 
 ;; Beacon
 (use-package! beacon
