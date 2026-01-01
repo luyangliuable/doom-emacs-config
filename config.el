@@ -2,7 +2,12 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
-(load-file "/Users/blackfish/.config/doom/elisp-functions/functions.el")
+(load! "elisp-functions/functions")
+
+;; Layers
+;; Theme
+;; (load-file "/Users/blackfish/.config/doom/themes.el")
+(load! "themes")
 
 ;; Unmap keybindings
 (map!
@@ -81,12 +86,19 @@
  :desc "toggle mode line" "tmT" #'luyangliuable/toggle-mode-line
  :desc "toggle minimap" "tmM" #'minimap-mode
 
+ ;; Key
+ :desc "describe key" "hdk" #'describe-key
+
  ;; Treemacs
  :desc "treemacs" "ft" #'treemacs
 
  ;; Projectile
  :desc "projectile find file based on string" "*s" #'helm-projectile-grep
  :desc "projectile find file based on string" "*f" #'helm-projectile-find-file
+
+ ;; Text
+ :desc "drag stuff down" "xJ" #'luyangliuable/drag-stuff-down-repeatable
+ :desc "drag stuff up" "xK" #'luyangliuable/drag-stuff-up-repeatable
 
  ;; file
  :desc "yank file directory" "fyd" #'luyangliuable/copy-directory-path
@@ -101,6 +113,7 @@
  ;; Git
  :desc "browse-at-remote" "xb" #'browse-at-remote
  :desc "magit" "gs" (lambda () (interactive) (luyangliuable/split-window-right-and-run-callback #'magit))
+ :desc "magit blame" "gs" (lambda () (interactive) (luyangliuable/split-window-right-and-run-callback #'magit))
 
  ;; Commenting
  :desc "evilnc comment operator" ";" #'evilnc-comment-operator)

@@ -39,7 +39,7 @@
        ;;neotree           ; a project drawer, like NERDTree for vim
        ;;tabs              ; a tab bar for Emacs
        ;;unicode           ; extended unicode support for various languages
-       ;;window-select     ; visually switch windows
+       (window-select +numbers)     ; visually switch windows
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
