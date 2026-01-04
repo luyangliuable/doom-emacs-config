@@ -170,6 +170,10 @@
 (map!
  :n "c-u" (lambda () (interactive) (revert-buffer nil t)))
 
+(map! :map emacs-lisp-mode-map
+        :localleader
+        :desc "flycheck-errors-list" "ge" #'flycheck-list-errors)
+
 ;; Main keybinding block - organized by category
 (map!
  ;; Global keybindings (non-leader)
@@ -233,6 +237,17 @@
 ;;; ============================================================================
 ;;; SECTION 5: PACKAGE CONFIGURATIONS
 ;;; ============================================================================
+
+;; EditorConfig - respect project .editorconfig files
+(use-package! editorconfig
+  :config
+  (editorconfig-mode 1)
+  ;; Ensure EditorConfig takes precedence over mode defaults
+  (setq editorconfig-get-properties-function
+        'editorconfig-get-properties)
+  ;; Apply to all relevant file types
+  (add-hook 'prog-mode-hook (lambda () (editorconfig-apply)))
+  (add-hook 'text-mode-hook (lambda () (editorconfig-apply))))
 
 ;; LSP configuration (consolidated from multiple blocks)
 (after! lsp-mode
