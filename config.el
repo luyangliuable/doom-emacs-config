@@ -107,23 +107,34 @@
   (good-scroll-mode 1))
 
 ;; Global breadcrumb navigation for all files (non-LSP files)
-(setq-default header-line-format
-  '(:eval (when (and buffer-file-name
-                     (not (string-match-p "^\\*" (buffer-name))))
+(defun my/set-header-line-breadcrumb ()
+  "Set header line breadcrumb for file buffers only."
+  (when (and buffer-file-name
+             (file-exists-p buffer-file-name)
+             (not (string-match-p "^\\*" (buffer-name)))
+             (not (string-match-p "^magit" (buffer-name)))
+             (not (derived-mode-p 'special-mode))
+             (not (derived-mode-p 'help-mode))
+             (not (derived-mode-p 'compilation-mode)))
     (let ((project-root (and (featurep 'projectile) (projectile-project-root)))
           (file-path (file-name-directory buffer-file-name))
           (file-name (file-name-nondirectory buffer-file-name)))
-      (concat
-        (propertize " " 'display '(space :align-to 0))
-        (when project-root
-          (propertize (file-name-nondirectory (directory-file-name project-root))
-                      'face 'font-lock-string-face))
-        (when project-root " > ")
-        (propertize (if project-root
-                        (file-relative-name file-path project-root)
-                      (abbreviate-file-name file-path))
-                    'face 'font-lock-comment-face)
-        (propertize file-name 'face 'mode-line-buffer-id))))))
+      (setq header-line-format
+        (concat
+          (propertize " " 'display '(space :align-to 0))
+          (when project-root
+            (propertize (file-name-nondirectory (directory-file-name project-root))
+                        'face 'font-lock-string-face))
+          (when project-root " > ")
+          (propertize (if project-root
+                          (file-relative-name file-path project-root)
+                        (abbreviate-file-name file-path))
+                      'face 'font-lock-comment-face)
+          (propertize file-name 'face 'mode-line-buffer-id))))))
+
+;; Apply breadcrumb to file buffers
+(add-hook 'find-file-hook #'my/set-header-line-breadcrumb)
+(add-hook 'after-change-major-mode-hook #'my/set-header-line-breadcrumb)
 
 ;;; ============================================================================
 ;;; SECTION 4: KEYBINDINGS
