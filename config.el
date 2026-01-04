@@ -166,12 +166,17 @@
  :n "C-b" #'good-scroll-up-full-screen
  :n "C-f" #'good-scroll-down-full-screen)
 
+;; File operations
+(map!
+ :n "c-u" (lambda () (interactive) (revert-buffer nil t)))
+
 ;; Main keybinding block - organized by category
 (map!
  ;; Global keybindings (non-leader)
  :n "C-c a" #'org-agenda
  :n "C-c c" #'org-capture
- :n "RET" #'save-buffer ;; RET save file
+
+ :n "RET" (lambda () (interactive) (delete-trailing-whitespace) (save-buffer)) ;; RET remove trailing whitespace and save file
 
  ;; Leader keybindings organized by prefix
  :leader
@@ -211,6 +216,7 @@
  ;; Text operations
  :desc "drag stuff down" "xJ" #'luyangliuable/drag-stuff-down-repeatable
  :desc "drag stuff up" "xK" #'luyangliuable/drag-stuff-up-repeatable
+ :desc "delete trailing whitespace" "xdw" #'delete-trailing-whitespace
  :desc "link-hint-copy-link-at-point" "xo" #'link-hint-open-link-at-point
 
  ;; Project operations
