@@ -28,10 +28,12 @@
  :v "s*" (lambda () (interactive) (luyangliuable/wrap-with-char ?*)))
 
 
+(scroll-bar-mode 1)
+
 ;; Good scroll
 ;; Load good-scroll and configure it
 (use-package good-scroll
-  :ensure nil
+  :ensure t
   :config
 
   ;; Disable beacon-mode if it is already enabled
@@ -43,14 +45,14 @@
   (setq good-scroll-amount 3)     ;; Set the amount of lines to scroll at a time
   (setq good-scroll-algorithm #'good-scroll-linear) ;; Use a linear scrolling algorithm for less motion sickness
 
-  ;; (map!
-  ;;  :n "C-u" #'good-scroll-down
-  ;;  :n "C-d" #'good-scroll-up
-  ;;  :n "C-b" #'good-scroll-up-full-screen
-  ;;  :n "C-f" #'good-scroll-down-full-screen)
+  (map!
+   :n "C-u" #'good-scroll-down
+   :n "C-d" #'good-scroll-up
+   :n "C-b" #'good-scroll-up-full-screen
+   :n "C-f" #'good-scroll-down-full-screen)
 
   ;; Disabled due to poor performance
-  (good-scroll-mode -1))
+  (good-scroll-mode 1))
 
 
 ;; Map keybindings
@@ -137,6 +139,10 @@
 
 (setq display-line-numbers-type 'relative)
 
+;; Maximize Emacs window on startup
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
   (setq web-mode-markup-indent-offset 2)
@@ -157,8 +163,15 @@
         :desc "Describe" "hh" #'lsp-describe-thing-at-point
         :desc "Find implementation" "gi" #'lsp-find-implementation
         :desc "Find references" "gr" #'lsp-find-references
-        :desc "lsp-treemacs-errors-list" "ge" #'lsp-treemacs-errors-list
         :desc "Jump to definition" "gg" #'lsp-find-definition))
+
+;; lsp-treemacs integration
+(use-package! lsp-treemacs
+  :after lsp-mode
+  :config
+  (map! :map lsp-mode-map
+        :localleader
+        :desc "lsp-treemacs-errors-list" "ge" #'lsp-treemacs-errors-list))
 
 ;; Doom modeline customization
 (use-package! doom-modeline
@@ -172,7 +185,7 @@
         doom-modeline-icon t
         doom-modeline-buffer-encoding t
         doom-modeline-project-detection 'projectile
-        doom-modeline-buffer-file-name-style 'truncate-upto-project
+        doom-modeline-buffer-file-name-style nil ;; Disable file path in modeline
         doom-modeline-minor-modes nil
         doom-modeline-major-mode-icon t
         doom-modeline-major-mode t
@@ -207,3 +220,37 @@
         beacon-blink-when-focused t)        ;; Blink when the frame gains focus
   :config
   (beacon-mode 1))
+
+;; LSP headerline breadcrumb navigation
+(after! lsp-mode
+  (setq lsp-headerline-breadcrumb-enable t)
+  (lsp-headerline-breadcrumb-mode 1)
+
+  ;; Disable jsts-ls server and set preferred server
+  (setq lsp-disabled-clients '(jsts-ls))
+
+  ;; Set typescript-language-server as preferred for TS/TSX files
+  (setq lsp-clients-typescript-prefer-use-project-ts-server nil)
+
+  ;; Force typescript-language-server for TypeScript files
+  (add-to-list 'lsp-language-id-configuration '(typescript-mode . "typescript"))
+  (add-to-list 'lsp-language-id-configuration '(typescript-ts-mode . "typescript"))
+  (add-to-list 'lsp-language-id-configuration '(tsx-ts-mode . "typescriptreact")))
+
+;; Global breadcrumb navigation for all files (non-LSP files)
+(setq-default header-line-format
+  '(:eval (when buffer-file-name
+    (let ((project-root (and (featurep 'projectile) (projectile-project-root)))
+          (file-path (file-name-directory buffer-file-name))
+          (file-name (file-name-nondirectory buffer-file-name)))
+      (concat
+        (propertize " " 'display '(space :align-to 0))
+        (when project-root
+          (propertize (file-name-nondirectory (directory-file-name project-root))
+                      'face 'font-lock-string-face))
+        (when project-root " > ")
+        (propertize (if project-root
+                        (file-relative-name file-path project-root)
+                      (abbreviate-file-name file-path))
+                    'face 'font-lock-comment-face)
+        (propertize file-name 'face 'mode-line-buffer-id))))))
