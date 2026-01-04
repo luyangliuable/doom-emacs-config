@@ -71,6 +71,7 @@
  :desc "Split window right and open shell" "p$" (lambda () (interactive) (luyangliuable/split-window-right-and-run-callback #'shell))
  :desc "Split window bottom and open shell" "p|" (lambda () (interactive) (luyangliuable/split-window-below-and-run-callback #'shell))
  :desc "Maximize buffer" "wm" #'luyangliuable/toggle-maximize-buffer
+ :desc "Ace window" "wW" #'ace-window
 
  ;; Jump
  :desc "avy goto char" "jw" #'avy-goto-char
@@ -239,7 +240,8 @@
 
 ;; Global breadcrumb navigation for all files (non-LSP files)
 (setq-default header-line-format
-  '(:eval (when buffer-file-name
+  '(:eval (when (and buffer-file-name
+                     (not (string-match-p "^\\*" (buffer-name))))
     (let ((project-root (and (featurep 'projectile) (projectile-project-root)))
           (file-path (file-name-directory buffer-file-name))
           (file-name (file-name-nondirectory buffer-file-name)))
