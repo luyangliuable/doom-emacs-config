@@ -1,4 +1,11 @@
-(defvar luyangliuable/themes '(doom-zenburn doom-challenger-deep doom-plain doom-plain-dark))
+(defvar luyangliuable/themes '(
+                               doom-zenburn
+                               doom-nord
+                               doom-challenger-deep
+                               doom-one
+                               doom-plain
+                               doom-plain-dark))
+
 (defvar luyangliuable/current-theme-index 0)
 
 ;; disable other themes before loading new one

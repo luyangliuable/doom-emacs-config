@@ -1,187 +1,50 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;; Personal Doom Emacs Configuration
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
-(load! "elisp-functions/functions")
+;;; ============================================================================
+;;; SECTION 1: FILE HEADER & IMPORTS
+;;; ============================================================================
 
-;; Layers
-;; Theme
-;; (load-file "/Users/blackfish/.config/doom/themes.el")
+;; Load custom functions and themes
+(load! "elisp-functions/functions")
 (load! "themes")
 
-;; Unmap keybindings
-(map!
- :leader "tm" nil
- :leader "*" nil
- :leader "x" nil
- :leader ";" nil
- :leader "fy" nil
- :leader "tl" nil)
+;;; ============================================================================
+;;; SECTION 2: CORE SETTINGS
+;;; ============================================================================
 
-(map!
- :v "s`" (lambda () (interactive) (luyangliuable/wrap-with-char ?`))
- :v "s\"" (lambda () (interactive) (luyangliuable/wrap-with-char ?\"))
- :v "s'" (lambda () (interactive) (luyangliuable/wrap-with-char ?'))
- :v "s(" (lambda () (interactive) (luyangliuable/wrap-with-char ?\())
- :v "s[" (lambda () (interactive) (luyangliuable/wrap-with-char ?\[))
- :v "s{" (lambda () (interactive) (luyangliuable/wrap-with-char ?{))
- :v "s*" (lambda () (interactive) (luyangliuable/wrap-with-char ?*)))
-
-
-(scroll-bar-mode 1)
-
-;; Good scroll
-;; Load good-scroll and configure it
-(use-package good-scroll
-  :ensure t
-  :config
-
-  ;; Disable beacon-mode if it is already enabled
-  ;; (when (bound-and-true-p good-scroll-mode)
-  ;;   (good-scroll-mode -1))
-
-  ;; Customize good-scroll settings
-  (setq good-scroll-duration 0.1) ;; Set a faster duration for scrolling
-  (setq good-scroll-amount 3)     ;; Set the amount of lines to scroll at a time
-  (setq good-scroll-algorithm #'good-scroll-linear) ;; Use a linear scrolling algorithm for less motion sickness
-
-  (map!
-   :n "C-u" #'good-scroll-down
-   :n "C-d" #'good-scroll-up
-   :n "C-b" #'good-scroll-up-full-screen
-   :n "C-f" #'good-scroll-down-full-screen)
-
-  ;; Disabled due to poor performance
-  (good-scroll-mode 1))
-
-
-;; Map keybindings
-(map!
- ;; Global keybindings
- :n "C-c a" #'org-agenda
- :n "C-c c" #'org-capture
-
- ;; RET save file i love it!
- :n "RET" #'save-buffer
-
- ;; Leader keybindings
- :leader
- ;; Window
- :desc "Switch to last buffer" "TAB" #'luyangliuable/switch-to-last-buffer
- :desc "Split window right and open shell" "p$" (lambda () (interactive) (luyangliuable/split-window-right-and-run-callback #'shell))
- :desc "Split window bottom and open shell" "p|" (lambda () (interactive) (luyangliuable/split-window-below-and-run-callback #'shell))
- :desc "Maximize buffer" "wm" #'luyangliuable/toggle-maximize-buffer
- :desc "Ace window" "wW" #'ace-window
-
- ;; Jump
- :desc "avy goto char" "jw" #'avy-goto-char
- :desc "goto last change" "jc" #'goto-last-change
-
- :desc "Window management transient state" "w." #'hydra-window-management/body
- :desc "M-x" "SPC" #'execute-extended-command
- :desc "Go to scratch buffer" "bs" #'luyangliuable/goto-scratch-buffer
-
- ;; Line
- :desc "absolute lineno toggle" "tna" #'luyangliuable/toggle-absolute-line-numbers
- :desc "relative lineno toggle" "tnr" #'luyangliuable/toggle-relative-line-numbers
-
- ;; Toggle
- :desc "toggle mode line" "tmT" #'luyangliuable/toggle-mode-line
- :desc "toggle minimap" "tmM" #'minimap-mode
-
- ;; Key
- :desc "describe key" "hdk" #'describe-key
-
- ;; Treemacs
- :desc "treemacs" "ft" #'treemacs
-
- ;; Projectile
- :desc "projectile find file based on string" "*s" #'helm-projectile-grep
- :desc "projectile find file based on string" "*f" #'helm-projectile-find-file
-
- ;; Text
- :desc "drag stuff down" "xJ" #'luyangliuable/drag-stuff-down-repeatable
- :desc "drag stuff up" "xK" #'luyangliuable/drag-stuff-up-repeatable
-
- ;; file
- :desc "yank file directory" "fyd" #'luyangliuable/copy-directory-path
- :desc "yank file name" "fyn" #'luyangliuable/copy-file-name
- :desc "yank file file path" "fyy" #'luyangliuable/copy-file-path
- :desc "yank file file path with line number" "fyl" #'luyangliuable/copy-file-path-with-line
-
- ;; Buffer
- :desc "Copy entire buffer to clipboard" "bY" #'luyangliuable/copy-whole-buffer-to-clipboard
- :desc "link-hint-copy-link-at-point" "xo" #'link-hint-open-link-at-point
-
- ;; Git
- :desc "browse-at-remote" "xb" #'browse-at-remote
- :desc "magit" "gs" (lambda () (interactive) (luyangliuable/split-window-right-and-run-callback #'magit))
- :desc "magit blame" "gs" (lambda () (interactive) (luyangliuable/split-window-right-and-run-callback #'magit))
-
- ;; Commenting
- :desc "evilnc comment operator" ";" #'evilnc-comment-operator)
-
-;; Theme
+;; Theme and appearance
 (setq doom-theme 'doom-challenger-deep)
 
-;; Other
-(setq blink-cursor-mode t)
-
-;; Projectile
-(after! projectile
-  ;; Add .git directory to the ignored directories
-  (add-to-list 'projectile-globally-ignored-directories ".git")
-  (add-to-list 'projectile-globally-ignored-directories "node_modules")
-  ;; Optionally add more patterns to ignore
-  (add-to-list 'projectile-globally-ignored-file-suffixes ".git"))
-
-;; Fonts
+;; Font configuration
 (setq doom-font (font-spec :family "Fira Code" :size 13 :weight 'semi-light))
 
+;; Display settings
 (setq display-line-numbers-type 'relative)
+(setq blink-cursor-mode t)
+(scroll-bar-mode -1)
 
-;; Maximize Emacs window on startup
+;; Window management - maximize on startup
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-(defun my-web-mode-hook ()
-  "Hooks for Web mode."
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-code-indent-offset 2))
-
-(add-hook 'web-mode-hook 'my-web-mode-hook)
-
-;; Define `,` as the major mode leader key
+;; Local leader key configuration
 (setq doom-localleader-key ",")
-
-;; Define a local leader key for insert mode if needed
 (setq doom-localleader-alt-key "M-,")
 
-;; lsp-mode
-(after! lsp-mode
-  (map! :map lsp-mode-map
-        :localleader
-        :desc "Describe" "hh" #'lsp-describe-thing-at-point
-        :desc "Find implementation" "gi" #'lsp-find-implementation
-        :desc "Find references" "gr" #'lsp-find-references
-        :desc "Jump to definition" "gg" #'lsp-find-definition))
-
-;; lsp-treemacs integration
-(use-package! lsp-treemacs
-  :after lsp-mode
-  :config
-  (map! :map lsp-mode-map
-        :localleader
-        :desc "lsp-treemacs-errors-list" "ge" #'lsp-treemacs-errors-list))
+;;; ============================================================================
+;;; SECTION 3: UI CONFIGURATION
+;;; ============================================================================
 
 ;; Doom modeline customization
 (use-package! doom-modeline
   :ensure t
   :init
-
   (setq doom-modeline-hud t) ;; Enable the HUD feature
 
-  ;; Additional customizations (optional)
+  ;; Modeline appearance settings
   (setq doom-modeline-height 28
         doom-modeline-icon t
         doom-modeline-buffer-encoding t
@@ -194,20 +57,13 @@
         doom-modeline-bar-width 6)
 
   :config
-  (doom-modeline-mode 1))    ;; Enable doom-modeline mode
+  (doom-modeline-mode 1))
 
-;; Minimap
-(use-package! minimap
-  :ensure t
-  :init
-  (setq minimap-window-location 'right) ;; Example: position the minimap on the right
-  :config)
-
-;; Beacon
+;; Beacon - highlight cursor position on big movements
 (use-package! beacon
   :ensure t
   :init
-  ;; Customize beacon settings
+  ;; Beacon appearance settings
   (setq beacon-blink-duration 0.8       ;; Duration of the blink
         beacon-blink-delay 0.3          ;; Delay before the blink starts
         beacon-size 40                  ;; Size of the beacon
@@ -222,21 +78,24 @@
   :config
   (beacon-mode 1))
 
-;; LSP headerline breadcrumb navigation
-(after! lsp-mode
-  (setq lsp-headerline-breadcrumb-enable t)
-  (lsp-headerline-breadcrumb-mode 1)
+;; Minimap configuration
+(use-package! minimap
+  :ensure t
+  :init
+  (setq minimap-window-location 'right) ;; Position minimap on the right
+  :config)
 
-  ;; Disable jsts-ls server and set preferred server
-  (setq lsp-disabled-clients '(jsts-ls))
+;; Good scroll - smooth scrolling
+(use-package good-scroll
+  :ensure t
+  :config
+  ;; Smooth scrolling settings
+  (setq good-scroll-duration 0.1) ;; Set a faster duration for scrolling
+  (setq good-scroll-amount 3)     ;; Set the amount of lines to scroll at a time
+  (setq good-scroll-algorithm #'good-scroll-linear) ;; Use a linear scrolling algorithm
 
-  ;; Set typescript-language-server as preferred for TS/TSX files
-  (setq lsp-clients-typescript-prefer-use-project-ts-server nil)
-
-  ;; Force typescript-language-server for TypeScript files
-  (add-to-list 'lsp-language-id-configuration '(typescript-mode . "typescript"))
-  (add-to-list 'lsp-language-id-configuration '(typescript-ts-mode . "typescript"))
-  (add-to-list 'lsp-language-id-configuration '(tsx-ts-mode . "typescriptreact")))
+  ;; Disabled due to poor performance
+  (good-scroll-mode 1))
 
 ;; Global breadcrumb navigation for all files (non-LSP files)
 (setq-default header-line-format
@@ -256,3 +115,150 @@
                       (abbreviate-file-name file-path))
                     'face 'font-lock-comment-face)
         (propertize file-name 'face 'mode-line-buffer-id))))))
+
+;;; ============================================================================
+;;; SECTION 4: KEYBINDINGS
+;;; ============================================================================
+
+;; Unmap conflicting keybindings
+(map!
+ :leader "tm" nil
+ :leader "*" nil
+ :leader "x" nil
+ :leader ";" nil
+ :leader "fy" nil
+ :leader "tl" nil)
+
+;; Visual mode text wrapping keybindings
+(map!
+ :v "s`" (lambda () (interactive) (luyangliuable/wrap-with-char ?`))
+ :v "s\"" (lambda () (interactive) (luyangliuable/wrap-with-char ?\"))
+ :v "s'" (lambda () (interactive) (luyangliuable/wrap-with-char ?'))
+ :v "s(" (lambda () (interactive) (luyangliuable/wrap-with-char ?\())
+ :v "s[" (lambda () (interactive) (luyangliuable/wrap-with-char ?\[))
+ :v "s{" (lambda () (interactive) (luyangliuable/wrap-with-char ?{))
+ :v "s*" (lambda () (interactive) (luyangliuable/wrap-with-char ?*)))
+
+;; Good scroll keybindings
+(map!
+ :n "C-u" #'good-scroll-down
+ :n "C-d" #'good-scroll-up
+ :n "C-b" #'good-scroll-up-full-screen
+ :n "C-f" #'good-scroll-down-full-screen)
+
+;; Main keybinding block - organized by category
+(map!
+ ;; Global keybindings (non-leader)
+ :n "C-c a" #'org-agenda
+ :n "C-c c" #'org-capture
+ :n "RET" #'save-buffer ;; RET save file
+
+ ;; Leader keybindings organized by prefix
+ :leader
+ ;; Buffer operations
+ :desc "Switch to last buffer" "TAB" #'luyangliuable/switch-to-last-buffer
+ :desc "Go to scratch buffer" "bs" #'luyangliuable/goto-scratch-buffer
+ :desc "Copy entire buffer to clipboard" "bY" #'luyangliuable/copy-whole-buffer-to-clipboard
+
+ ;; Window management
+ :desc "Split window right and open shell" "p$" (lambda () (interactive) (luyangliuable/split-window-right-and-run-callback #'shell))
+ :desc "Split window bottom and open shell" "p|" (lambda () (interactive) (luyangliuable/split-window-below-and-run-callback #'shell))
+ :desc "Maximize buffer" "wm" #'luyangliuable/toggle-maximize-buffer
+ :desc "Ace window" "wW" #'ace-window
+ :desc "Window management transient state" "w." #'hydra-window-management/body
+
+ ;; File operations
+ :desc "treemacs" "ft" #'treemacs
+ :desc "yank file directory" "fyd" #'luyangliuable/copy-directory-path
+ :desc "yank file name" "fyn" #'luyangliuable/copy-file-name
+ :desc "yank file file path" "fyy" #'luyangliuable/copy-file-path
+ :desc "yank file file path with line number" "fyl" #'luyangliuable/copy-file-path-with-line
+
+ ;; Git operations
+ :desc "browse-at-remote" "xb" #'browse-at-remote
+ :desc "magit" "gs" (lambda () (interactive) (luyangliuable/split-window-right-and-run-callback #'magit))
+
+ ;; Jump operations
+ :desc "avy goto char" "jw" #'avy-goto-char
+ :desc "goto last change" "jc" #'goto-last-change
+
+ ;; Toggle operations
+ :desc "absolute lineno toggle" "tna" #'luyangliuable/toggle-absolute-line-numbers
+ :desc "relative lineno toggle" "tnr" #'luyangliuable/toggle-relative-line-numbers
+ :desc "toggle mode line" "tmT" #'luyangliuable/toggle-mode-line
+ :desc "toggle minimap" "tmM" #'minimap-mode
+
+ ;; Text operations
+ :desc "drag stuff down" "xJ" #'luyangliuable/drag-stuff-down-repeatable
+ :desc "drag stuff up" "xK" #'luyangliuable/drag-stuff-up-repeatable
+ :desc "link-hint-copy-link-at-point" "xo" #'link-hint-open-link-at-point
+
+ ;; Project operations
+ :desc "projectile find file based on string" "*s" #'helm-projectile-grep
+ :desc "projectile find file based on string" "*f" #'helm-projectile-find-file
+
+ ;; Help operations
+ :desc "describe key" "hdk" #'describe-key
+
+ ;; Misc operations
+ :desc "M-x" "SPC" #'execute-extended-command
+ :desc "evilnc comment operator" ";" #'evilnc-comment-operator)
+
+;;; ============================================================================
+;;; SECTION 5: PACKAGE CONFIGURATIONS
+;;; ============================================================================
+
+;; LSP configuration (consolidated from multiple blocks)
+(after! lsp-mode
+  ;; LSP headerline breadcrumb navigation
+  (setq lsp-headerline-breadcrumb-enable t)
+  (lsp-headerline-breadcrumb-mode 1)
+
+  ;; TypeScript/JavaScript server preferences
+  (setq lsp-disabled-clients '(jsts-ls))
+  (setq lsp-clients-typescript-prefer-use-project-ts-server nil)
+
+  ;; Language ID configuration for TypeScript files
+  (add-to-list 'lsp-language-id-configuration '(typescript-mode . "typescript"))
+  (add-to-list 'lsp-language-id-configuration '(typescript-ts-mode . "typescript"))
+  (add-to-list 'lsp-language-id-configuration '(tsx-ts-mode . "typescriptreact"))
+
+  ;; LSP keybindings
+  (map! :map lsp-mode-map
+        :localleader
+        :desc "Describe" "hh" #'lsp-describe-thing-at-point
+        :desc "Find implementation" "gi" #'lsp-find-implementation
+        :desc "Find references" "gr" #'lsp-find-references
+        :desc "Jump to definition" "gg" #'lsp-find-definition))
+
+;; LSP-Treemacs integration
+(use-package! lsp-treemacs
+  :after lsp-mode
+  :config
+  (map! :map lsp-mode-map
+        :localleader
+        :desc "lsp-treemacs-errors-list" "ge" #'lsp-treemacs-errors-list))
+
+;; Projectile configuration
+(after! projectile
+  ;; Add directories to ignore list
+  (add-to-list 'projectile-globally-ignored-directories ".git")
+  (add-to-list 'projectile-globally-ignored-directories "node_modules")
+  ;; Add file suffixes to ignore
+  (add-to-list 'projectile-globally-ignored-file-suffixes ".git"))
+
+;;; ============================================================================
+;;; SECTION 6: MODE HOOKS & CUSTOM FUNCTIONS
+;;; ============================================================================
+
+;; Web mode configuration
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-code-indent-offset 2))
+
+(add-hook 'web-mode-hook 'my-web-mode-hook)
+
+;;; ============================================================================
+;;; END OF CONFIGURATION
+;;; ============================================================================
