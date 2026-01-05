@@ -288,6 +288,23 @@
   ;; Add file suffixes to ignore
   (add-to-list 'projectile-globally-ignored-file-suffixes ".git"))
 
+;; Agent shell configuration
+(use-package agent-shell
+    :ensure t
+    :ensure-system-package
+    ;; Add agent installation configs here
+    ((claude-code-acp . "npm install -g @zed-industries/claude-code-acp")))
+
+(setq agent-shell-anthropic-claude-environment
+      (agent-shell-make-environment-variables
+       "ANTHROPIC_BASE_URL" "https://api.studio.genai.cba"
+       "ANTHROPIC_API_KEY" (auth-source-pass-get "secret" "(or (getenv "OPENAI_API_KEY") "")")
+       "ANTHROPIC_MODEL" "aipe-bedrock-claude-4-sonnet"
+       "ANTHROPIC_SMALL_FAST_MODEL" "aipe-bedrock-claude-4-sonnet"))
+
+;; Explicitly set the default model for agent shell to override any defaults
+(setq agent-shell-anthropic-default-model-id "aipe-bedrock-claude-4-sonnet")
+
 ;;; ============================================================================
 ;;; SECTION 6: MODE HOOKS & CUSTOM FUNCTIONS
 ;;; ============================================================================
@@ -299,6 +316,26 @@
   (setq web-mode-code-indent-offset 2))
 
 (add-hook 'web-mode-hook 'my-web-mode-hook)
+
+;;; ============================================================================
+;;; SECTION 7: EVIL MODE FIXES
+;;; ============================================================================
+
+;; Fix for c$ and cw commands in evil mode
+;; evil-collection sometimes disables these commands in certain contexts
+;; This restores the proper bindings
+(after! evil
+  ;; Ensure change commands are properly bound in normal state
+  (define-key evil-normal-state-map "c" #'evil-change)
+  (define-key evil-normal-state-map "C" #'evil-change-line)
+
+  ;; Additional fix: ensure the change operator can accept motions
+  (evil-define-key 'normal 'global "c" #'evil-change)
+  (evil-define-key 'normal 'global "C" #'evil-change-line)
+
+  ;; Make sure motion state has the necessary motions
+  (define-key evil-motion-state-map "$" #'evil-end-of-line)
+  (define-key evil-motion-state-map "w" #'evil-forward-word-begin))
 
 ;;; ============================================================================
 ;;; END OF CONFIGURATION
