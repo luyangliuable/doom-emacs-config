@@ -23,3 +23,16 @@
 (setq debug-on-error t)
 
 ;; (load! "config/packages/gptel")     ; gptel
+
+;; anki-editor configuration
+;; (use-package! anki-editor
+;;   :after org
+;;   :bind (("C-c a c" . anki-editor-cloze-region-auto-incr)
+;;          ("C-c a r" . anki-editor-retry-failure-notes)
+;;          ("C-c a p" . anki-editor-push-tree)
+;;          ("C-c a P" . anki-editor-push-notes)
+;;          ("C-c a b" . anki-editor-browse-notes)
+;;          ("C-c a g" . anki-editor-gui-browse))
+;;   :config
+;;   (setq anki-editor-create-decks t
+;;         anki-editor-org-tags-as-anki-tags t))
