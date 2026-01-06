@@ -1,0 +1,34 @@
+# Emacs temporary and backup files
+*~
+\#*\#
+.\#*
+/.emacs.desktop
+/.emacs.desktop.lock
+
+# Byte-compiled and native-compiled Emacs Lisp files
+*.elc
+*.eln.gz
+
+# Directories for package management (e.g., Cask, straight.el)
+.cask/
+.emacs.d/elpa/
+.emacs.d/straight/
+dist/
+
+# Other potential temporary or generated files
+auto-save-list
+tramp
+.rel # RefTeX files
+/auto/ # AUCTeX auto folder
+flycheck_*.el
+.projectile # Projectile files
+.dir-locals.el
+
+# OS-specific temporary files
+.DS_Store # macOS
+Thumbs.db # Windows
+
+*.backup
+
+# Agent shell files
+.agent-shell/
