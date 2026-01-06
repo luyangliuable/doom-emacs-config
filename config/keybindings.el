@@ -70,7 +70,7 @@
 
  ;; Git operations
  :desc "browse-at-remote" "xb" #'browse-at-remote
- :desc "magit" "gs" (lambda () (interactive) (luyangliuable/split-window-right-and-run-callback #'magit))
+ :desc "magit" "gs" #'luyangliuable/magit
 
  ;; Jump operations
  :desc "avy goto char" "jw" #'avy-goto-char
