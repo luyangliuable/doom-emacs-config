@@ -98,3 +98,11 @@
  ;; Misc operations
  :desc "M-x" "SPC" #'execute-extended-command
  :desc "evilnc comment operator" ";" #'evilnc-comment-operator)
+
+;; Override magit quit function to handle window cleanup properly
+(after! magit
+  (define-key magit-mode-map "q" #'luyangliuable/magit-quit))
+
+;; Also handle evil-collection-magit if it's loaded
+(after! evil-collection-magit
+  (map! :map magit-mode-map :nv "q" #'luyangliuable/magit-quit))
