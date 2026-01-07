@@ -24,7 +24,7 @@
 (setq debug-on-error t)
 
 
-;; (load! "config/packages/gptel")     ; gptel
+(load! "config/packages/gptel")     ; gptel - temporarily disabled
 
 ;; anki-editor configuration
 ;; (use-package! anki-editor
