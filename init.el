@@ -31,6 +31,7 @@
        :ui
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        (vc-gutter +pretty) ; vcs diff in the fringe
+       (window-select +numbers)     ; visually switch windows
        ;;(emoji +unicode)  ; 🙂
        ;;deft              ; notational velocity for Emacs
        ;;doom-quit         ; DOOM quit-message prompts when you quit Emacs
@@ -39,7 +40,6 @@
        ;;neotree           ; a project drawer, like NERDTree for vim
        ;;tabs              ; a tab bar for Emacs
        ;;unicode           ; extended unicode support for various languages
-       (window-select +numbers)     ; visually switch windows
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
@@ -92,29 +92,31 @@
        ;;collab            ; buffers with friends
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        ;;direnv
-       editorconfig        ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
-       ;;pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
-       rgb               ; creating color strings
-       taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
-       tree-sitter       ; syntax and parsing, sitting in a tree...
        ;;upload            ; map local to remote projects via ssh/ftp
        docker
+       editorconfig        ; let someone else argue about tabs vs spaces
        lookup              ; navigate your code and its documentation
        lsp                 ; M-x vscode
        magit               ; a git porcelain for Emacs
+       pdf               ; pdf enhancements
+       rgb               ; creating color strings
+       taskrunner        ; taskrunner for all your projects
+       tree-sitter       ; syntax and parsing, sitting in a tree...
 
        :os
        (:if (featurep :system 'macos) macos)  ; improve compatibility with macOS
        tty               ; improve the terminal Emacs experience
 
        :lang
+       (javascript +lsp) ; all(hope(abandon(ye(who(enter(here))))))
        (rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       (typescript +lsp) ; TypeScript with LSP support
        (web +html +css +lsp)               ; the tubes
        ;;(cc +lsp)         ; C > C++ == 1
        ;;(dart +flutter)   ; paint ui and not much else
@@ -171,8 +173,6 @@
        ;;zig               ; C, but simpler
        common-lisp       ; if you've seen one lisp, you've seen them all
        emacs-lisp        ; drown in parentheses
-       (javascript +lsp) ; all(hope(abandon(ye(who(enter(here))))))
-       (typescript +lsp) ; TypeScript with LSP support
        markdown          ; writing docs for people to ignore
        org               ; organize your plain life in plain text
        python            ; beautiful is better than ugly

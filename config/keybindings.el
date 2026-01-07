@@ -88,6 +88,8 @@
  :desc "delete trailing whitespace" "xdw" #'delete-trailing-whitespace
  :desc "link-hint-copy-link-at-point" "xo" #'link-hint-open-link-at-point
 
+ :desc "sort lines" "xls" #'luyangliuable/sort-lines
+
  ;; Project operations
  :desc "projectile find file based on string" "*s" #'helm-projectile-grep
  :desc "projectile find file based on string" "*f" #'helm-projectile-find-file
