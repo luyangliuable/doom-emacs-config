@@ -16,6 +16,8 @@
 (setq blink-cursor-mode t)
 (scroll-bar-mode -1)
 (evil-goggles-mode t)
+;; (set-fringe-mode 1) ;; fringe mode minimal
+(blink-cursor-mode) ;; make cursor blink
 
 ;; Window management - maximize on startup
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))

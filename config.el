@@ -16,11 +16,13 @@
 (load! "config/modes")             ; Mode hooks
 (load! "config/keybindings")       ; Keybindings after packages
 (load! "config/packages/evil")     ; Evil fixes last
+(load! "config/packages/drag-stuff")
 
 ; Source - https://stackoverflow.com/a
 ; Posted by Trey Jackson, modified by community. See post 'Timeline' for change history
 ; Retrieved 2026-01-06, License - CC BY-SA 4.0
 (setq debug-on-error t)
+
 
 ;; (load! "config/packages/gptel")     ; gptel
 

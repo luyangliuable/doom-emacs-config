@@ -55,8 +55,8 @@
  :desc "Copy entire buffer to clipboard" "bY" #'luyangliuable/copy-whole-buffer-to-clipboard
 
  ;; Window management
- :desc "Split window right and open shell" "p$" (lambda () (interactive) (luyangliuable/split-window-right-and-run-callback #'shell))
- :desc "Split window bottom and open shell" "p|" (lambda () (interactive) (luyangliuable/split-window-below-and-run-callback #'shell))
+ :desc "Split window right and open shell" "p$" #'luyangliuable/treemacs-shell-here
+ :desc "Split window bottom and open shell" "p|" #'luyangliuable/treemacs-shell-here-horizontal
  :desc "Maximize buffer" "wm" #'luyangliuable/toggle-maximize-buffer
  :desc "Ace window" "wW" #'ace-window
  :desc "Window management transient state" "w." #'hydra-window-management/body
