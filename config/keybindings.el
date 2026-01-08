@@ -99,7 +99,13 @@
 
  ;; Misc operations
  :desc "M-x" "SPC" #'execute-extended-command
- :desc "evilnc comment operator" ";" #'evilnc-comment-operator)
+ :desc "evilnc comment operator" ";" #'evilnc-comment-operator
+
+ ;; Audio operations
+ :desc "Say text" "ok" (lambda () (interactive)
+                         (let ((text (read-string "Say: ")))
+                           (when (not (string-empty-p text))
+                             (start-process "say-text" nil "say" text)))))
 
 ;; Override magit quit function to handle window cleanup properly
 (after! magit

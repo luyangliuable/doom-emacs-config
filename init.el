@@ -23,10 +23,10 @@
        :completion
        ;;(corfu +orderless)  ; complete with cap(f), cape and a flying feather!
        ;;ido               ; the other *other* search engine...
-       ivy               ; a search engine for love and life
+       ;;ivy               ; a search engine for love and life
        company           ; the ultimate code completion backend
        helm              ; the *other* search engine for love and life
-       vertico           ; the search engine of the future
+       ;;vertico           ; the search engine of the future
 
        :ui
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
