@@ -14,9 +14,10 @@
 (load! "config/packages/drag-stuff")
 (load! "config/packages/editorconfig")
 (load! "config/packages/evil")     ; Evil fixes last
-(load! "config/packages/gptel")     ; gptel - temporarily disabled
+(load! "config/packages/gptel")    ; gptel - temporarily disabled
 (load! "config/packages/lsp")
 (load! "config/packages/projectile")
+(load! "config/packages/treemacs") ; treemacs
 (load! "config/ui")                ; UI packages after core
 
 ; Source - https://stackoverflow.com/a

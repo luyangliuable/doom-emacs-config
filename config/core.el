@@ -34,3 +34,12 @@
 ;; Local leader key configuration
 (setq doom-localleader-key ",")
 (setq doom-localleader-alt-key "M-,")
+
+;; Proxy configuration
+;; (setq url-proxy-services
+;;       '(("http" . "localhost:3128")
+;;         ("https" . "localhost:3128")
+;;         ("ftp" . "localhost:3128")))
+
+;; Ensure proxy is used for all HTTP/HTTPS requests
+;; (setq url-gateway-method 'native)
