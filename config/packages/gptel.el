@@ -1,5 +1,18 @@
 ;;; config/packages/gptel.el -*- lexical-binding: t; -*-
 
+;; Note: Global keybindings have been moved to config/keybindings/gptel.el
+
+;; Safe wrapper for gptel-rewrite (define outside use-package for immediate availability)
+(defun gptel-rewrite-safe ()
+  "Safely rewrite selection with error handling."
+  (interactive)
+  (if (use-region-p)
+      (condition-case err
+          (gptel-rewrite)
+        (error
+         (message "gptel-rewrite failed: %s. Try selecting text first." (error-message-string err))))
+    (message "Please select text to rewrite first.")))
+
 (use-package! gptel
   :defer t
   :config
@@ -7,9 +20,7 @@
   (setq gptel-stream nil)  ; Global streaming disable
 
   ;; Set the API key and backend configuration with explicit non-streaming
-  (setq gptel-api-key "(or (getenv "OPENAI_API_KEY") "")"
-        gptel-model 'bedrock-claude-4-sonnet
-        gptel-backend (gptel-make-openai "Custom-Claude"
+  (setq gptel-backend (gptel-make-openai "Custom-Claude"
                         :stream nil  ; Explicit streaming disable
                         :protocol "https"
                         :host "api.studio.genai.cba"
@@ -36,29 +47,6 @@
        (message "gptel-rewrite: Cursor at end of buffer, skipping operation"))
       (error
        (message "gptel-rewrite error: %s" (error-message-string err)))))
-
-  ;; Safe wrapper for gptel-rewrite
-  (defun gptel-rewrite-safe ()
-    "Safely rewrite selection with error handling."
-    (interactive)
-    (if (use-region-p)
-        (condition-case err
-            (gptel-rewrite)
-          (error
-           (message "gptel-rewrite failed: %s. Try selecting text first." (error-message-string err))))
-      (message "Please select text to rewrite first.")))
-
-  ;; Global keybindings for gptel
-  (map! :leader
-        (:prefix-map ("a" . "applications")
-         (:prefix ("g" . "gptel")
-          :desc "Start gptel chat" "g" #'gptel
-          :desc "Send region/buffer" "s" #'gptel-send
-          :desc "Open gptel menu" "m" #'gptel-menu
-          :desc "Set system message" "S" #'gptel-system-prompt
-          :desc "Add context from file" "f" #'gptel-add-file
-          :desc "Rewrite selection" "r" #'gptel-rewrite-safe
-          :desc "Kill gptel session" "k" #'gptel-abort)))
 
   ;; Local leader keybindings for gptel-mode
   (map! :localleader

@@ -1,6 +1,12 @@
 ;;; config/keybindings.el -*- lexical-binding: t; -*-
 ;; All Keybinding Configurations
 
+;; Load individual keybinding files (standalone map!/after! blocks only)
+(load! "keybindings/gptel")
+(load! "keybindings/evil")
+(load! "keybindings/treemacs")
+(load! "keybindings/lsp")
+
 ;;; ============================================================================
 ;;; KEYBINDINGS
 ;;; ============================================================================

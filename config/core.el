@@ -4,10 +4,6 @@
 ;;; ============================================================================
 ;;; CORE SETTINGS
 ;;; ============================================================================
-
-;; Theme and appearance
-(setq doom-theme 'doom-nord)
-
 ;; Font configuration
 (setq doom-font (font-spec :family "Fira Code" :size 13 :weight 'semi-light))
 

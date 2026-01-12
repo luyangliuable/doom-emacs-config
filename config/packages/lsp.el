@@ -14,15 +14,7 @@
   ;; Language ID configuration for TypeScript files
   (add-to-list 'lsp-language-id-configuration '(typescript-mode . "typescript"))
   (add-to-list 'lsp-language-id-configuration '(typescript-ts-mode . "typescript"))
-  (add-to-list 'lsp-language-id-configuration '(tsx-ts-mode . "typescriptreact"))
-
-  ;; LSP keybindings
-  (map! :map lsp-mode-map
-        :localleader
-        :desc "Describe" "hh" #'lsp-describe-thing-at-point
-        :desc "Find implementation" "gi" #'lsp-find-implementation
-        :desc "Find references" "gr" #'lsp-find-references
-        :desc "Jump to definition" "gg" #'lsp-find-definition))
+  (add-to-list 'lsp-language-id-configuration '(tsx-ts-mode . "typescriptreact")))
 
 ;; LSP-Treemacs integration
 (use-package! lsp-treemacs
@@ -31,3 +23,5 @@
   (map! :map lsp-mode-map
         :localleader
         :desc "lsp-treemacs-errors-list" "ge" #'lsp-treemacs-errors-list))
+
+;; Note: Standalone map!/after! blocks moved to config/keybindings/lsp.el

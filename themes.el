@@ -3,14 +3,35 @@
 (defvar luyangliuable/themes
   '(doom-zenburn
     doom-nord
+    doom-solarized-light
+    doom-solarized-dark
     doom-challenger-deep
     doom-one
     doom-plain
     doom-plain-dark)
   "List of available themes to cycle through.")
 
-(defvar luyangliuable/current-theme-index 0
-  "Index of the currently active theme.")
+
+(let ((current-hour (nth 2 (decode-time))))
+  (if (or (< current-hour 6) (>= current-hour 20))
+      ;; Night time (before 6 AM or after 8 PM)
+      (progn
+        (message "Good evening!")
+        (setq doom-theme 'doom-solarized-dark)
+        (defvar luyangliuable/current-theme-index 3
+          "Index of the currently active theme.")
+        ;; Add your night-time actions here
+        )
+    ;; Day time
+    (progn
+      (message "Good day!")
+      (setq doom-theme 'doom-solarized-light)
+      (defvar luyangliuable/current-theme-index 2
+        ;; Add your day-time actions here
+        ))))
+
+
+(load-theme doom-theme t)
 
 ;;; Theme Management
 
