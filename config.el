@@ -2,28 +2,41 @@
 ;; Personal Doom Emacs Configuration
 ;; Split into organized modules for better maintainability
 
+;; CRITICAL: Evil operator configuration MUST happen early
+;; These variables need to be set before evil loads
+(setq evil-want-integration t)
+(setq evil-want-keybinding nil)
+(setq evil-want-operator-state t)
+(setq evil-want-operator-pending-state t)
+(setq evil-want-visual-char-semi-exclusive t)
+(setq evil-want-C-u-scroll t)
+(setq evil-want-C-d-scroll t)
+(setq evil-want-Y-yank-to-eol t)
+
 ;; Load existing custom modules
 (load! "elisp-functions/functions")
 (load! "themes")
 
 ;; Load core configuration modules (order matters)
-(load! "config/core")              ; Core settings first
-(load! "config/keybindings")       ; Keybindings after packages
-(load! "config/modes")             ; Mode hooks
-(load! "config/packages/agent-shell")
-(load! "config/packages/drag-stuff")
-(load! "config/packages/editorconfig")
-(load! "config/packages/evil")     ; Evil fixes last
-(load! "config/packages/gptel")    ; gptel - temporarily disabled
-(load! "config/packages/lsp")
-(load! "config/packages/projectile")
-(load! "config/packages/treemacs") ; treemacs
-(load! "config/ui")                ; UI packages after core
+(load! "config/core")                     ; Core settings first
+(load! "config/modes")                    ; Mode hooks
+(load! "config/packages/evil")            ; Evil configuration EARLY
+(load! "config/packages/agent-shell")     ; agent-shell
+(load! "config/packages/drag-stuff")      ; dragstuff
+(load! "config/packages/editorconfig")    ; editorconfig
+(load! "config/packages/gptel")           ; gptel
+(load! "config/packages/lsp")             ; lsp
+(load! "config/packages/projectile")      ; projectile
+(load! "config/packages/treemacs")        ; treemacs
+(load! "config/keybindings")              ; Keybindings after packages
+(load! "config/ui")                       ; UI packages after core
+(ignore-errors
+    (load! "config/packages/lsp-vtsls")) ; lsp-vtsls
 
 ; Source - https://stackoverflow.com/a
 ; Posted by Trey Jackson, modified by community. See post 'Timeline' for change history
 ; Retrieved 2026-01-06, License - CC BY-SA 4.0
-(setq debug-on-error t)
+(setq debug-on-error nil)
 
 ;; anki-editor configuration
 ;; (use-package! anki-editor

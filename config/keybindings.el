@@ -2,10 +2,15 @@
 ;; All Keybinding Configurations
 
 ;; Load individual keybinding files (standalone map!/after! blocks only)
-(load! "keybindings/gptel")
-(load! "keybindings/evil")
-(load! "keybindings/treemacs")
-(load! "keybindings/lsp")
+(ignore-errors
+  (load! "keybindings/gptel")
+  (load! "keybindings/evil")
+  (load! "keybindings/treemacs")
+  (load! "keybindings/lsp")
+  (load! "keybindings/shell")
+  (load! "keybindings/magit")
+  (load! "keybindings/emacs-lisp")
+  (load! "keybindings/good-scroll"))
 
 ;;; ============================================================================
 ;;; KEYBINDINGS
@@ -14,7 +19,10 @@
 ;; Unmap conflicting keybindings
 (map!
  :leader "tm" nil
+ :leader "wr" nil
+ :leader "gs" nil
  :leader "*" nil
+ :leader "p!" nil
  :leader "x" nil
  :leader ";" nil
  :leader "fy" nil
@@ -30,20 +38,9 @@
  :v "s{" (lambda () (interactive) (luyangliuable/wrap-with-char ?{))
  :v "s*" (lambda () (interactive) (luyangliuable/wrap-with-char ?*)))
 
-;; Good scroll keybindings
-(map!
- :n "C-u" #'good-scroll-down
- :n "C-d" #'good-scroll-up
- :n "C-b" #'good-scroll-up-full-screen
- :n "C-f" #'good-scroll-down-full-screen)
-
 ;; File operations
-(map!
- :n "c-u" (lambda () (interactive) (revert-buffer nil t)))
-
-(map! :map emacs-lisp-mode-map
-        :localleader
-        :desc "flycheck-errors-list" "ge" #'flycheck-list-errors)
+;; (map!
+;; :n "c-u" (lambda () (interactive) (revert-buffer nil t)))
 
 ;; Main keybinding block - organized by category
 (map!
@@ -60,9 +57,39 @@
  :desc "Go to scratch buffer" "bs" #'luyangliuable/goto-scratch-buffer
  :desc "Copy entire buffer to clipboard" "bY" #'luyangliuable/copy-whole-buffer-to-clipboard
 
- ;; Window management
- :desc "Split window right and open shell" "p$" #'luyangliuable/treemacs-shell-here
+ :desc "Run shell in project" "p$." #'projectile-run-shell
+ :desc "Split window vertically and run shell"
+ "p$v" (lambda ()
+         (interactive)
+         (split-window-right)
+         (other-window 1)
+         (projectile-run-shell))
+ ;; :desc "Split window vertically and temp run shell"
+ ;; "p$t" (cmd! (split-window-right)
+ ;;             (other-window 1)
+ ;;             (projectile-run-shell)
+ ;;             (evil-local-set-key 'normal (kbd "q") 'kill-current-buffer)
+ ;;             (local-set-key (kbd "q") 'kill-current-buffer))
+ :desc "Split window horizontally and run shell" "p$s" (lambda () (interactive) (split-window-below) (other-window 1) (projectile-run-shell))
+ :desc "Split window vertically and run shell" "p$V" (lambda () (interactive) (split-window-right) (other-window 1) (projectile-run-shell) (other-window -1))
+ :desc "Split window horizontally and run shell" "p$S" (lambda () (interactive) (split-window-below) (other-window 1) (projectile-run-shell) (other-window -1))
+
+ ;; :desc "new shell for project" "p!" #'luyangliuable/new-shell-for-project
+ :desc "Run shell in project" "p!." #'luyangliuable/new-shell-for-project
+ :desc "Split window vertically and run shell" "p!v" (lambda () (interactive) (split-window-right) (other-window 1) (luyangliuable/new-shell-for-project))
+ :desc "Split window horizontally and run shell" "p!s" (lambda () (interactive) (split-window-below) (other-window 1) (luyangliuable/new-shell-for-project))
+ :desc "Split window vertically and run shell" "p!V" (lambda () (interactive) (split-window-right) (other-window 1) (luyangliuable/new-shell-for-project) (other-window -1))
+ :desc "Split window horizontally and run shell" "p!S" (lambda () (interactive) (split-window-below) (other-window 1) (luyangliuable/new-shell-for-project) (other-window -1))
+
+ :desc "Resize window width" "wrw" (lambda () (interactive)
+                                     (let ((width (read-number "Window width: ")))
+                                       (window-resize nil (- width (window-width)) t)))
+ :desc "Resize window height" "wrh" (lambda () (interactive)
+                                      (let ((height (read-number "Window height: ")))
+                                        (window-resize nil (- height (window-height)))))
+
  :desc "Split window bottom and open shell" "p|" #'luyangliuable/treemacs-shell-here-horizontal
+ :desc "New shell for project (split)" "p@" #'luyangliuable/new-shell-for-project-split
  :desc "Maximize buffer" "wm" #'luyangliuable/toggle-maximize-buffer
  :desc "Ace window" "wW" #'ace-window
  :desc "Window management transient state" "w." #'hydra-window-management/body
@@ -76,7 +103,13 @@
 
  ;; Git operations
  :desc "browse-at-remote" "xb" #'browse-at-remote
- :desc "magit" "gs" #'luyangliuable/magit
+
+ ;;:desc "magit" "gs" #'luyangliuable/magit
+ :desc "Run shell in project" "gs." #'magit
+ :desc "Split window vertically and run shell" "gsv" (lambda () (interactive) (split-window-right) (other-window 1) (magit))
+ :desc "Split window horizontally and run shell" "gss" (lambda () (interactive) (split-window-below) (other-window 1) (magit))
+ :desc "Split window vertically and run shell" "gsV" (lambda () (interactive) (split-window-right) (other-window 1) (magit) (other-window -1))
+ :desc "Split window horizontally and run shell" "gsS" (lambda () (interactive) (split-window-below) (other-window 1) (magit) (other-window -1))
 
  ;; Jump operations
  :desc "avy goto char" "jw" #'avy-goto-char
@@ -112,27 +145,3 @@
                          (let ((text (read-string "Say: ")))
                            (when (not (string-empty-p text))
                              (start-process "say-text" nil "say" text)))))
-
-;; Override magit quit function to handle window cleanup properly
-(after! magit
-  (define-key magit-mode-map "q" #'luyangliuable/magit-quit))
-
-;; Also handle evil-collection-magit if it's loaded
-(after! evil-collection-magit
-  (map! :map magit-mode-map :nv "q" #'luyangliuable/magit-quit))
-
-;; Shell mode local leader keybindings
-(map! :map shell-mode-map
-      :localleader
-      :desc "Clear shell buffer" "c" #'luyangliuable/shell-clear-buffer
-      :desc "Command history" "h" #'comint-history-isearch-backward-regexp
-      :desc "Previous command" "p" #'comint-previous-input
-      :desc "Next command" "n" #'comint-next-input
-      :desc "Kill current command" "k" #'luyangliuable/shell-kill-current-command
-      :desc "Interrupt process (C-c)" "i" #'luyangliuable/shell-interrupt-process
-      :desc "Send EOF (C-d)" "d" #'luyangliuable/shell-send-eof
-      :desc "Copy last output" "y" #'luyangliuable/shell-copy-last-output
-      :desc "Previous prompt" "[" #'comint-previous-prompt
-      :desc "Next prompt" "]" #'comint-next-prompt
-      :desc "Beginning of line" "a" #'comint-bol
-      :desc "List input ring" "l" #'comint-dynamic-list-input-ring)

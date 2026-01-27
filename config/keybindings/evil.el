@@ -1,18 +1,67 @@
 ;;; config/keybindings/evil.el -*- lexical-binding: t; -*-
-;; Evil Mode Keybindings
+;; Evil Mode Keybindings - Complete operator+motion fix
 
-;; Fix for c$ and cw commands in evil mode
-;; evil-collection sometimes disables these commands in certain contexts
-;; This restores the proper bindings
+;; CRITICAL: Set evil-want variables BEFORE evil loads
+(setq evil-want-operator-state t)
+(setq evil-want-operator-pending-state t)
+(setq evil-want-visual-char-semi-exclusive t)
+(setq evil-want-C-u-scroll t)
+(setq evil-want-C-d-scroll t)
+
+;; Core evil operator and motion system fix
 (after! evil
-  ;; Ensure change commands are properly bound in normal state
+  ;; Ensure evil is fully loaded with operator support
+  (when (featurep 'evil)
+    (evil-mode 1))
+
+  ;; Ensure all basic operators are properly defined
   (define-key evil-normal-state-map "c" #'evil-change)
+  (define-key evil-normal-state-map "d" #'evil-delete)
+  (define-key evil-normal-state-map "y" #'evil-yank)
   (define-key evil-normal-state-map "C" #'evil-change-line)
+  (define-key evil-normal-state-map "D" #'evil-delete-line)
+  (define-key evil-normal-state-map "Y" #'evil-yank-line)
 
-  ;; Additional fix: ensure the change operator can accept motions
-  (evil-define-key 'normal 'global "c" #'evil-change)
-  (evil-define-key 'normal 'global "C" #'evil-change-line)
+  ;; Ensure operator-pending state map exists and has all motions
+  (unless (and (boundp 'evil-operator-state-map) evil-operator-state-map)
+    (setq evil-operator-state-map (copy-keymap evil-motion-state-map)))
 
-  ;; Make sure motion state has the necessary motions
+  ;; Essential motions in operator-pending state
+  (define-key evil-operator-state-map "$" #'evil-end-of-line)
+  (define-key evil-operator-state-map "w" #'evil-forward-word-begin)
+  (define-key evil-operator-state-map "W" #'evil-forward-WORD-begin)
+  (define-key evil-operator-state-map "b" #'evil-backward-word-begin)
+  (define-key evil-operator-state-map "B" #'evil-backward-WORD-begin)
+  (define-key evil-operator-state-map "e" #'evil-forward-word-end)
+  (define-key evil-operator-state-map "E" #'evil-forward-WORD-end)
+  (define-key evil-operator-state-map "0" #'evil-beginning-of-line)
+  (define-key evil-operator-state-map "^" #'evil-first-non-blank)
+  (define-key evil-operator-state-map "g_" #'evil-last-non-blank)
+  (define-key evil-operator-state-map "gg" #'evil-goto-first-line)
+  (define-key evil-operator-state-map "G" #'evil-goto-line)
+  (define-key evil-operator-state-map "h" #'evil-backward-char)
+  (define-key evil-operator-state-map "j" #'evil-next-line)
+  (define-key evil-operator-state-map "k" #'evil-previous-line)
+  (define-key evil-operator-state-map "l" #'evil-forward-char)
+
+  ;; Also ensure these motions work in motion state
   (define-key evil-motion-state-map "$" #'evil-end-of-line)
-  (define-key evil-motion-state-map "w" #'evil-forward-word-begin))
+  (define-key evil-motion-state-map "w" #'evil-forward-word-begin)
+  (define-key evil-motion-state-map "W" #'evil-forward-WORD-begin)
+  (define-key evil-motion-state-map "b" #'evil-backward-word-begin)
+  (define-key evil-motion-state-map "B" #'evil-backward-WORD-begin)
+  (define-key evil-motion-state-map "e" #'evil-forward-word-end)
+  (define-key evil-motion-state-map "E" #'evil-forward-WORD-end)
+
+  ;; Ensure evil modes are properly initialized
+  (when (fboundp 'evil-normalize-keymaps)
+    (evil-normalize-keymaps)))
+
+;; Additional hook to restore functionality after evil-collection loads
+(add-hook 'evil-collection-setup-hook
+          (lambda (_mode keymaps)
+            ;; Restore operator functionality if it gets disabled
+            (when (bound-and-true-p evil-mode)
+              (define-key evil-normal-state-map "c" #'evil-change)
+              (define-key evil-normal-state-map "d" #'evil-delete)
+              (define-key evil-normal-state-map "y" #'evil-yank))))

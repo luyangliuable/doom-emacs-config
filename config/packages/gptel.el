@@ -20,7 +20,8 @@
   (setq gptel-stream nil)  ; Global streaming disable
 
   ;; Set the API key and backend configuration with explicit non-streaming
-  (setq gptel-backend (gptel-make-openai "Custom-Claude"
+  (setq gptel-model 'bedrock-claude-4-sonnet
+        gptel-backend (gptel-make-openai "Custom-Claude"
                         :stream nil  ; Explicit streaming disable
                         :protocol "https"
                         :host "api.studio.genai.cba"
