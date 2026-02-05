@@ -25,7 +25,7 @@
                         :stream nil  ; Explicit streaming disable
                         :protocol "https"
                         :host "api.studio.genai.cba"
-                        :key "(or (getenv "OPENAI_API_KEY") "")"
+                        :key (or (getenv "OPENAI_API_KEY") "")
                         :endpoint "/v1/chat/completions"
                         :models '("bedrock-claude-4-sonnet")))
 

@@ -1,7 +1,8 @@
 ;;; Theme Configuration
 
 (defvar luyangliuable/themes
-  '(doom-zenburn
+  '(frutiger-aero
+    doom-zenburn
     doom-nord
     doom-solarized-light
     doom-solarized-dark
@@ -18,7 +19,7 @@
       (progn
         (message "Good evening!")
         (setq doom-theme 'doom-solarized-dark)
-        (defvar luyangliuable/current-theme-index 3
+        (defvar luyangliuable/current-theme-index 4
           "Index of the currently active theme.")
         ;; Add your night-time actions here
         )
@@ -26,7 +27,7 @@
     (progn
       (message "Good day!")
       (setq doom-theme 'doom-solarized-light)
-      (defvar luyangliuable/current-theme-index 2
+      (defvar luyangliuable/current-theme-index 3
         ;; Add your day-time actions here
         ))))
 

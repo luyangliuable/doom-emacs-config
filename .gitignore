@@ -32,3 +32,8 @@ Thumbs.db # Windows
 
 # Agent shell files
 .agent-shell/
+
+# Node.js (for formatting scripts)
+node_modules/
+npm-debug.log*
+package-lock.json

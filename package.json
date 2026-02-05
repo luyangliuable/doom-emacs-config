@@ -1,0 +1,18 @@
+{
+  "name": "doom-emacs-formatting",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NPM scripts for formatting Emacs Lisp code in Doom Emacs configuration",
+  "scripts": {
+    "format": "node scripts/format-elisp.js",
+    "format:check": "node scripts/format-elisp.js --check",
+    "format:help": "echo 'Available commands: npm run format (format all .el files) | npm run format:check (dry-run check)'"
+  },
+  "devDependencies": {
+    "glob": "^10.0.0"
+  },
+  "keywords": ["emacs", "elisp", "formatting", "doom-emacs"],
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

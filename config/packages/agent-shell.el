@@ -15,14 +15,14 @@
 (setq agent-shell-anthropic-claude-environment
       (agent-shell-make-environment-variables
        "ANTHROPIC_BASE_URL" "https://api.studio.genai.cba"
-       "ANTHROPIC_API_KEY" "(or (getenv "ANTHROPIC_API_KEY") "")"
+       "ANTHROPIC_API_KEY" (or (getenv "ANTHROPIC_API_KEY") "")
        "ANTHROPIC_MODEL" "aipe-bedrock-claude-4-sonnet"
        "ANTHROPIC_SMALL_FAST_MODEL" "aipe-bedrock-claude-4-sonnet"))
 
 ;; Codex configuration
 (setq agent-shell-openai-codex-environment
       (agent-shell-make-environment-variables
-       "OPENAI_API_KEY" "(or (getenv "ANTHROPIC_API_KEY") "")"
+       "OPENAI_API_KEY" (or (getenv "OPENAI_API_KEY") "")
        "ANTHROPIC_BASE_URL" "https://api.studio.genai.cba"
        "NODE_TLS_REJECT_UNAUTHORIZED" "0"))
 

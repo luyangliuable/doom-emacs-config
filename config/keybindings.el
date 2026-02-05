@@ -10,6 +10,7 @@
   (load! "keybindings/shell")
   (load! "keybindings/magit")
   (load! "keybindings/emacs-lisp")
+  (load! "keybindings/zone")
   (load! "keybindings/good-scroll"))
 
 ;;; ============================================================================
@@ -64,12 +65,14 @@
          (split-window-right)
          (other-window 1)
          (projectile-run-shell))
+
  ;; :desc "Split window vertically and temp run shell"
  ;; "p$t" (cmd! (split-window-right)
  ;;             (other-window 1)
  ;;             (projectile-run-shell)
  ;;             (evil-local-set-key 'normal (kbd "q") 'kill-current-buffer)
  ;;             (local-set-key (kbd "q") 'kill-current-buffer))
+ ;;
  :desc "Split window horizontally and run shell" "p$s" (lambda () (interactive) (split-window-below) (other-window 1) (projectile-run-shell))
  :desc "Split window vertically and run shell" "p$V" (lambda () (interactive) (split-window-right) (other-window 1) (projectile-run-shell) (other-window -1))
  :desc "Split window horizontally and run shell" "p$S" (lambda () (interactive) (split-window-below) (other-window 1) (projectile-run-shell) (other-window -1))
