@@ -1,7 +1,6 @@
 ;;; config/packages/agent-shell.el -*- lexical-binding: t; -*-
 ;; Agent Shell Package Configuration
 
-;; Agent shell configuration
 (use-package agent-shell
   :ensure-system-package ((claude-code-acp . "npm install -g @zed-industries/claude-code-acp")
                           (codex . "brew install codex"))
@@ -14,10 +13,18 @@
 ;; Claude Code configuration
 (setq agent-shell-anthropic-claude-environment
       (agent-shell-make-environment-variables
-       "ANTHROPIC_BASE_URL" "https://api.studio.genai.cba"
-       "ANTHROPIC_API_KEY" (or (getenv "ANTHROPIC_API_KEY") "")
-       "ANTHROPIC_MODEL" "aipe-bedrock-claude-4-sonnet"
-       "ANTHROPIC_SMALL_FAST_MODEL" "aipe-bedrock-claude-4-sonnet"))
+       "ANTHROPIC_BASE_URL" (or (getenv "ANTHROPIC_BASE_URL") "https://api.kimi.com/coding")
+       "ANTHROPIC_API_KEY" (or (getenv "ANTHROPIC_API_KEY") "sk-kimi-Pgi46xvob5hFir4UClU1Mt9hJjIkejeIlB9ZtNYGNZRDbcMqt2TfhI7hrIT68pex")
+       "ANTHROPIC_MODEL" (or (getenv "ANTHROPIC_MODEL") "kimi-k2.5")
+       "ANTHROPIC_SMALL_FAST_MODEL" (or (getenv "ANTHROPIC_SMALL_FAST_MODEL") "kimi-k2.5")))
+
+
+(setq agent-shell-opencode-environment
+      (agent-shell-make-environment-variables
+       "ANTHROPIC_BASE_URL" (or (getenv "ANTHROPIC_BASE_URL") "https://api.kimi.com/coding")
+       "ANTHROPIC_API_KEY" (or (getenv "ANTHROPIC_API_KEY") "sk-kimi-Pgi46xvob5hFir4UClU1Mt9hJjIkejeIlB9ZtNYGNZRDbcMqt2TfhI7hrIT68pex")
+       "ANTHROPIC_MODEL" (or (getenv "ANTHROPIC_MODEL") "kimi-k2.5")
+       "ANTHROPIC_SMALL_FAST_MODEL" (or (getenv "ANTHROPIC_SMALL_FAST_MODEL") "kimi-k2.5")))
 
 ;; Codex configuration
 (setq agent-shell-openai-codex-environment
