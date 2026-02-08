@@ -11,7 +11,8 @@
   (load! "keybindings/magit")
   (load! "keybindings/emacs-lisp")
   (load! "keybindings/zone")
-  (load! "keybindings/good-scroll"))
+  (load! "keybindings/good-scroll")
+  (load! "keybindings/undo-tree"))
 
 ;;; ============================================================================
 ;;; KEYBINDINGS

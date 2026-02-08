@@ -8,12 +8,12 @@
 (setq doom-font (font-spec :family "Fira Code" :size 13 :weight 'semi-light))
 
 ;; Display settings
-(setq display-line-numbers-type 'relative)
-(setq blink-cursor-mode t)
-(scroll-bar-mode -1)
-(evil-goggles-mode t)
-;; (set-fringe-mode 1) ;; fringe mode minimal
-(blink-cursor-mode) ;; make cursor blink
+(setq display-line-numbers-type 'relative)  ;; show relative line number
+(setq blink-cursor-mode t)                  ;; show blinking cursor
+(scroll-bar-mode -1)                         ;; don't show scrollbar
+(evil-goggles- t)                       ;; enable evil-goggles-mode
+(add-hook 'find-file-hook 'undo-tree-mode)  ;; enable undo-tree-mode for all buffer
+;; (set-fringe-mode 1)                      ;; fringe mode minimal
 
 ;; Window management - maximize on startup
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
