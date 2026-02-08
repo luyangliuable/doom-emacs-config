@@ -11,7 +11,7 @@
 (setq display-line-numbers-type 'relative)  ;; show relative line number
 (setq blink-cursor-mode t)                  ;; show blinking cursor
 (scroll-bar-mode -1)                         ;; don't show scrollbar
-(evil-goggles- t)                       ;; enable evil-goggles-mode
+(evil-goggles-mode t)                       ;; enable evil-goggles-mode
 (add-hook 'find-file-hook 'undo-tree-mode)  ;; enable undo-tree-mode for all buffer
 ;; (set-fringe-mode 1)                      ;; fringe mode minimal
 
