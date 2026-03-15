@@ -34,7 +34,7 @@
        "NODE_TLS_REJECT_UNAUTHORIZED" "0"))
 
 ;; Explicitly set the default models
-(setq agent-shell-anthropic-default-model-id "aipe-bedrock-claude-4-sonnet")
+(setq agent-shell-anthropic-default-model-id "aipe-bedrock-claude-4-5-sonnet")
 (setq agent-shell-openai-codex-default-model-id "aipe-bedrock-claude-4-5-sonnet")
 
 ;; Set codex executable path if needed

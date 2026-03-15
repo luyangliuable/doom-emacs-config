@@ -9,22 +9,25 @@
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;; (package! some-package)
 
-(package! projectile)
-(package! helm-projectile)
-(package! good-scroll)
-(package! beacon)
-(package! doom-modeline)
-(package! minimap)
-(package! lsp-treemacs)
 (package! agent-shell)
 (package! anki-editor)
+(package! beacon)
+(package! doom-modeline)
 (package! drag-stuff)
-(package! zone)
-(package! gptel :recipe (:nonrecursive t))
+(package! exec-path-from-shell)
 (package! git-timemachine)
+(package! good-scroll)
+(package! gptel :recipe (:nonrecursive t))
+(package! lsp-treemacs)
+(package! lsp-vtsls :recipe (:host github :repo "sdvcrx/lsp-vtsls"))
+(package! lsp-vtsls :recipe (:host github :repo "sdvcrx/lsp-vtsls"))
+(package! minimap)
+(package! org-jira)
+(package! projectile)
 (package! terminal-here)
 (package! undo-tree)
-(package! lsp-vtsls :recipe (:host github :repo "sdvcrx/lsp-vtsls"))
+(package! zone)
+;;(package! helm-projectile)  ; Removed: Switching to Vertico for better performance
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:

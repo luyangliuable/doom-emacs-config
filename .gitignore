@@ -37,3 +37,9 @@ Thumbs.db # Windows
 node_modules/
 npm-debug.log*
 package-lock.json
+
+# Doom Emacs log files
+doom-startup-error.log
+doom-startup.log
+doom-sync-error.log
+doom-sync.log

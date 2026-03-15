@@ -12,7 +12,8 @@
   (load! "keybindings/emacs-lisp")
   (load! "keybindings/zone")
   (load! "keybindings/good-scroll")
-  (load! "keybindings/undo-tree"))
+  (load! "keybindings/undo-tree")
+  (load! "keybindings/narrow"))
 
 ;;; ============================================================================
 ;;; KEYBINDINGS
@@ -85,12 +86,14 @@
  :desc "Split window vertically and run shell" "p!V" (lambda () (interactive) (split-window-right) (other-window 1) (luyangliuable/new-shell-for-project) (other-window -1))
  :desc "Split window horizontally and run shell" "p!S" (lambda () (interactive) (split-window-below) (other-window 1) (luyangliuable/new-shell-for-project) (other-window -1))
 
- :desc "Resize window width" "wrw" (lambda () (interactive)
-                                     (let ((width (read-number "Window width: ")))
-                                       (window-resize nil (- width (window-width)) t)))
- :desc "Resize window height" "wrh" (lambda () (interactive)
-                                      (let ((height (read-number "Window height: ")))
-                                        (window-resize nil (- height (window-height)))))
+ :desc "Resize window width %" "wrw" (lambda () (interactive)
+                                      (let* ((pct (read-number "Window width %: "))
+                                             (target-width (round (* (frame-width) (/ pct 100.0)))))
+                                        (window-resize nil (- target-width (window-width)) t)))
+ :desc "Resize window height %" "wrh" (lambda () (interactive)
+                                        (let* ((pct (read-number "Window height %: "))
+                                               (target-height (round (* (frame-height) (/ pct 100.0)))))
+                                          (window-resize nil (- target-height (window-height)))))
 
  :desc "Split window bottom and open shell" "p|" #'luyangliuable/treemacs-shell-here-horizontal
  :desc "New shell for project (split)" "p@" #'luyangliuable/new-shell-for-project-split

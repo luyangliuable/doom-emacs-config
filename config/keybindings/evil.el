@@ -14,6 +14,12 @@
   (when (featurep 'evil)
     (evil-mode 1))
 
+  ;; CRITICAL: Unbind comma from evil-repeat-find-char-reverse
+  ;; This allows doom-localleader-key "," to work properly
+  (define-key evil-normal-state-map "," nil)
+  (define-key evil-motion-state-map "," nil)
+  (define-key evil-visual-state-map "," nil)
+
   ;; Ensure all basic operators are properly defined
   (define-key evil-normal-state-map "c" #'evil-change)
   (define-key evil-normal-state-map "d" #'evil-delete)

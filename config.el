@@ -27,7 +27,10 @@
 (load! "config/packages/gptel")           ; gptel
 (load! "config/packages/lsp")             ; lsp
 (load! "config/packages/projectile")      ; projectile
+(load! "config/packages/consult")         ; consult + ripgrep
+(load! "config/packages/vertico")         ; vertico optimization
 (load! "config/packages/treemacs")        ; treemacs
+(load! "config/packages/org-jira")        ; org jira
 (load! "config/keybindings")              ; Keybindings after packages
 (load! "config/ui")                       ; UI packages after core
 (ignore-errors
