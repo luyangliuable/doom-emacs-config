@@ -1,156 +1,205 @@
 # Doom Emacs Configuration
 
-This is a sample configuration file for Doom Emacs. You can place your private configuration here. Remember, you do not need to run `doom sync` after modifying this file.
+Custom Doom Emacs configuration with enhanced features and Spacemacs-inspired keybindings.
 
-## User Information
+## Features Beyond Vanilla Doom Emacs
 
-Some functionality uses this to identify you, e.g., GPG configuration, email clients, file templates, and snippets. This section is optional.
+### LSP Enhancements
+- **Comprehensive localleader bindings**: All LSP code actions available under `,` (localleader)
+  - `,rr` - LSP rename
+  - `,aa` - Execute code action
+  - `,=b` / `,=r` / `,=o` - Format buffer/region/organize imports
+  - `,gg` / `,gi` / `,gr` / `,gt` - Jump to definition/implementation/references/type
+  - `,hh` - Describe thing at point
+  - `,bd` / `,br` / `,bs` / `,bv` - LSP backend management
+  - `,Fa` / `,Fr` / `,Fs` - Workspace folder management
+- **Electric indent**: Auto-indentation on new lines in LSP buffers
 
-```elisp
-;; (setq user-full-name "John Doe"
-;;       user-mail-address "john@doe.com")
+### UI & Visual Enhancements
+- **Beacon mode**: Highlights cursor position on big movements
+- **Minimap**: Code overview sidebar (`SPC tmM`)
+- **Good scroll**: Smooth scrolling with customizable speed
+- **Auto-highlight-symbol**: Toggle symbol highlighting with `SPC sh`
+- **Ligatures**: Programming ligatures support
+- **Doom modeline**: Enhanced modeline with breadcrumbs
+- **Global breadcrumb navigation**: File path breadcrumbs for all files
+- **Zen mode**: Distraction-free writing/coding
+
+### Window & Layout Management
+- **Custom window resizing**: Resize by percentage
+  - `SPC wrw` - Resize window width by %
+  - `SPC wrh` - Resize window height by %
+- **Window maximize**: Toggle buffer maximization (`SPC wm`)
+- **Ace window**: Quick window switching (`SPC wW`)
+- **Workspaces**: Tab emulation with persistence
+- **Hydra window management**: Transient state for window operations (`SPC w.`)
+
+### Evil/Vim Enhancements
+- **Evil everywhere**: Vim bindings in all modes
+- **Evil operator state**: Full operator pending support
+- **Custom text objects**: Additional text object support
+- **Visual wrapping**: Quick wrap selections with quotes, brackets, etc.
+  - `s"` / `s'` / `` s` `` - Wrap with quotes
+  - `s(` / `s[` / `s{` - Wrap with brackets
+  - `s*` - Wrap with asterisks
+- **Enhanced undo**: Persistent undo with undo-tree/vundo
+- **Code folding**: Universal code folding support
+- **Snippets**: YASnippet integration
+
+### File Operations
+- **Enhanced yank/copy**:
+  - `SPC fyd` - Copy directory path
+  - `SPC fyn` - Copy file name
+  - `SPC fyy` - Copy file path
+  - `SPC fyl` - Copy file path with line number
+- **Treemacs integration**: Project drawer with icon support
+- **Browse at remote**: Open current file/line in browser (`SPC xb`)
+
+### Project Management
+- **Projectile**: Enhanced project management
+- **Project shell commands**:
+  - `SPC p$.` - Run shell in project
+  - `SPC p$v` / `SPC p$s` - Split and run shell
+  - `SPC p!.` - New shell for project
+- **Magit integration**: Git porcelain
+  - `SPC gs.` - Open magit
+  - `SPC gsv` / `SPC gss` - Split and open magit
+
+### Text Operations
+- **Drag stuff**: Move lines/regions up/down
+  - `SPC xJ` - Drag down (repeatable)
+  - `SPC xK` - Drag up (repeatable)
+- **Delete trailing whitespace**: `SPC xdw`
+- **Sort lines**: `SPC xls`
+- **Link hint**: Open links at point (`SPC xo`)
+- **Evil nerd commenter**: Comment operator (`SPC ;`)
+
+### Toggle Commands
+- **Line numbers**:
+  - `SPC tna` - Toggle absolute line numbers
+  - `SPC tnr` - Toggle relative line numbers
+- **UI elements**:
+  - `SPC tmT` - Toggle mode line
+  - `SPC tmM` - Toggle minimap
+  - `SPC sh` - Toggle symbol highlighting
+
+### Navigation
+- **Avy**: Jump to char (`SPC jw`)
+- **Goto last change**: `SPC jc`
+- **Buffer switching**: `SPC TAB` - Switch to last buffer
+- **Scratch buffer**: `SPC bs` - Go to scratch buffer
+
+### Custom Functions
+- **Buffer operations**:
+  - `SPC bY` - Copy entire buffer to clipboard
+  - `SPC wm` - Toggle buffer maximization
+- **Window splitting with shell**:
+  - `SPC p$V` / `SPC p$S` - Split and run shell (stay in current)
+  - `SPC p!V` / `SPC p!S` - New shell split (stay in current)
+- **Mode line toggle**: Custom function to show/hide mode line
+
+### Package Management
+- **Straight.el**: Declarative package management
+- **Custom packages**:
+  - agent-shell
+  - anki-editor
+  - auto-highlight-symbol
+  - beacon
+  - drag-stuff
+  - gptel
+  - minimap
+  - org-jira
+  - lsp-vtsls (TypeScript)
+
+### Language Support
+- **TypeScript/JavaScript**: LSP with vtsls
+- **Rust**: LSP support
+- **Web**: HTML/CSS/JavaScript with LSP
+- **Python**: Full language support
+- **Emacs Lisp**: Enhanced with flycheck
+- **Markdown**: With live preview
+- **Org mode**: Enhanced org support with org-jira
+- **Common Lisp**: With SLY
+- **Shell scripting**: Bash/Zsh support
+
+### Additional Tools
+- **Docker**: Docker integration
+- **EditorConfig**: Consistent coding styles
+- **Tree-sitter**: Enhanced syntax parsing
+- **LSP**: Multiple language servers configured
+- **PDF tools**: PDF viewing and annotation
+- **Task runner**: Project task management
+
+## Configuration Structure
+
+```
+.doom.d/
+├── config.el                    # Main configuration loader
+├── init.el                      # Doom modules configuration
+├── packages.el                  # Package declarations
+├── themes.el                    # Theme configuration
+├── config/
+│   ├── core.el                  # Core settings
+│   ├── modes.el                 # Mode hooks
+│   ├── ui.el                    # UI configuration
+│   ├── keybindings.el           # Main keybindings
+│   ├── keybindings/             # Keybinding modules
+│   │   ├── emacs-lisp.el
+│   │   ├── evil.el
+│   │   ├── gptel.el
+│   │   ├── lsp.el
+│   │   ├── magit.el
+│   │   ├── shell.el
+│   │   ├── treemacs.el
+│   │   └── ...
+│   └── packages/                # Package configurations
+│       ├── agent-shell.el
+│       ├── auto-highlight-symbol.el
+│       ├── drag-stuff.el
+│       ├── evil.el
+│       ├── lsp.el
+│       ├── lsp-vtsls.el
+│       └── ...
+└── elisp-functions/
+    └── functions.el             # Custom Elisp functions
 ```
 
-## Fonts
-Doom exposes five (optional) variables for controlling fonts in Doom:
+## Installation
 
-* doom-font -- the primary font to use
-* doom-variable-pitch-font -- a non-monospace font (where applicable)
-* doom-big-font -- used for doom-big-font-mode; use this for presentations or streaming.
-* doom-symbol-font -- for symbols
-* doom-serif-font -- for the fixed-pitch-serif face
-
-See C-h v doom-font for documentation and more examples of what they accept. For example:
-
-```elsip
-;; (setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+1. Install Doom Emacs:
+```bash
+git clone https://github.com/doomemacs/doomemacs ~/.config/doom-emacs
+~/.config/doom-emacs/bin/doom install
 ```
 
-If you or Emacs can't find your font, use M-x describe-font to look them up, M-x eval-region to execute elisp code, and M-x doom/reload-font to refresh your font settings. If Emacs still can't find your font, it likely wasn't installed correctly. Font issues are rarely Doom issues!
-
-## Themes
-There are two ways to load a theme. Both assume the theme is installed and available. You can either set doom-theme or manually load a theme with the load-theme function. This is the default:
-
-```emacs-lisp
-(setq doom-theme 'doom-one)
+2. Clone this configuration:
+```bash
+git clone https://github.com/luyangliuable/doom-emacs-config.git ~/.doom.d
+cd ~/.doom.d
+git submodule update --init --recursive
 ```
 
-## Line Numbers
-This determines the style of line numbers in effect. If set to nil, line numbers are disabled. For relative line numbers, set this to relative.
-
-```emacs-lisp
-(setq display-line-numbers-type t)
+3. Sync Doom:
+```bash
+doom sync
 ```
 
-## Org Directory
+4. Restart Emacs
 
-If you use org and don't want your org files in the default location below, change org-directory. It must be set before org loads!
+## Key Customizations
 
-```emacs-lisp
-(setq org-directory "~/org/")
-```
+- **Localleader**: `,` (instead of `SPC m`)
+- **Leader key**: `SPC` (standard Doom)
+- **Font**: Set in `config/core.el`
+- **Theme**: Configured in `themes.el`
+- **Custom functions**: Defined in `elisp-functions/functions.el`
 
-## Reconfiguring Packages
-Whenever you reconfigure a package, make sure to wrap your config in an after! block, otherwise Doom's defaults may override your settings. E.g.
+## Notes
 
-``` emacs-lisp
-;; (after! PACKAGE
-;;   (setq x y))
-```
+- This configuration is optimized for macOS but should work on Linux
+- LSP servers need to be installed separately for each language
+- Some packages require additional system dependencies
 
-## Exceptions
-The exceptions to this rule:
+## License
 
-* Setting file/directory variables (like org-directory)
-* Setting variables which explicitly tell you to set them before their package is loaded (see C-h v VARIABLE to look up their documentation).
-* Setting Doom variables (which start with doom- or +).
-
-## Additional Functions/Macros
-Here are some additional functions/macros that will help you configure Doom:
-
-* `load!` for loading external *.el files relative to this one
-* `use-package!` for configuring packages
-* `after!` for running code after a package has loaded
-* `add-load-path!` for adding directories to the load-path, relative to this file. Emacs searches the load-path when you load packages with require or use-package.
-* `map!` for binding new keys
-
-
-``` emacs-lisp
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
-
-
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets. It is optional.
-;; (setq user-full-name "John Doe"
-;;       user-mail-address "john@doe.com")
-
-;; Doom exposes five (optional) variables for controlling fonts in Doom:
-;;
-;; - doom-font' -- the primary font to use
-;; - doom-variable-pitch-font' -- a non-monospace font (where applicable)
-;; - doom-big-font' -- used for doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;; - doom-symbol-font' -- for symbols
-;; - doom-serif-font' -- for the fixed-pitch-serif' face
-;;
-;; See 'C-h v doom-font' for documentation and more examples of what they
-;; accept. For example:
-;;
-;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
-;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
-;;
-;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
-;; up, M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
-;; refresh your font settings. If Emacs still can't find your font, it likely
-;; wasn't installed correctly. Font issues are rarely Doom issues!
-
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set doom-theme' or manually load a theme with the
-;; load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
-
-;; This determines the style of line numbers in effect. If set to nil', line
-;; numbers are disabled. For relative line numbers, set this to relative'.
-(setq display-line-numbers-type t)
-
-;; If you use org' and don't want your org files in the default location below,
-;; change org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-
-
-;; Whenever you reconfigure a package, make sure to wrap your config in an
-;; after!' block, otherwise Doom's defaults may override your settings. E.g.
-;;
-;;   (after! PACKAGE
-;;     (setq x y))
-;;
-;; The exceptions to this rule:
-;;
-;;   - Setting file/directory variables (like org-directory')
-;;   - Setting variables which explicitly tell you to set them before their
-;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
-;;   - Setting doom variables (which start with 'doom-' or '+').
-;;
-;; Here are some additional functions/macros that will help you configure Doom.
-;;
-;; - load!' for loading external *.el files relative to this one
-;; - use-package!' for configuring packages
-;; - after!' for running code after a package has loaded
-;; - add-load-path!' for adding directories to the load-path', relative to
-;;   this file. Emacs searches the load-path' when you load packages with
-;;   require' or use-package'.
-;; - map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;; Alternatively, use C-h o' to look up a symbol (functions, variables, faces,
-;; etc).
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
-```
+MIT License - See individual package licenses for third-party components
