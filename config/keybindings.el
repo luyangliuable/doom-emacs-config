@@ -147,6 +147,9 @@
  :desc "M-x" "SPC" #'execute-extended-command
  :desc "evilnc comment operator" ";" #'evilnc-comment-operator
 
+ ;; Search operations
+ :desc "Toggle symbol highlight" "sh" #'auto-highlight-symbol-mode
+
  ;; Audio operations
  :desc "Say text" "ok" (lambda () (interactive)
                          (let ((text (read-string "Say: ")))

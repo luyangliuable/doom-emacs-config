@@ -11,6 +11,7 @@
 
 (package! agent-shell)
 (package! anki-editor)
+(package! auto-highlight-symbol)
 (package! beacon)
 (package! doom-modeline)
 (package! drag-stuff)

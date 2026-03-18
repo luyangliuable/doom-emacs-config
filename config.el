@@ -22,6 +22,7 @@
 (load! "config/modes")                    ; Mode hooks
 (load! "config/packages/evil")            ; Evil configuration EARLY
 (load! "config/packages/agent-shell")     ; agent-shell
+(load! "config/packages/auto-highlight-symbol") ; auto-highlight-symbol
 (load! "config/packages/drag-stuff")      ; dragstuff
 (load! "config/packages/editorconfig")    ; editorconfig
 (load! "config/packages/gptel")           ; gptel

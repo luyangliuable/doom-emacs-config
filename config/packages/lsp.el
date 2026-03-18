@@ -7,6 +7,9 @@
   (setq lsp-headerline-breadcrumb-enable t)
   (lsp-headerline-breadcrumb-mode 1)
 
+  ;; Ensure electric-indent works in LSP buffers
+  (add-hook 'lsp-mode-hook #'electric-indent-local-mode)
+
   ;; TypeScript/JavaScript server preferences
   (setq lsp-disabled-clients '(jsts-ls))
   (setq lsp-clients-typescript-prefer-use-project-ts-server nil)
