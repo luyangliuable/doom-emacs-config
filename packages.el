@@ -17,6 +17,7 @@
 (package! drag-stuff)
 (package! exec-path-from-shell)
 (package! git-timemachine)
+(package! golden-ratio)
 (package! good-scroll)
 (package! gptel :recipe (:nonrecursive t))
 (package! lsp-treemacs)

@@ -13,7 +13,8 @@
   (load! "keybindings/zone")
   (load! "keybindings/good-scroll")
   (load! "keybindings/undo-tree")
-  (load! "keybindings/narrow"))
+  (load! "keybindings/narrow")
+  (load! "keybindings/frames"))
 
 ;;; ============================================================================
 ;;; KEYBINDINGS
@@ -127,6 +128,10 @@
  :desc "relative lineno toggle" "tnr" #'luyangliuable/toggle-relative-line-numbers
  :desc "toggle mode line" "tmT" #'luyangliuable/toggle-mode-line
  :desc "toggle minimap" "tmM" #'minimap-mode
+ :desc "zen mode" "tz" #'+zen/toggle
+ :desc "whitespace mode" "tW" #'whitespace-mode
+ :desc "golden ratio" "tG" #'golden-ratio-mode
+ :desc "centered buffer" "tc" #'doom/centered-buffer-transient-state
 
  ;; Text operations
  :desc "drag stuff down" "xJ" #'luyangliuable/drag-stuff-down-repeatable
@@ -149,6 +154,9 @@
 
  ;; Search operations
  :desc "Toggle symbol highlight" "sh" #'auto-highlight-symbol-mode
+
+ ;; Frame operations
+ :desc "Frame commands" "F" #'doom/frame-transient-state/body
 
  ;; Audio operations
  :desc "Say text" "ok" (lambda () (interactive)
