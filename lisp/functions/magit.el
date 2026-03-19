@@ -1,7 +1,8 @@
 ;;; lisp/functions/magit.el -*- lexical-binding: t; -*-
-;; Magit and shell integration functions
+;; Magit and shell integration functions (require magit to be loaded)
 
-(defun luyangliuable/magit ()
+(after! magit
+  (defun luyangliuable/magit ()
   "Smart magit function that refreshes if already in magit-status-mode, otherwise opens magit in a split window."
   (interactive)
   (if (eq major-mode 'magit-status-mode)
@@ -79,6 +80,12 @@
         ;; Store the original window for cleanup purposes
         (with-current-buffer (magit-get-mode-buffer 'magit-status-mode)
           (setq-local luyangliuable--magit-original-window original-window))))))
+
+) ;; End of (after! magit)
+
+;;; ============================================================================
+;;; SHELL FUNCTIONS (Don't require magit)
+;;; ============================================================================
 
 (defun luyangliuable/shell-clear-buffer ()
   "Clear the shell buffer content, similar to 'clear' command."
