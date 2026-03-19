@@ -1,18 +1,5 @@
-;;; config/keybindings.el -*- lexical-binding: t; -*-
-;; All Keybinding Configurations
-
-;; Load individual keybinding files with proper error handling (OPTIMIZED)
-(dolist (file '("gptel" "evil" "treemacs" "lsp" "shell" "magit" "emacs-lisp"
-                "zone" "good-scroll" "undo-tree" "narrow" "frames"))
-  (let* ((filepath (concat "keybindings/" file))
-         (fullpath (concat doom-private-dir "config/" filepath ".el")))
-    (if (file-exists-p fullpath)
-        (condition-case err
-            (load! filepath)
-          (error
-           (message "ERROR: Failed to load keybindings file %s: %s"
-                    filepath (error-message-string err))))
-      (message "WARNING: Keybinding file not found: %s" filepath))))
+;;; lisp/keybindings/core.el -*- lexical-binding: t; -*-
+;; Core keybindings
 
 ;;; ============================================================================
 ;;; KEYBINDINGS
@@ -40,10 +27,6 @@
  :v "s{" (lambda () (interactive) (luyangliuable/wrap-with-char ?{))
  :v "s*" (lambda () (interactive) (luyangliuable/wrap-with-char ?*)))
 
-;; File operations
-;; (map!
-;; :n "c-u" (lambda () (interactive) (revert-buffer nil t)))
-
 ;; Main keybinding block - organized by category
 (map!
  ;; Global keybindings (non-leader)
@@ -67,18 +50,10 @@
          (other-window 1)
          (projectile-run-shell))
 
- ;; :desc "Split window vertically and temp run shell"
- ;; "p$t" (cmd! (split-window-right)
- ;;             (other-window 1)
- ;;             (projectile-run-shell)
- ;;             (evil-local-set-key 'normal (kbd "q") 'kill-current-buffer)
- ;;             (local-set-key (kbd "q") 'kill-current-buffer))
- ;;
  :desc "Split window horizontally and run shell" "p$s" (lambda () (interactive) (split-window-below) (other-window 1) (projectile-run-shell))
  :desc "Split window vertically and run shell" "p$V" (lambda () (interactive) (split-window-right) (other-window 1) (projectile-run-shell) (other-window -1))
  :desc "Split window horizontally and run shell" "p$S" (lambda () (interactive) (split-window-below) (other-window 1) (projectile-run-shell) (other-window -1))
 
- ;; :desc "new shell for project" "p!" #'luyangliuable/new-shell-for-project
  :desc "Run shell in project" "p!." #'luyangliuable/new-shell-for-project
  :desc "Split window vertically and run shell" "p!v" (lambda () (interactive) (split-window-right) (other-window 1) (luyangliuable/new-shell-for-project))
  :desc "Split window horizontally and run shell" "p!s" (lambda () (interactive) (split-window-below) (other-window 1) (luyangliuable/new-shell-for-project))
@@ -110,7 +85,6 @@
  ;; Git operations
  :desc "browse-at-remote" "xb" #'browse-at-remote
 
- ;;:desc "magit" "gs" #'luyangliuable/magit
  :desc "Run shell in project" "gs." #'magit
  :desc "Split window vertically and run shell" "gsv" (lambda () (interactive) (split-window-right) (other-window 1) (magit))
  :desc "Split window horizontally and run shell" "gss" (lambda () (interactive) (split-window-below) (other-window 1) (magit))
@@ -161,3 +135,6 @@
                          (let ((text (read-string "Say: ")))
                            (when (not (string-empty-p text))
                              (start-process "say-text" nil "say" text)))))
+
+(provide 'core)
+;;; core.el ends here

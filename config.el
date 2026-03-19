@@ -1,6 +1,6 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-;; Personal Doom Emacs Configuration
-;; Split into organized modules for better maintainability
+;; Personal Doom Emacs Configuration (OPTIMIZED & REORGANIZED)
+;; Split into organized modules in lisp/ directory for better maintainability
 
 ;; CRITICAL: Evil operator configuration MUST happen early
 ;; These variables need to be set before evil loads
@@ -13,46 +13,73 @@
 (setq evil-want-C-d-scroll t)
 (setq evil-want-Y-yank-to-eol t)
 
-;; Load existing custom modules
-(load! "elisp-functions/functions")
-(load! "themes")
+;;; ============================================================================
+;;; CORE SETTINGS
+;;; ============================================================================
 
-;; Load core configuration modules (order matters)
-(load! "config/core")                     ; Core settings first
-(load! "config/modes")                    ; Mode hooks
-(load! "config/packages/evil")            ; Evil configuration EARLY
-(load! "config/packages/agent-shell")     ; agent-shell
-(load! "config/packages/auto-highlight-symbol") ; auto-highlight-symbol
-(load! "config/packages/drag-stuff")      ; dragstuff
-(load! "config/packages/editorconfig")    ; editorconfig
-(load! "config/packages/gptel")           ; gptel
-(load! "config/packages/lsp")             ; lsp
-(load! "config/packages/projectile")      ; projectile
-(load! "config/packages/consult")         ; consult + ripgrep
-(load! "config/packages/vertico")         ; vertico optimization
-(load! "config/packages/treemacs")        ; treemacs
-(load! "config/packages/org-jira")        ; org jira
-(load! "config/packages/golden-ratio")    ; golden-ratio
-(load! "config/packages/centered-buffer") ; centered-buffer
-(load! "config/keybindings")              ; Keybindings after packages
-(load! "config/ui")                       ; UI packages after core
+(load! "lisp/core/settings")  ;; exec-path, fonts, display, ripgrep
+(load! "lisp/core/ui")         ;; UI packages, theme management
+(load! "lisp/core/modes")      ;; Mode hooks, file handling
+
+;;; ============================================================================
+;;; CUSTOM FUNCTIONS
+;;; ============================================================================
+
+(load! "lisp/functions/buffer")  ;; Buffer operations
+(load! "lisp/functions/window")  ;; Window management
+(load! "lisp/functions/file")    ;; File operations
+(load! "lisp/functions/magit")   ;; Magit & shell integration
+(load! "lisp/functions/text")    ;; Text operations & UI toggles
+
+;;; ============================================================================
+;;; PACKAGE CONFIGURATIONS
+;;; ============================================================================
+
+(load! "lisp/packages/evil")            ;; Evil configuration EARLY
+(load! "lisp/packages/agent-shell")
+(load! "lisp/packages/auto-highlight-symbol")
+(load! "lisp/packages/centered-buffer")
+(load! "lisp/packages/consult")
+(load! "lisp/packages/drag-stuff")
+(load! "lisp/packages/editorconfig")
+(load! "lisp/packages/git-timemachine")
+(load! "lisp/packages/golden-ratio")
+(load! "lisp/packages/gptel")
+(load! "lisp/packages/lsp")
+(load! "lisp/packages/org-jira")
+(load! "lisp/packages/projectile")
+(load! "lisp/packages/treemacs")
+(load! "lisp/packages/vertico")
 (ignore-errors
-    (load! "config/packages/lsp-vtsls")) ; lsp-vtsls
+  (load! "lisp/packages/lsp-vtsls"))
+
+;;; ============================================================================
+;;; KEYBINDINGS
+;;; ============================================================================
+
+;; Load individual keybinding modules with proper error handling
+(dolist (file '("gptel" "evil" "treemacs" "lsp" "shell" "magit" "emacs-lisp"
+                "zone" "good-scroll" "undo-tree" "narrow" "frames"))
+  (let* ((filepath (concat "lisp/keybindings/" file))
+         (fullpath (concat doom-private-dir filepath ".el")))
+    (if (file-exists-p fullpath)
+        (condition-case err
+            (load! filepath)
+          (error
+           (message "ERROR: Failed to load keybindings file %s: %s"
+                    filepath (error-message-string err))))
+      (message "WARNING: Keybinding file not found: %s" filepath))))
+
+;; Load core keybindings (main keybinding block)
+(load! "lisp/keybindings/core")
+
+;;; ============================================================================
+;;; MISC SETTINGS
+;;; ============================================================================
 
 ; Source - https://stackoverflow.com/a
 ; Posted by Trey Jackson, modified by community. See post 'Timeline' for change history
 ; Retrieved 2026-01-06, License - CC BY-SA 4.0
 (setq debug-on-error nil)
 
-;; anki-editor configuration
-;; (use-package! anki-editor
-;;   :after org
-;;   :bind (("C-c a c" . anki-editor-cloze-region-auto-incr)
-;;          ("C-c a r" . anki-editor-retry-failure-notes)
-;;          ("C-c a p" . anki-editor-push-tree)
-;;          ("C-c a P" . anki-editor-push-notes)
-;;          ("C-c a b" . anki-editor-browse-notes)
-;;          ("C-c a g" . anki-editor-gui-browse))
-;;   :config
-;;   (setq anki-editor-create-decks t
-;;         anki-editor-org-tags-as-anki-tags t))
+;;; config.el ends here

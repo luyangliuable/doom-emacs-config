@@ -1,4 +1,4 @@
-;;; Theme Configuration
+;;; Theme Configuration (OPTIMIZED: Cached time calculation)
 
 (defvar luyangliuable/themes
   '(frutiger-aero
@@ -12,25 +12,19 @@
     doom-plain-dark)
   "List of available themes to cycle through.")
 
+;; Cache theme selection based on time of day (calculated once at startup)
+(defvar luyangliuable--cached-theme-time nil
+  "Cached hour when theme was selected.")
+(defvar luyangliuable--cached-theme nil
+  "Cached theme selection.")
 
-(let ((current-hour (nth 2 (decode-time))))
-  (if (or (< current-hour 6) (>= current-hour 20))
-      ;; Night time (before 6 AM or after 8 PM)
-      (progn
-        (message "Good evening!")
-        (setq doom-theme 'doom-solarized-dark)
-        (defvar luyangliuable/current-theme-index 4
-          "Index of the currently active theme.")
-        ;; Add your night-time actions here
-        )
-    ;; Day time
-    (progn
-      (message "Good day!")
-      (setq doom-theme 'doom-solarized-light)
-      (defvar luyangliuable/current-theme-index 3
-        ;; Add your day-time actions here
-        ))))
-
+(let* ((current-hour (nth 2 (decode-time)))
+       (is-night (or (< current-hour 6) (>= current-hour 20))))
+  (setq luyangliuable--cached-theme-time current-hour
+        luyangliuable--cached-theme (if is-night 'doom-solarized-dark 'doom-solarized-light)
+        doom-theme luyangliuable--cached-theme
+        luyangliuable/current-theme-index (if is-night 4 3))
+  (message (if is-night "Good evening!" "Good day!")))
 
 (load-theme doom-theme t)
 
