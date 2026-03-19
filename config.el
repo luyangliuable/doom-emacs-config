@@ -28,7 +28,7 @@
 (load! "lisp/functions/buffer")  ;; Buffer operations
 (load! "lisp/functions/window")  ;; Window management
 (load! "lisp/functions/file")    ;; File operations
-(load! "lisp/functions/magit")   ;; Magit & shell integration
+;; Magit functions loaded AFTER packages
 (load! "lisp/functions/text")    ;; Text operations & UI toggles
 
 ;;; ============================================================================
@@ -52,6 +52,9 @@
 (load! "lisp/packages/vertico")
 (ignore-errors
   (load! "lisp/packages/lsp-vtsls"))
+
+;; Load magit functions AFTER packages configured
+(load! "lisp/functions/magit")   ;; Magit & shell integration
 
 ;;; ============================================================================
 ;;; KEYBINDINGS
