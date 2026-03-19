@@ -10,7 +10,7 @@
       (magit-refresh)
     ;; Otherwise, open magit in a split window and mark it for cleanup
     (let ((original-window (selected-window)))
-      (luyangliuable/split-window-right-and-run-callback #'magit)
+      (luyangliuable/split-window-right-and-run-callback (lambda () (call-interactively 'magit)))
       ;; Store the original window for cleanup purposes
       (with-current-buffer (magit-get-mode-buffer 'magit-status-mode)
         (setq-local luyangliuable--magit-original-window original-window)))))
