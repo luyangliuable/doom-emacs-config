@@ -12,9 +12,9 @@ Center buffer
 "
   ("c" doom/toggle-centered-buffer-on "center")
   ("C" +zen/toggle "uncenter")
-  ("+" text-scale-increase "wider")
-  ("-" text-scale-decrease "narrower")
-  ("=" text-scale-adjust "reset")
+  ("+" doom/global-text-scale-increase "wider")
+  ("-" doom/global-text-scale-decrease "narrower")
+  ("=" doom/global-text-scale-reset "reset")
   ("q" nil "quit" :exit t))
 
 (defun doom/centered-buffer-transient-state ()
