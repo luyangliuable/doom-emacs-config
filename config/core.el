@@ -30,10 +30,33 @@ Returns ~14pt for 1080p, ~20pt for 1440p, ~27pt for 4K displays."
 (setq blink-cursor-mode t)                  ;; show blinking cursor
 (scroll-bar-mode -1)                         ;; don't show scrollbar
 (evil-goggles-mode t)                       ;; enable evil-goggles-mode
-(setq-default truncate-lines t)             ;; disable line wrapping globally
+;; Line truncation - multi-layered enforcement
+(setq-default truncate-lines t)             ;; Set default for all new buffers
+
+;; Disable visual line mode globally (it overrides truncate-lines)
+(global-visual-line-mode -1)
+
 ;; Enforce truncate-lines after major mode initialization
 (add-hook 'after-change-major-mode-hook
           (lambda () (setq truncate-lines t)))
+
+;; Enforce truncate-lines on window configuration changes
+;; This handles window splits, resizes, and buffer switches
+(add-hook 'window-configuration-change-hook
+          (lambda ()
+            (walk-windows
+             (lambda (window)
+               (with-current-buffer (window-buffer window)
+                 (setq truncate-lines t)))
+             nil t)))
+
+;; Fix initial *scratch* buffer (exists before config loads)
+(add-hook 'after-init-hook
+          (lambda ()
+            (when (get-buffer "*scratch*")
+              (with-current-buffer "*scratch*"
+                (setq truncate-lines t)))))
+
 ;; (add-hook 'find-file-hook 'undo-tree-mode)  ;; enable undo-tree-mode for all buffer
 ;; (set-fringe-mode 1)                      ;; fringe mode minimal
 
