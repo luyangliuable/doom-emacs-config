@@ -10,52 +10,14 @@
   :if (memq window-system '(mac ns))
   :config
   (exec-path-from-shell-initialize))
-;; Font configuration with dynamic screen-based sizing
-(defvar doom-font-base-size nil
-  "Base font size for global text scaling. Calculated on startup based on display height.")
-
-(defun doom/calculate-font-size-for-display ()
-  "Calculate appropriate font size based on display height.
-Returns ~14pt for 1080p, ~20pt for 1440p, ~27pt for 4K displays."
-  (max 14 (/ (display-pixel-height) 70)))
-
-;; Calculate initial font size based on display
-(setq doom-font-base-size (doom/calculate-font-size-for-display))
-(setq doom-font (font-spec :family "Fira Code"
-                           :size doom-font-base-size
-                           :weight 'semi-light))
+;; Font configuration
+(setq doom-font (font-spec :family "Fira Code" :size 13 :weight 'semi-light))
 
 ;; Display settings
 (setq display-line-numbers-type 'relative)  ;; show relative line number
 (setq blink-cursor-mode t)                  ;; show blinking cursor
 (scroll-bar-mode -1)                         ;; don't show scrollbar
 (evil-goggles-mode t)                       ;; enable evil-goggles-mode
-;; Line truncation - multi-layered enforcement
-(setq-default truncate-lines t)             ;; Set default for all new buffers
-
-;; Disable visual line mode globally (it overrides truncate-lines)
-(global-visual-line-mode -1)
-
-;; Enforce truncate-lines after major mode initialization
-(add-hook 'after-change-major-mode-hook
-          (lambda () (setq truncate-lines t)))
-
-;; Enforce truncate-lines on window configuration changes
-;; This handles window splits, resizes, and buffer switches
-(add-hook 'window-configuration-change-hook
-          (lambda ()
-            (walk-windows
-             (lambda (window)
-               (with-current-buffer (window-buffer window)
-                 (setq truncate-lines t)))
-             nil t)))
-
-;; Fix initial *scratch* buffer (exists before config loads)
-(add-hook 'after-init-hook
-          (lambda ()
-            (when (get-buffer "*scratch*")
-              (with-current-buffer "*scratch*"
-                (setq truncate-lines t)))))
 
 ;; (add-hook 'find-file-hook 'undo-tree-mode)  ;; enable undo-tree-mode for all buffer
 ;; (set-fringe-mode 1)                      ;; fringe mode minimal
@@ -93,42 +55,3 @@ Returns ~14pt for 1080p, ~20pt for 1440p, ~27pt for 4K displays."
 
   ;; Use ripgrep for project-wide searches
   (setq xref-search-program 'ripgrep))
-
-;;; ============================================================================
-;;; GLOBAL TEXT SCALING FUNCTIONS
-;;; ============================================================================
-
-(defun doom/global-text-scale-adjust (increment)
-  "Adjust font size globally across all buffers and frames.
-INCREMENT is added to the current font size."
-  (interactive "p")
-  (let* ((current-size (or doom-font-base-size 16))
-         (new-size (+ current-size increment)))
-    (when (> new-size 0)
-      (setq doom-font-base-size new-size)
-      (set-frame-font (format "%s-%d"
-                              (font-get doom-font :family)
-                              new-size)
-                      nil t)
-      (message "Global font size: %d" new-size))))
-
-(defun doom/global-text-scale-increase ()
-  "Increase font size globally by 1 point."
-  (interactive)
-  (doom/global-text-scale-adjust 1))
-
-(defun doom/global-text-scale-decrease ()
-  "Decrease font size globally by 1 point."
-  (interactive)
-  (doom/global-text-scale-adjust -1))
-
-(defun doom/global-text-scale-reset ()
-  "Reset font size to display-calculated base size."
-  (interactive)
-  (let ((base-size (doom/calculate-font-size-for-display)))
-    (setq doom-font-base-size base-size)
-    (set-frame-font (format "%s-%d"
-                            (font-get doom-font :family)
-                            base-size)
-                    nil t)
-    (message "Reset global font size to: %d" base-size)))
