@@ -34,6 +34,7 @@
 (load! "config/packages/org-jira")        ; org jira
 (load! "config/packages/golden-ratio")    ; golden-ratio
 (load! "config/packages/centered-buffer") ; centered-buffer
+(load! "config/packages/persistent-scratch") ; persistent-scratch
 (load! "config/keybindings")              ; Keybindings after packages
 (load! "config/ui")                       ; UI packages after core
 (ignore-errors

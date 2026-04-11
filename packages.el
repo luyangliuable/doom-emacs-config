@@ -25,6 +25,7 @@
 (package! lsp-vtsls :recipe (:host github :repo "sdvcrx/lsp-vtsls"))
 (package! minimap)
 (package! org-jira)
+(package! persistent-scratch)
 (package! projectile)
 (package! terminal-here)
 (package! undo-tree)
