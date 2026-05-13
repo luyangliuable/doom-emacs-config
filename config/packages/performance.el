@@ -111,31 +111,3 @@
 
 ;; Reduce echo area message delay
 (setq echo-keystrokes 0.02)                   ; Show keystrokes immediately
-
-;;; ============================================================================
-;;; LSP OPTIMIZATION (without disabling features)
-;;; ============================================================================
-
-;; These are already in lsp.el, but we ensure they're optimal
-(after! lsp-mode
-  ;; Increase read buffer size for LSP communication
-  (setq lsp-log-io nil)                       ; Keep logging off (perf impact)
-  (setq lsp-print-performance nil)            ; Don't print perf messages
-  (setq lsp-report-if-no-buffer nil)          ; Reduce noise
-
-  ;; Optimize completion
-  (setq lsp-completion-enable t)
-  (setq lsp-completion-show-detail t)
-  (setq lsp-completion-show-kind t)
-
-  ;; Optimize headerline
-  (setq lsp-headerline-breadcrumb-enable-diagnostics nil)  ; Diagnostics in modeline instead
-
-  ;; Optimize semantic tokens (syntax highlighting)
-  (setq lsp-semantic-tokens-enable t)
-  (setq lsp-semantic-tokens-honor-refresh-requests t))
-
-;; LSP UI optimizations
-(after! lsp-ui
-  (setq lsp-ui-peek-enable t)                 ; Enable peek feature
-  (setq lsp-ui-peek-show-directory t))        ; Show directory in peek

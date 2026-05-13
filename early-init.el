@@ -13,6 +13,14 @@
 (setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6)
 
+;;; ============================================================================
+;;; LSP OPTIMIZATION - Must be set BEFORE lsp-mode loads
+;;; ============================================================================
+
+;; Use plists for LSP deserialization (faster than hash tables)
+;; CRITICAL: Must be set before lsp-mode is loaded
+(setq lsp-use-plists t)
+
 ;; Prevent unwanted runtime compilation
 (setq comp-deferred-compilation nil)
 
