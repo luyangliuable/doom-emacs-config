@@ -22,7 +22,6 @@
 (package! gptel :recipe (:nonrecursive t))
 (package! lsp-treemacs)
 (package! lsp-vtsls :recipe (:host github :repo "sdvcrx/lsp-vtsls"))
-(package! lsp-vtsls :recipe (:host github :repo "sdvcrx/lsp-vtsls"))
 (package! minimap)
 (package! org-jira)
 (package! persistent-scratch)

@@ -2,6 +2,23 @@
 ;; Personal Doom Emacs Configuration
 ;; Split into organized modules for better maintainability
 
+;;; ============================================================================
+;;; PERFORMANCE MONITORING (Optional - Comment out after optimization)
+;;; ============================================================================
+
+;; Uncomment to profile startup time
+;; (add-hook 'emacs-startup-hook
+;;   (lambda ()
+;;     (message "Emacs loaded in %s with %d garbage collections."
+;;              (format "%.2f seconds"
+;;                      (float-time
+;;                       (time-subtract after-init-time before-init-time)))
+;;              gcs-done)))
+
+;;; ============================================================================
+;;; CORE CONFIGURATION
+;;; ============================================================================
+
 ;; CRITICAL: Evil operator configuration MUST happen early
 ;; These variables need to be set before evil loads
 (setq evil-want-integration t)
@@ -35,6 +52,7 @@
 (load! "config/packages/golden-ratio")    ; golden-ratio
 (load! "config/packages/centered-buffer") ; centered-buffer
 (load! "config/packages/persistent-scratch") ; persistent-scratch
+(load! "config/packages/performance")     ; Performance optimizations
 (load! "config/keybindings")              ; Keybindings after packages
 (load! "config/ui")                       ; UI packages after core
 (ignore-errors
