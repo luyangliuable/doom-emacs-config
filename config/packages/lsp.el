@@ -2,7 +2,7 @@
 ;; LSP Mode Package Configuration - Optimized for Performance
 
 ;;; ============================================================================
-;;; SECTION 1: EMACS-LSP-BOOSTER SETUP (Optional - Graceful Fallback)
+;;; SECTION 1: EMACS-LSP-BOOSTER SETUP (Corrected Official Implementation)
 ;;; ============================================================================
 
 ;; Configure emacs-lsp-booster if available (4x faster JSON parsing)
@@ -11,7 +11,7 @@
   
   ;; Advice to parse bytecode from booster
   (defun lsp-booster--advice-json-parse (old-fn &rest args)
-    "Try to parse JSON with emacs-lsp-booster bytecode, fallback to native."
+    "Try to parse bytecode instead of json."
     (or
      (when (equal (following-char) ?#)
        (let ((bytecode (read (current-buffer))))
@@ -25,13 +25,21 @@
                 'json-read)
               :around #'lsp-booster--advice-json-parse)
   
-  ;; Advice to wrap LSP server commands with booster
+  ;; Advice to wrap LSP server commands with booster (FIXED VERSION)
   (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
-    "Prepend emacs-lsp-booster to LSP server command if not already present."
+    "Prepend emacs-lsp-booster command to lsp CMD."
     (let ((orig-result (funcall old-fn cmd test?)))
-      (if (and (not (equal orig-result ""))
-               (not (string-match-p "emacs-lsp-booster" orig-result)))
-          (concat "emacs-lsp-booster -- " orig-result)
+      (if (and (not test?)                             ;; Don't wrap during server detection!
+               (not (file-remote-p default-directory)) ;; Don't wrap remote servers
+               lsp-use-plists                          ;; Only if using plists
+               (not (functionp 'json-rpc-connection))  ;; Not native json-rpc
+               (executable-find "emacs-lsp-booster"))
+          (progn
+            ;; Resolve command from exec-path (in case not found in $PATH)
+            (when-let ((command-from-exec-path (executable-find (car orig-result))))
+              (setcar orig-result command-from-exec-path))
+            (message "Using emacs-lsp-booster for %s!" orig-result)
+            (cons "emacs-lsp-booster" orig-result))  ;; Use cons, not concat!
         orig-result)))
   
   (advice-add 'lsp-resolve-final-command
@@ -73,7 +81,7 @@
   (add-hook 'lsp-mode-hook #'electric-indent-local-mode)
 
   ;; TypeScript/JavaScript server preferences
-  (setq lsp-disabled-clients '(jsts-ls))
+  (setq lsp-disabled-clients '(jsts-ls ts-ls))  ; Disable jsts-ls and ts-ls, use vtsls
   (setq lsp-clients-typescript-prefer-use-project-ts-server nil)
 
   ;; Language ID configuration for multiple languages
