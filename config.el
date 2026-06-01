@@ -56,6 +56,7 @@
 (load! "config/keybindings")              ; Keybindings after packages
 (load! "config/ui")                       ; UI packages after core
 (load! "config/packages/lsp-vtsls")      ; lsp-vtsls
+(load! "config/packages/lsp-pyright")    ; lsp-pyright
 
 ; Source - https://stackoverflow.com/a
 ; Posted by Trey Jackson, modified by community. See post 'Timeline' for change history

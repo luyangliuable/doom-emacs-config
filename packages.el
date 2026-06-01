@@ -21,6 +21,7 @@
 (package! good-scroll)
 (package! gptel :recipe (:nonrecursive t))
 (package! lsp-treemacs)
+(package! lsp-pyright)
 (package! lsp-vtsls :recipe (:host github :repo "sdvcrx/lsp-vtsls"))
 (package! minimap)
 (package! org-jira)
