@@ -13,16 +13,15 @@
 ;; After startup, use a more reasonable threshold
 (add-hook 'emacs-startup-hook
   (lambda ()
-    ;; 100MB threshold (vs default 800KB) - fewer GC pauses
-    (setq gc-cons-threshold (* 100 1024 1024))
+    ;; 16MB threshold - more frequent but shorter GC pauses
+    (setq gc-cons-threshold (* 16 1024 1024))
     ;; Increase memory limit before warning
     (setq gc-cons-percentage 0.1)))
 
-;; GC when idle for 5 seconds
-(run-with-idle-timer 5 t #'garbage-collect)
-
-;; GC when Emacs loses focus (out of the way)
-(add-function :after after-focus-change-function #'garbage-collect)
+;; REMOVED: Forced GC timers cause noticeable pauses
+;; Let Emacs GC naturally based on threshold
+;; (run-with-idle-timer 5 t #'garbage-collect)
+;; (add-function :after after-focus-change-function #'garbage-collect)
 
 ;;; ============================================================================
 ;;; FILE HANDLING OPTIMIZATIONS
