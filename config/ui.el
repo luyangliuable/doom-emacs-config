@@ -28,12 +28,14 @@
     (doom-modeline-mode 1))
 
   ;; Beacon - highlight cursor position on big movements
+  ;; Lazy load after 5 seconds to improve startup performance
   (use-package! beacon
+    :defer 5
     :ensure t
     :init
-    ;; Beacon appearance settings
-    (setq beacon-blink-duration 0.8       ;; Duration of the blink
-          beacon-blink-delay 0.3          ;; Delay before the blink starts
+    ;; Beacon appearance settings (optimized for faster animation)
+    (setq beacon-blink-duration 0.3       ;; Faster animation (was 0.8)
+          beacon-blink-delay 0.1          ;; Faster start (was 0.3)
           beacon-size 40                  ;; Size of the beacon
           beacon-color "#ff9d00"          ;; Color of the beacon
           beacon-push-mark 35             ;; Number of moves before pushing a new mark onto the ring
@@ -47,25 +49,29 @@
     (beacon-mode 1))
 
   ;; Minimap configuration
+  ;; Lazy load after 10 seconds - use M-x minimap-mode when needed
   (use-package! minimap
+    :defer 10
     :ensure t
     :init
     (setq minimap-window-location 'right) ;; Position minimap on the right
     :config)
 
   ;; Good scroll - smooth scrolling
+  ;; Lazy load after 3 seconds with optimized settings
   (use-package good-scroll
+    :defer 3
     :ensure t
     :config
-    ;; Smooth scrolling settings
-    (setq good-scroll-duration 0.1) ;; Set a faster duration for scrolling
-    (setq good-scroll-amount 3)     ;; Set the amount of lines to scroll at a time
-    (setq good-scroll-algorithm #'good-scroll-linear) ;; Use a linear scrolling algorithm
+    ;; Optimized scrolling settings for better performance
+    (setq good-scroll-duration 0.05) ;; Faster duration for better performance (was 0.1)
+    (setq good-scroll-amount 2)      ;; Smaller scroll amount (was 3)
+    (setq good-scroll-algorithm #'good-scroll-linear)
 
-    ;; Disabled due to poor performance
     (good-scroll-mode 1))
 
   ;; Global breadcrumb navigation for all files (non-LSP files)
+  ;; Optimized version with project root caching
   (defun my/set-header-line-breadcrumb ()
     "Set header line breadcrumb for file buffers only."
     (when (and buffer-file-name
@@ -75,9 +81,13 @@
                (not (derived-mode-p 'special-mode))
                (not (derived-mode-p 'help-mode))
                (not (derived-mode-p 'compilation-mode)))
-      (let ((project-root (and (featurep 'projectile) (projectile-project-root)))
-            (file-path (file-name-directory buffer-file-name))
-            (file-name (file-name-nondirectory buffer-file-name)))
+      ;; Use cached project root if available for better performance
+      (let* ((project-root (or (and (boundp 'projectile-cached-project-root)
+                                    projectile-cached-project-root)
+                               (and (featurep 'projectile)
+                                    (ignore-errors (projectile-project-root)))))
+             (file-path (file-name-directory buffer-file-name))
+             (file-name (file-name-nondirectory buffer-file-name)))
         (setq header-line-format
               (concat
                (propertize " " 'display '(space :align-to 0))

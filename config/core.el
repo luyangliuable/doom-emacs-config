@@ -26,13 +26,13 @@
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;; Focus Emacs window on startup (bring to front)
-(when (display-graphic-p)
-  (add-hook 'after-init-hook
-    (lambda ()
-      (when (eq system-type 'darwin) ; macOS
-        (call-process "osascript" nil nil nil
-          "-e" "tell application \"Emacs\" to activate")))))
+;; Focus Emacs window on startup (bring to front) - DISABLED (causes hang with Emacs Plus)
+;; (when (display-graphic-p)
+;;   (add-hook 'after-init-hook
+;;     (lambda ()
+;;       (when (eq system-type 'darwin) ; macOS
+;;         (call-process "osascript" nil nil nil
+;;           "-e" "tell application \"Emacs\" to activate")))))
 
 ;; Proxy configuration
 ;; (setq url-proxy-services

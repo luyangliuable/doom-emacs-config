@@ -36,7 +36,7 @@
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        (vc-gutter +pretty) ; vcs diff in the fringe
        (window-select +numbers)     ; visually switch windows
-       ;;(emoji +unicode)  ; 🙂
+       ;;(emoji +unicode)  ; 
        ;;deft              ; notational velocity for Emacs
        ;;doom-quit         ; DOOM quit-message prompts when you quit Emacs
        indent-guides     ; highlighted indent columns
@@ -121,6 +121,7 @@
        :lang
        (javascript +lsp) ; all(hope(abandon(ye(who(enter(here))))))
        (rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       (python +lsp)
        (typescript +lsp) ; TypeScript with LSP support
        (web +html +css +lsp)               ; the tubes
        ;;(cc +lsp)         ; C > C++ == 1
@@ -180,7 +181,6 @@
        emacs-lisp        ; drown in parentheses
        markdown          ; writing docs for people to ignore
        org               ; organize your plain life in plain text
-       python            ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
 
        :email

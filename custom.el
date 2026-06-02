@@ -14,3 +14,4 @@
  )
 (put 'erase-buffer 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
+(put 'projectile-ripgrep 'disabled nil)

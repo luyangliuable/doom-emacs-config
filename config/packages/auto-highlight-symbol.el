@@ -2,9 +2,10 @@
 ;; Auto-highlight symbol under cursor (VSCode-style)
 
 (use-package! auto-highlight-symbol
+  :defer t
   :config
-  ;; Idle delay before highlighting (0.35 seconds)
-  (setq ahs-idle-interval 0.35)
+  ;; Increase idle delay to reduce overhead (was 0.35s)
+  (setq ahs-idle-interval 1.0)
 
   ;; Highlight in entire buffer
   (setq ahs-default-range 'ahs-range-whole-buffer)

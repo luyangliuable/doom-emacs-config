@@ -43,7 +43,9 @@
 (use-package! evil-collection
   :after evil
   :config
-  (evil-collection-init)
+  ;; PERFORMANCE: Removed (evil-collection-init) to enable lazy per-mode loading
+  ;; Evil-collection will automatically load modes when they're first activated
+  ;; This prevents loading 20+ modes synchronously at startup
   ;; Ensure operators still work after evil-collection loads
   (add-hook 'evil-collection-setup-hook
             (lambda (_mode keymaps)
