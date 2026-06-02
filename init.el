@@ -36,7 +36,7 @@
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        (vc-gutter +pretty) ; vcs diff in the fringe
        (window-select +numbers)     ; visually switch windows
-       ;;(emoji +unicode)  ; 🙂
+       ;;(emoji +unicode)  ; 
        ;;deft              ; notational velocity for Emacs
        ;;doom-quit         ; DOOM quit-message prompts when you quit Emacs
        indent-guides     ; highlighted indent columns

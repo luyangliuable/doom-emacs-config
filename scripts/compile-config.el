@@ -58,8 +58,8 @@
 
     ;; Return status
     (if (> failed-files 0)
-        (message "⚠️  Compilation completed with errors")
-      (message "✅ Compilation completed successfully"))))
+        (message "  Compilation completed with errors")
+      (message " Compilation completed successfully"))))
 
 ;; Clean up old compiled files
 (defun clean-doom-config-compiled ()
@@ -72,7 +72,7 @@
     (dolist (file compiled-files)
       (delete-file file)
       (message "Deleted: %s" file))
-    (message "✅ Cleaned %d compiled files" count)))
+    (message " Cleaned %d compiled files" count)))
 
 ;; If running in batch mode, compile automatically
 (when noninteractive

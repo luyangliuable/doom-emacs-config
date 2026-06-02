@@ -43,3 +43,5 @@ doom-startup-error.log
 doom-startup.log
 doom-sync-error.log
 doom-sync.log
+
+*.bak

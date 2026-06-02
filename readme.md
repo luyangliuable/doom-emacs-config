@@ -2,7 +2,7 @@
 
 Personal Doom Emacs configuration with enhanced features, Spacemacs-inspired keybindings, and extensive performance optimizations.
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Installation
 
@@ -26,16 +26,16 @@ Personal Doom Emacs configuration with enhanced features, Spacemacs-inspired key
 
 4. Restart Emacs!
 
-## ⚡ Performance Features
+##  Performance Features
 
 ### What's Optimized
 
-- ✅ **Fast startup**: ~3-7 seconds (down from 10-20)
-- ✅ **LSP auto-update**: Fixed! No more manual `:lsp` reloading
-- ✅ **All LSP features enabled**: Docs, sideline, code lens, modeline actions
-- ✅ **Smart garbage collection**: 100MB threshold, runs on idle/focus-out
-- ✅ **Byte-compilation support**: Run `./scripts/compile-doom-config.sh` for 2-3x faster loading
-- ✅ **Early init optimizations**: `early-init.el` disables GC and file handlers during startup
+-  **Fast startup**: ~3-7 seconds (down from 10-20)
+-  **LSP auto-update**: Fixed! No more manual `:lsp` reloading
+-  **All LSP features enabled**: Docs, sideline, code lens, modeline actions
+-  **Smart garbage collection**: 100MB threshold, runs on idle/focus-out
+-  **Byte-compilation support**: Run `./scripts/compile-doom-config.sh` for 2-3x faster loading
+-  **Early init optimizations**: `early-init.el` disables GC and file handlers during startup
 
 ### Testing LSP Auto-Update
 
@@ -192,14 +192,14 @@ cd ~/.doom.d
 - **Task runner**: Project task management
 - **Git timemachine**: Browse git history
 
-## 📁 Configuration Structure
+##  Configuration Structure
 
 ```
 .doom.d/
 ├── config.el                    # Main configuration loader
 ├── init.el                      # Doom modules configuration
 ├── packages.el                  # Package declarations
-├── early-init.el                # ⭐ Early startup optimizations
+├── early-init.el                #  Early startup optimizations
 ├── themes.el                    # Theme configuration
 ├── config/
 │   ├── core.el                  # Core settings
@@ -222,18 +222,18 @@ cd ~/.doom.d
 │       ├── evil.el
 │       ├── lsp.el
 │       ├── lsp-vtsls.el
-│       ├── performance.el       # ⭐ Performance optimizations
+│       ├── performance.el       #  Performance optimizations
 │       └── ...
 ├── elisp-functions/
 │   └── functions.el             # Custom Elisp functions
 └── scripts/
-    ├── compile-config.el        # ⭐ Byte-compilation script
-    └── compile-doom-config.sh   # ⭐ Compilation wrapper
+    ├── compile-config.el        #  Byte-compilation script
+    └── compile-doom-config.sh   #  Compilation wrapper
 ```
 
-⭐ = New optimization files
+ = New optimization files
 
-## 🔧 Maintenance
+##  Maintenance
 
 ### After editing config files:
 
@@ -254,7 +254,7 @@ doom upgrade
 cd ~/.doom.d && ./scripts/compile-doom-config.sh
 ```
 
-## 🔑 Key Customizations
+##  Key Customizations
 
 - **Localleader**: `,` (instead of `SPC m`)
 - **Leader key**: `SPC` (standard Doom)
@@ -262,7 +262,7 @@ cd ~/.doom.d && ./scripts/compile-doom-config.sh
 - **Theme**: Configured in `themes.el`
 - **Custom functions**: Defined in `elisp-functions/functions.el`
 
-## 📝 Notes
+##  Notes
 
 - Optimized for macOS but works on Linux
 - LSP servers need separate installation per language
@@ -270,7 +270,7 @@ cd ~/.doom.d && ./scripts/compile-doom-config.sh
 - Byte-compilation is optional but recommended
 - Native compilation (Emacs 28+) provides best performance
 
-## 🆘 Troubleshooting
+##  Troubleshooting
 
 ### If LSP doesn't auto-update:
 - Check LSP is running: `M-x lsp-describe-session`
@@ -288,14 +288,14 @@ cd ~/.doom.d
 ./scripts/compile-doom-config.sh clean
 ```
 
-## 📚 References
+##  References
 
 Configuration inspired by:
 - [Doom Emacs](https://github.com/doomemacs/doomemacs)
 - [Spacemacs](https://github.com/syl20bnr/spacemacs)
 - [Timothy Ye's Doom](https://github.com/TimothyYe/doom-emacs)
 
-## 📄 License
+##  License
 
 MIT License - See individual package licenses for third-party components
 
