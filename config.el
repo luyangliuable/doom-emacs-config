@@ -2,17 +2,6 @@
 ;; Personal Doom Emacs Configuration
 ;; Split into organized modules for better maintainability
 
-;; CRITICAL: Evil operator configuration MUST happen early
-;; These variables need to be set before evil loads
-(setq evil-want-integration t)
-(setq evil-want-keybinding nil)
-(setq evil-want-operator-state t)
-(setq evil-want-operator-pending-state t)
-(setq evil-want-visual-char-semi-exclusive t)
-(setq evil-want-C-u-scroll t)
-(setq evil-want-C-d-scroll t)
-(setq evil-want-Y-yank-to-eol t)
-
 ;; Load existing custom modules
 (load! "elisp-functions/functions")
 (load! "themes")

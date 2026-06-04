@@ -2,37 +2,11 @@
 ;; Evil Mode Package Configuration
 
 ;;; ============================================================================
-;;; CRITICAL EVIL CONFIGURATION - MUST RUN BEFORE EVIL LOADS
-;;; ============================================================================
-
-;; These MUST be set before evil is loaded for operator+motion to work
-(setq evil-want-integration t)
-(setq evil-want-keybinding nil)  ; Let evil-collection handle most keybindings
-(setq evil-want-operator-state t)
-(setq evil-want-operator-pending-state t)
-(setq evil-want-visual-char-semi-exclusive t)
-(setq evil-want-C-u-scroll t)
-(setq evil-want-C-d-scroll t)
-(setq evil-want-C-i-jump nil)
-(setq evil-want-Y-yank-to-eol t)
-(setq evil-want-fine-undo t)
-(setq evil-search-module 'evil-search)
-(setq evil-ex-complete-emacs-commands nil)
-(setq evil-vsplit-window-right t)
-(setq evil-split-window-below t)
-(setq evil-shift-round nil)
-(setq evil-want-C-w-in-emacs-state nil)
-
-;;; ============================================================================
 ;;; PACKAGE CONFIGURATION
 ;;; ============================================================================
 
-;; Ensure evil loads with proper configuration
+;; Pre-load evil variables are centralized in early-init.el.
 (use-package! evil
-  :init
-  ;; Ensure variables are set before evil loads
-  (setq evil-want-operator-state t
-        evil-want-operator-pending-state t)
   :config
   ;; Force initialize operator system after evil loads
   (when (fboundp 'evil-normalize-keymaps)

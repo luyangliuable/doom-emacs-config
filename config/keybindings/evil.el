@@ -1,13 +1,6 @@
 ;;; config/keybindings/evil.el -*- lexical-binding: t; -*-
 ;; Evil Mode Keybindings - Complete operator+motion fix
 
-;; CRITICAL: Set evil-want variables BEFORE evil loads
-(setq evil-want-operator-state t)
-(setq evil-want-operator-pending-state t)
-(setq evil-want-visual-char-semi-exclusive t)
-(setq evil-want-C-u-scroll t)
-(setq evil-want-C-d-scroll t)
-
 ;; Core evil operator and motion system fix
 (after! evil
   ;; Ensure evil is fully loaded with operator support

@@ -14,6 +14,28 @@
       gc-cons-percentage 0.6)
 
 ;;; ============================================================================
+;;; EVIL OPTIMIZATION - Must be set BEFORE evil loads
+;;; ============================================================================
+
+;; Evil reads these variables during load; keep them centralized here.
+(setq evil-want-integration t
+      evil-want-keybinding nil
+      evil-want-operator-state t
+      evil-want-operator-pending-state t
+      evil-want-visual-char-semi-exclusive t
+      evil-want-C-u-scroll t
+      evil-want-C-d-scroll t
+      evil-want-C-i-jump nil
+      evil-want-Y-yank-to-eol t
+      evil-want-fine-undo t
+      evil-search-module 'evil-search
+      evil-ex-complete-emacs-commands nil
+      evil-vsplit-window-right t
+      evil-split-window-below t
+      evil-shift-round nil
+      evil-want-C-w-in-emacs-state nil)
+
+;;; ============================================================================
 ;;; LSP OPTIMIZATION - Must be set BEFORE lsp-mode loads
 ;;; ============================================================================
 
