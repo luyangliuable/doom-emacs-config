@@ -16,6 +16,8 @@
 ;; Display settings
 (setq display-line-numbers-type 'relative)  ;; show relative line number
 (setq blink-cursor-mode t)                  ;; show blinking cursor
+(setq-default truncate-lines nil)           ;; wrap long lines by default
+(setq-default word-wrap t)                  ;; wrap at word boundaries
 (scroll-bar-mode -1)                         ;; don't show scrollbar
 (evil-goggles-mode t)                       ;; enable evil-goggles-mode
 

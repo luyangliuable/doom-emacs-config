@@ -6,6 +6,7 @@
     doom-nord
     doom-solarized-light
     doom-solarized-dark
+    doom-moonlight
     doom-challenger-deep
     doom-one
     doom-plain
@@ -18,8 +19,8 @@
       ;; Night time (before 6 AM or after 8 PM)
       (progn
         (message "Good evening!")
-        (setq doom-theme 'doom-solarized-dark)
-        (defvar luyangliuable/current-theme-index 4
+        (setq doom-theme 'doom-moonlight)
+        (defvar luyangliuable/current-theme-index 5
           "Index of the currently active theme.")
         ;; Add your night-time actions here
         )
