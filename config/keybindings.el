@@ -14,7 +14,8 @@
   (load! "keybindings/good-scroll")
   (load! "keybindings/undo-tree")
   (load! "keybindings/narrow")
-  (load! "keybindings/frames"))
+  (load! "keybindings/frames")
+  (load! "keybindings/snippets"))
 
 ;;; ============================================================================
 ;;; KEYBINDINGS
@@ -24,13 +25,17 @@
 (map!
  :leader "tm" nil
  :leader "wr" nil
+ :leader "wc" nil
  :leader "gs" nil
  :leader "*" nil
  :leader "p!" nil
  :leader "x" nil
  :leader ";" nil
  :leader "fy" nil
- :leader "tl" nil)
+ :leader "tl" nil
+ :leader "tz" nil
+ :leader "tZ" nil
+ :leader "tc" nil)
 
 ;; Visual mode text wrapping keybindings
 (map!
@@ -128,10 +133,11 @@
  :desc "relative lineno toggle" "tnr" #'luyangliuable/toggle-relative-line-numbers
  :desc "toggle mode line" "tmT" #'luyangliuable/toggle-mode-line
  :desc "toggle minimap" "tmM" #'minimap-mode
- :desc "zen mode" "tz" #'+zen/toggle
+ :desc "centered buffer" "wcc" #'luyangliuable/toggle-centered-buffer
+ :desc "distraction-free zen" "wcC" #'+zen/toggle-fullscreen
+ :desc "centered buffer transient" "wc." #'luyangliuable/centered-buffer-transient-state
  :desc "whitespace mode" "tW" #'whitespace-mode
  :desc "golden ratio" "tG" #'golden-ratio-mode
- :desc "centered buffer" "tc" #'doom/centered-buffer-transient-state
 
  ;; Text operations
  :desc "drag stuff down" "xJ" #'luyangliuable/drag-stuff-down-repeatable

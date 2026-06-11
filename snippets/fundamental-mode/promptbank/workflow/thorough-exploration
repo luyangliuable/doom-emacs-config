@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/thorough-exploration
+# key: pb-workflow-thorough-exploration
+# condition: t
+# source: promptbank/workflow/thorough-exploration.txt
+# --
+Explore the entire codebase thoroughly before making changes:
+
+* Search for existing implementations of similar functionality
+* Identify patterns and conventions used throughout the codebase
+* Check for utilities/helpers that can be reused
+* Verify changes won't break existing code
+* Ensure no duplication of logic
+$0

@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: promptbank/git/commit-message
+# key: pb-git-commit-message
+# condition: t
+# source: promptbank/git/commit-message.txt
+# --
+Update component to handle edge case in validation logic
+
+- Improves error handling for null inputs
+- Adds validation for empty arrays
+- Ensures consistent behavior across all scenarios
+$0

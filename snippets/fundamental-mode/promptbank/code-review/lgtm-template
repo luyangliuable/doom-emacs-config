@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: promptbank/code-review/lgtm-template
+# key: pb-code-review-lgtm-template
+# condition: t
+# source: promptbank/code-review/lgtm-template.txt
+# --
+LGTM!
+
+Great work on ${1:specific aspect of the PR}. The implementation is clean and follows our coding standards.
+
+**Highlights:**
+- ${2:Specific good practice 1}
+- ${3:Specific good practice 2}
+- ${4:Specific good practice 3}
+
+**Testing:** Tests provide good coverage of the happy path and edge cases.
+
+**Documentation:** Clear and helpful inline comments where needed.
+
+Approving to merge.
+$0

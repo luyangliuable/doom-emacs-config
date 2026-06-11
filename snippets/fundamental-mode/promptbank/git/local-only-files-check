@@ -1,0 +1,68 @@
+# -*- mode: snippet -*-
+# name: promptbank/git/local-only-files-check
+# key: pb-git-local-only-files-check
+# condition: t
+# source: promptbank/git/local-only-files-check.txt
+# --
+# Local-Only Files Check (Pre-Commit)
+
+Before committing, verify no local-only configuration files are staged:
+
+## Files to Never Commit (Local Changes Only)
+
+Project-specific (check CLAUDE.md or ask user):
+- Database configs (database.ts, connections/*, drizzle.config.ts)
+- Environment-specific settings
+- Local credential files
+- Test configuration overrides
+
+## Workflow
+
+1. Check what files will be committed:
+   git diff --name-only --cached
+
+2. Verify no local-only files in list
+
+3. If local-only files detected:
+   - Unstage: git restore --staged ${1:file}
+   - Keep local changes but exclude from commit
+   - Document in CLAUDE.md if not already listed
+
+4. Proceed with commit only after verification
+
+## Recovery: If Already Committed (Not Yet Pushed)
+
+If local-only files were included in last commit:
+
+1. Reset last commit (keep changes):
+   git reset HEAD~1
+
+2. Unstage local-only files:
+   git restore --staged ${2:local-only-file}
+
+3. Commit only intended changes:
+   git add ${3:intended-files}
+   git commit -m "Your commit message"
+
+4. Verify clean state:
+   git diff --name-only --cached
+
+## Recovery: If Already Pushed
+
+See: promptbank/git/recover-committed-local-files.txt
+
+## Common Patterns
+
+Database configuration files:
+- app/constants/database.ts
+- app/database/connections/*
+- drizzle.config.ts
+
+Environment files (if tracked):
+- .env.local
+- config/environment.local.ts
+
+Test configuration overrides:
+- jest.config.local.js
+- vitest.config.local.ts
+$0

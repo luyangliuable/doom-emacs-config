@@ -1,0 +1,101 @@
+# -*- mode: snippet -*-
+# name: promptbank/git/revert-unnecessary-changes
+# key: pb-git-revert-unnecessary-changes
+# condition: t
+# source: promptbank/git/revert-unnecessary-changes.txt
+# --
+# Revert Unnecessary File Changes
+
+When AI makes unnecessary changes to a file (shuffling code, removing comments, formatting changes), use this workflow to restore the original and reapply only essential changes.
+
+## When to Use
+
+- AI modified a file but added noise (shuffled imports, removed comments, reformatted)
+- Diff shows many unnecessary changes alongside functional changes
+- Want to minimize diff size and keep only meaningful changes
+- Need to preserve original code style/structure
+
+## Workflow
+
+1. Identify the merge base branch:
+   Usually: develop or main
+   Confirm with: git branch -r
+
+2. Find the common ancestor commit:
+   git merge-base HEAD origin/develop
+   (or origin/main if develop doesn't exist)
+   Save the commit hash
+
+3. View original file at merge base:
+   git show ${2:merge-base-hash}:${3:file-path}
+
+4. Save original file temporarily:
+   git show ${2}:${3} > /tmp/original-file
+
+5. Analyze what actually changed:
+   Compare current file vs original to identify:
+   - Functional changes (new logic, bug fixes)
+   - Necessary changes (imports for new functions)
+   - Unnecessary changes (shuffling, comment removal, formatting)
+
+6. Restore original file:
+   git checkout ${2} -- ${3}
+
+7. Reapply ONLY essential changes:
+   Manually edit the file to add:
+   - New functionality
+   - Bug fixes
+   - Required imports/dependencies
+   Skip:
+   - Comment removal
+   - Code shuffling
+   - Formatting changes (unless critical)
+   - Import reordering (unless needed)
+
+8. Verify functionality still works:
+   ${1:$$(yas-choose-value '("JavaScript/TypeScript:\n- npm test\n- npm run lint\n- npm run build" "Python:\n- pytest\n- ruff check\n- ruff format --check" "Rust:\n- cargo test\n- cargo clippy\n- cargo build --release" "Go:\n- go test ./...\n- golangci-lint run\n- go build"))}
+
+9. Stage and commit the minimal changes:
+   git add ${3}
+   git commit -m "Apply only essential changes to ${4:file-name}"
+
+## Example (React Component)
+
+AI changed: Removed comments, shuffled imports, reformatted, added new prop handling
+
+Essential changes: New prop handling only
+
+Workflow:
+1. git merge-base HEAD origin/develop  # ${5:commit-hash}
+2. git show ${5}:src/components/Button.tsx > /tmp/Button-original.tsx
+3. Review diff to identify: new prop handling is the only essential change
+4. git checkout ${5} -- src/components/Button.tsx
+5. Manually add new prop handling code
+6. Run selected check set:
+${1}
+7. git add src/components/Button.tsx
+8. git commit -m "Add loading state prop to Button component"
+
+Result: Minimal diff, no noise, clear intent
+
+## Common Scenarios
+
+- Import shuffling: Restore original import order, add only new imports
+- Comment removal: Restore comments, keep only functional changes
+- Formatting changes: Restore original formatting, apply only logic changes
+- Refactoring: If not requested, revert to original structure
+
+## DO NOT Use When
+
+- Changes are intentional refactoring
+- User explicitly requested formatting/cleanup
+- Original file has known issues that should be fixed
+- Changes are all essential
+
+## Alternative: Cherry-pick Approach
+
+If changes are in separate commits:
+1. git reset --soft ${2}
+2. git restore --staged .
+3. Manually stage and commit only essential changes
+$0

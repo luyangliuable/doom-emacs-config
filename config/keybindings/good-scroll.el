@@ -6,3 +6,7 @@
  :n "C-d" #'good-scroll-up
  :n "C-b" #'good-scroll-up-full-screen
  :n "C-f" #'good-scroll-down-full-screen)
+
+(after! evil-collection-comint
+  (evil-collection-define-key 'normal 'comint-mode-map
+    (kbd "C-d") #'good-scroll-up))

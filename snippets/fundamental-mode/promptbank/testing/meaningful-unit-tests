@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: promptbank/testing/meaningful-unit-tests
+# key: pb-testing-meaningful-unit-tests
+# condition: t
+# source: promptbank/testing/meaningful-unit-tests.txt
+# --
+${1:$$(yas-choose-value '("Quick checklist only:\n- Add at least 1 positive/happy-path test\n- Add at least 1 negative/error-path test\n- Add edge-case tests where relevant\n- Avoid duplicate, trivial, or conflicting tests\n- Use clear behavior-focused test names\n- Run tests and coverage before finishing" "Generate meaningful tests for this change:\nAdd unit tests that catch real bugs. Include:\n- one positive/happy-path test\n- one negative/error-path test\n- one edge-case test if relevant\nAvoid tests for styling, static text, simple rendering, prop pass-through, or implementation details. Ensure test names describe expected behavior." "Review existing tests:\nReview the tests for meaningful coverage. Flag and fix:\n- duplicate tests covering the same path\n- trivial assertions\n- conflicting expectations\n- missing positive or negative paths\n- vague test names\n- tests without assertions\n- tests that depend on implementation details" "Full standards summary:\nWrite tests that verify behavior, not implementation details. Cover business logic, data transformations, edge cases, error handling, state transitions, and integration points. Avoid CSS/static-text/simple-render tests. Every feature change should have at least one positive and one negative test, clear names, no duplicates, no conflicts, and coverage around meaningful logic."))}
+$0

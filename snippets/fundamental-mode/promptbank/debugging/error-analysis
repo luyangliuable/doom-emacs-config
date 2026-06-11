@@ -1,0 +1,35 @@
+# -*- mode: snippet -*-
+# name: promptbank/debugging/error-analysis
+# key: pb-debugging-error-analysis
+# condition: t
+# source: promptbank/debugging/error-analysis.txt
+# --
+## Problem Statement
+${1:Describe the issue clearly and concisely}
+
+## Expected Behavior
+${2:What should happen}
+
+## Actual Behavior
+${3:What actually happens}
+
+## Error Messages
+```
+${4:Paste full error message with stack trace}
+```
+
+## Environment
+- OS: ${5:macOS/Linux/Windows}
+- Language/Framework: ${6:Node.js/Python/etc}
+- Version: ${7:specific version}
+- Package Manager: ${8:npm/yarn/pip/cargo}
+
+## Steps to Reproduce
+1. ${9:Step 1}
+2. ${10:Step 2}
+3. ${11:Step 3}
+
+## What I've Tried
+- ${12:Attempted solution 1}
+- ${13:Attempted solution 2}
+$0

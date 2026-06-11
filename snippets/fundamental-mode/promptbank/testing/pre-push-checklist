@@ -1,0 +1,27 @@
+# -*- mode: snippet -*-
+# name: promptbank/testing/pre-push-checklist
+# key: pb-testing-pre-push-checklist
+# condition: t
+# source: promptbank/testing/pre-push-checklist.txt
+# --
+Pre-push verification checklist:
+
+## Performance Option: Run Checks in Parallel
+
+For faster verification, use: promptbank/testing/parallel-pre-push-checks.txt
+This spawns independent tasks for test/lint/build simultaneously (3x faster).
+
+---
+
+Code Quality (All Modified/Added Files):
+[ ] No trailing whitespace (git diff --check)
+[ ] No unused imports (linter catches this)
+[ ] No local-only config files staged (use: promptbank/git/local-only-files-check.txt)
+[ ] Conventions followed:
+    [ ] Use ?? instead of || for defaults
+    [ ] Absolute imports (not relative)
+    [ ] No TODO comments
+    [ ] Native HTML elements used
+
+${1:$$(yas-choose-value '("JavaScript/TypeScript:\n- npm test\n- npm run lint\n- npm run build" "Python:\n- pytest\n- ruff check\n- ruff format --check" "Rust:\n- cargo test\n- cargo clippy\n- cargo build --release" "Go:\n- go test ./...\n- golangci-lint run\n- go build"))}
+$0

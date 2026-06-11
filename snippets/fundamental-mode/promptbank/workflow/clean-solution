@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/clean-solution
+# key: pb-workflow-clean-solution
+# condition: t
+# source: promptbank/workflow/clean-solution.txt
+# --
+Ensure the solution is:
+- Clean and easy to understand
+- Symmetrical in design and structure
+- Robust (handles edge cases and errors gracefully)
+- Simple (minimal complexity, no over-engineering)
+
+Guidelines:
+- Use consistent naming conventions
+- Follow established patterns in the codebase
+- Remove unnecessary abstractions
+- Write self-documenting code with clear intent
+$0

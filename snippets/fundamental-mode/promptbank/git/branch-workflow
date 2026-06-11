@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: promptbank/git/branch-workflow
+# key: pb-git-branch-workflow
+# condition: t
+# source: promptbank/git/branch-workflow.txt
+# --
+Create new branch from current commit:
+
+git checkout -b ${1:feature/ticket-id-descriptive-name}
+
+Push branch and set upstream:
+
+git push -u origin ${1}
+$0

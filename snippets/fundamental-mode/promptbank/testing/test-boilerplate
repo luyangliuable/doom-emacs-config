@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: promptbank/testing/test-boilerplate
+# key: pb-testing-test-boilerplate
+# condition: t
+# source: promptbank/testing/test-boilerplate.txt
+# --
+${1:$$(yas-choose-value '("Vitest outline:\nimport describe, it, expect, and vi from vitest.\nCreate a describe block for the unit under test.\nAdd one successful-case test.\nAdd one invalid-input test.\nUse Arrange, Act, Assert comments." "Pytest outline:\ndef test_handles_successful_case():\n    arrange\n    act\n    assert\n\ndef test_handles_invalid_input():\n    arrange\n    act and assert" "Rust outline:\nCreate a cfg(test) tests module.\nImport the unit under test.\nAdd handles_successful_case test.\nAdd handles_invalid_input test.\nUse arrange, act, assert comments." "Go outline:\nfunc TestHandlesSuccessfulCase with arrange, act, assert.\nfunc TestHandlesInvalidInput with arrange, act, assert.\nUse t testing helper and clear failure messages."))}
+$0

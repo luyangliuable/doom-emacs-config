@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/pipeline-monitoring
+# key: pb-workflow-pipeline-monitoring
+# condition: t
+# source: promptbank/workflow/pipeline-monitoring.txt
+# --
+After EVERY push to GitHub, monitor pipelines until ALL pass:
+
+1. Push code changes
+2. Run: gh run list --limit 5
+3. Run: gh run watch (monitor real-time)
+4. If ANY pipeline fails:
+   - Investigate failure logs: gh run view ${1:run_id} --log
+   - Fix the issue
+   - Push fix
+   - Go back to step 2
+5. Repeat until ALL pipelines are green
+6. Only then consider task complete
+
+This is MANDATORY - never complete with failing pipelines.
+$0

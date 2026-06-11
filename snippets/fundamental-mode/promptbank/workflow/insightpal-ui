@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/insightpal-ui
+# key: pb-workflow-insightpal-ui
+# condition: t
+# source: promptbank/workflow/insightpal-ui.txt
+# --
+Workflow: Trigger docker image build on new image version (CRITICAL: latest no overwrites) → Monitor → Wait for completion → Trigger ${1:deployment skill} deployment (verify ${2:deployment cleanup flag}=true) → Monitor → Verify success
+$0

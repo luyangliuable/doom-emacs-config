@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/use-skills
+# key: pb-workflow-use-skills
+# condition: t
+# source: promptbank/workflow/use-skills.txt
+# --
+Invoke appropriate agent skills when:
+
+Planning phase:
+- Use code-quality skill for design review
+- Use react-best-practices skill for React/Next.js planning
+
+Writing code:
+- Use code-quality skill to validate implementation
+- Use simplify skill to review for reuse and efficiency
+- Use appropriate domain skills (frontend-design, etc.)
+
+Reviewing:
+- Use code-reviewer skill for comprehensive review
+- Use audit skill for interface quality checks
+
+Example: "Use the code-quality skill to review this implementation"
+$0

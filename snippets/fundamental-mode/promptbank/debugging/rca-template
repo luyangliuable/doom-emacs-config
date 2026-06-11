@@ -1,0 +1,41 @@
+# -*- mode: snippet -*-
+# name: promptbank/debugging/rca-template
+# key: pb-debugging-rca-template
+# condition: t
+# source: promptbank/debugging/rca-template.txt
+# --
+## Root Cause Analysis
+
+### Problem
+${1:Brief description of the bug}
+
+### Symptoms
+- ${2:Observable symptom 1}
+- ${3:Observable symptom 2}
+
+### Root Cause
+${4:Detailed explanation of the underlying cause}
+
+### Why It Happened
+${5:Explanation of how this bug was introduced}
+
+### Solution
+${6:Description of the fix applied}
+
+### Code Changes
+```
+${7:Relevant code snippet showing before/after}
+```
+
+### Prevention
+- ${8:Preventive measure 1}
+- ${9:Preventive measure 2}
+- ${10:Preventive measure 3}
+
+### Testing
+- ${11:How to verify the fix}
+- ${12:Regression tests added}
+
+### Related Issues
+- ${13:Link to similar bugs or related tickets}
+$0

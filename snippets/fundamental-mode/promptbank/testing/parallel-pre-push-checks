@@ -1,0 +1,41 @@
+# -*- mode: snippet -*-
+# name: promptbank/testing/parallel-pre-push-checks
+# key: pb-testing-parallel-pre-push-checks
+# condition: t
+# source: promptbank/testing/parallel-pre-push-checks.txt
+# --
+# Parallel Pre-Push Verification (Fast Approach)
+
+1. Code quality checks (MANDATORY - run first):
+   [ ] Remove trailing whitespace: git diff --check
+   [ ] Remove unused imports (linter will catch remaining)
+   [ ] Apply team conventions (?? not ||, absolute imports, no TODOs)
+
+2. Choose language-specific checks for your project:
+
+   ${1:$$(yas-choose-value '("JavaScript/TypeScript:\n- npm test\n- npm run lint\n- npm run build" "Python:\n- pytest\n- ruff check\n- ruff format --check" "Rust:\n- cargo test\n- cargo clippy\n- cargo build --release" "Go:\n- go test ./...\n- golangci-lint run\n- go build"))}
+
+3. Spawn parallel Bash tool calls (run_in_background: true):
+   - Launch one Bash call per independent check
+   - Use run_in_background: true for concurrent execution
+   - Example: spawn npm test, npm run lint, npm run build simultaneously
+
+4. Monitor all background tasks:
+   - Use TaskOutput to check status of each task
+   - When ANY task fails:
+     - STOP remaining tasks immediately (TaskStop if needed)
+     - Analyze failure output
+     - Fix the issue
+     - Restart from step 3
+   - Success: ALL tasks complete successfully
+
+5. Push only after ALL checks pass
+## Example (JavaScript/TypeScript)
+
+Spawn three parallel tasks:
+- Task 1: npm test (run_in_background: true)
+- Task 2: npm run lint (run_in_background: true)
+- Task 3: npm run build (run_in_background: true)
+
+Wait for all, fix if any fail.
+$0

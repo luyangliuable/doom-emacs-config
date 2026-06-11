@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/reuse
+# key: pb-workflow-reuse
+# condition: t
+# source: promptbank/workflow/reuse.txt
+# --
+${1:$$(yas-choose-value '("Parallel pre-push checks only:\nBefore pushing, run independent checks in parallel. First verify code quality: no trailing whitespace, no unused imports, conventions followed, and no local-only files staged. Then run the selected language checks concurrently and push only after all pass." "Parallel pipeline monitoring only:\nAfter pushing, list active GitHub Actions with gh run list. Spawn one background monitor per workflow using gh run watch. If any workflow fails, stop the other monitors, inspect logs, fix, push, and restart monitoring. Finish only when all pipelines pass." "Both pre-push and pipeline monitoring:\nBefore pushing, run code quality and selected language checks in parallel. Push only after all local checks pass. After pushing, monitor every GitHub Actions workflow in parallel, stop on first failure, inspect logs, fix, push again, and continue until all pipelines are green."))}
+
+Check set:
+${2:$$(yas-choose-value '("JavaScript/TypeScript:\n- npm test\n- npm run lint\n- npm run build" "Python:\n- pytest\n- ruff check\n- ruff format --check" "Rust:\n- cargo test\n- cargo clippy\n- cargo build --release" "Go:\n- go test ./...\n- golangci-lint run\n- go build"))}
+$0

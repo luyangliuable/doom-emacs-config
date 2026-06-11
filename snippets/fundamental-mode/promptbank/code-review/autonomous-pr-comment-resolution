@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: promptbank/code-review/autonomous-pr-comment-resolution
+# key: pb-code-review-autonomous-pr-comment-resolution
+# condition: t
+# source: promptbank/code-review/autonomous-pr-comment-resolution.txt
+# --
+PR: ${1:https://github.com/org/repo/pull/pr_number}
+Check set:
+${2:$$(yas-choose-value '("JavaScript/TypeScript:\n- npm test\n- npm run lint\n- npm run build" "Python:\n- pytest\n- ruff check\n- ruff format --check" "Rust:\n- cargo test\n- cargo clippy\n- cargo build --release" "Go:\n- go test ./...\n- golangci-lint run\n- go build"))}
+
+${3:$$(yas-choose-value '("Full autonomous resolution:\nFetch all unresolved PR comments immediately. Spawn one independent background agent per comment. Each agent must understand the feedback, find all occurrences, apply the fix, run selected checks, commit, push, monitor pipelines, reply to the exact original thread, and resolve only after 100% verification." "Agent workflow only:\nFor each unresolved PR comment: read carefully, find all related occurrences, apply the smallest complete fix, verify the requested change is fully addressed, run selected checks, commit, push, monitor pipelines, reply to the exact thread, then resolve only after green checks." "Failure handling only:\nIf checks or pipelines fail: stop progress for that comment, inspect logs, identify root cause, fix, rerun checks, push again, and restart monitoring. Do not resolve comments with failing checks, unclear feedback, or incomplete fixes. Escalate after repeated failure." "GitHub commands only:\nFetch unresolved comments with the local unresolved-comments script.\nReply with gh pr comment PR_NUMBER --body fixed explanation.\nResolve the original review thread through the GitHub API using THREAD_ID.\nMonitor with gh run list and gh run watch RUN_ID."))}
+$0

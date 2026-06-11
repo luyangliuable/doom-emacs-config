@@ -1,0 +1,49 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/parallel-pipeline-monitoring
+# key: pb-workflow-parallel-pipeline-monitoring
+# condition: t
+# source: promptbank/workflow/parallel-pipeline-monitoring.txt
+# --
+# Parallel Pipeline Monitoring (Enhanced Approach)
+
+After EVERY push to GitHub, monitor ALL pipelines in parallel until ALL pass:
+
+## Workflow
+
+1. Push code changes
+
+2. Identify all running workflows:
+   gh run list --limit 10 --json status,name,databaseId,workflowName
+
+3. Spawn parallel monitoring agents:
+   - Launch one Agent tool per running workflow
+   - Each agent monitors its assigned workflow using: gh run watch ${1:run_id}
+   - All agents run in background (run_in_background: true)
+   - Agents work concurrently for faster feedback
+
+4. Immediate failure detection:
+   - When ANY agent detects a failure:
+     - STOP all other monitoring agents immediately (TaskStop)
+     - Investigate failure logs: gh run view ${1} --log
+     - Analyze and fix the issue
+     - Push the fix
+     - Restart from step 2
+
+5. Success criteria:
+   - ALL agents report success
+   - ALL pipelines show green/passed status
+   - Only then consider task complete
+
+This is MANDATORY - never complete with failing pipelines.
+
+## Benefits
+
+- Faster failure detection (immediate vs sequential)
+- Time savings (monitor 3+ pipelines simultaneously)
+- Better visibility of all pipeline statuses at once
+- Proactive: stop and fix first failure, don't wait for all to complete
+
+## Fallback
+
+For single workflow or simple monitoring, use: promptbank/workflow/pipeline-monitoring.txt
+$0

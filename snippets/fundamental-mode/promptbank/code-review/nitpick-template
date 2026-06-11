@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: promptbank/code-review/nitpick-template
+# key: pb-code-review-nitpick-template
+# condition: t
+# source: promptbank/code-review/nitpick-template.txt
+# --
+**Nitpick:** ${1:Minor suggestion}
+
+Consider ${2:specific improvement}. This would ${3:benefit}.
+
+Example:
+```
+${4:code example showing suggested change}
+```
+
+Reference: ${5:link to documentation/style guide if applicable}
+
+Not blocking - feel free to address in a follow-up if you prefer.
+$0

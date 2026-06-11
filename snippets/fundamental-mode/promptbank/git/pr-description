@@ -1,0 +1,31 @@
+# -*- mode: snippet -*-
+# name: promptbank/git/pr-description
+# key: pb-git-pr-description
+# condition: t
+# source: promptbank/git/pr-description.txt
+# --
+## Summary
+
+This PR updates ${1:component/feature} to ${2:brief description of changes}.
+
+**Key Changes:**
+- Added ${3:feature/fix 1}
+- Updated ${4:feature/fix 2}
+- Removed ${5:deprecated code/feature}
+
+## Technical Details
+
+${6:Provide context about implementation approach, architectural decisions, or technical considerations}
+
+## Testing
+
+- [ ] Unit tests added/updated
+- [ ] Integration tests pass
+- [ ] Manual testing completed
+- [ ] Edge cases covered
+
+## Related
+
+- Resolves #${7:issue-number}
+- Part of ${8:epic/project name}
+$0

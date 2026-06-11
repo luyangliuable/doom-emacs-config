@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/got-pr-grilled
+# key: pb-workflow-got-pr-grilled
+# condition: t
+# source: promptbank/workflow/got-pr-grilled.txt
+# --
+Also please ensure the solution is as simple as possible because if you look at ${1:https://github.com/CBA-General/cdao-insightspal-ui/pull/243} PR (use gh to see all comments), I got grilled in PR review for overcomplicating the solution. To prevent this from happening again, please implement my code in a way this can be minimised.
+$0

@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: promptbank/code-review/auto-resolve-pr-comments-loop
+# key: pb-code-review-auto-resolve-pr-comments-loop
+# condition: t
+# source: promptbank/code-review/auto-resolve-pr-comments-loop.txt
+# --
+PR: ${1:https://github.com/org/repo/pull/pr_number}
+Check set:
+${2:$$(yas-choose-value '("JavaScript/TypeScript:\n- npm test\n- npm run lint\n- npm run build" "Python:\n- pytest\n- ruff check\n- ruff format --check" "Rust:\n- cargo test\n- cargo clippy\n- cargo build --release" "Go:\n- go test ./...\n- golangci-lint run\n- go build"))}
+
+${3:$$(yas-choose-value '("Quick continuous PR comment monitor:\nMonitor this PR for new unresolved review comments. For each new thread: read the feedback, fix it fully, run the selected checks, commit, push, monitor pipelines, reply to the exact thread, and mark resolved only after verification." "Full autonomous loop:\nRun a continuous 1-minute loop for this PR. Fetch unresolved comments, compare with prior seen comment IDs, spawn one background agent per new comment, apply fixes consistently across the codebase, run selected checks, commit and push, monitor all GitHub Actions, reply to exact threads, resolve only after pipelines pass, and log failures for manual escalation." "Troubleshooting mode:\nIf the monitor gets stuck: confirm unresolved comments were fetched, check seen-comment state, inspect agent progress, verify pipeline monitor status, inspect GitHub rate limits, review failure logs, and escalate comments that are ambiguous, repeatedly failing, or too large to safely auto-resolve." "GitHub commands only:\ngh pr view --comments\ngh pr checks\ngh run list --limit 10 --json status,name,databaseId,workflowName\ngh run watch RUN_ID\ngh run view RUN_ID --log"))}
+$0

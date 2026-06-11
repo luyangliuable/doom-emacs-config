@@ -1,0 +1,118 @@
+# -*- mode: snippet -*-
+# name: promptbank/code-review/resolve-pr-comments
+# key: pb-code-review-resolve-pr-comments
+# condition: t
+# source: promptbank/code-review/resolve-pr-comments.txt
+# --
+# Systematic PR Comment Resolution Workflow
+
+Use this workflow to ensure ALL PR review comments are properly addressed and resolved.
+
+## Prerequisites
+
+- PR URL or number
+- Branch checked out locally
+- All code changes committed
+
+## Step-by-Step Process
+
+### 1. Fetch Unresolved Comments
+
+```bash
+# Get current PR URL
+PR_URL=\$(gh pr view --json url -q '.url')
+
+# Fetch unresolved comments using script
+~/claude-setup/fetch-unresolved-comments.sh "\$PR_URL"
+```
+
+### 2. For Each Comment Thread
+
+**CRITICAL: Process each comment systematically:**
+
+a) **Read the feedback carefully**
+   - Understand what the reviewer is asking for
+   - Identify the specific file and line number
+   - Note the exact change requested
+
+b) **Verify 100% addressed**
+   - Check the code changes against the feedback
+   - Ensure the solution fully addresses the concern
+   - DO NOT proceed if incomplete or uncertain
+
+c) **Reply to the exact comment thread**
+   ```bash
+   # Reply to specific comment in thread
+   gh pr comment ${1:pr-number} --body "Addressed: ${2:explain what you did}"
+   ```
+
+   Example reply formats:
+   - "Fixed: Changed to absolute imports throughout the codebase"
+   - "Updated: Now using ?? instead of || for default values"
+   - "Removed: Eliminated all unused mocks from test files"
+   - "Clarified: Added explicit error handling with try/catch"
+
+d) **Mark as resolved**
+   - Only after verifying 100% addressed
+   - Only after posting reply
+   - Use GitHub UI or CLI to resolve the thread
+
+### 3. Verification
+
+Before marking as resolved, confirm:
+- [ ] Code changes 100% address the feedback
+- [ ] Reply posted to the EXACT comment thread (not a new comment)
+- [ ] Reply explains what was done to address feedback
+- [ ] No uncertainty about whether it's fully resolved
+
+## Critical Reminders
+
+**NEVER mark a comment as resolved unless:**
+- The feedback is 100% addressed in code
+- You've replied to the exact thread explaining the fix
+- You've verified the changes match the request
+
+**NEVER reply in a new comment:**
+- Always reply in the existing thread
+- This maintains conversation context
+- Helps reviewers see your response next to their feedback
+
+## Example Workflow
+
+```bash
+# 1. Fetch unresolved comments
+~/claude-setup/fetch-unresolved-comments.sh ${3:https://github.com/org/repo/pull/pr_number}
+
+# 2. Read output, identify files/lines to fix
+
+# 3. Make code changes, commit
+
+# 4. Reply to each thread
+gh pr comment ${1} --body "Fixed: Now using absolute imports (@/) instead of relative imports"
+
+# 5. Verify and resolve in GitHub UI
+```
+
+## GitHub CLI Reference
+
+```bash
+# View PR comments
+gh pr view ${1} --comments
+
+# Add comment to PR thread
+gh pr comment ${1} --body "text"
+
+# View PR details
+gh pr view ${1}
+
+# Check PR status
+gh pr checks ${1}
+```
+
+## Tips
+
+- Process comments one file at a time for focus
+- Use /fetch-unresolved-comments skill to avoid missing feedback
+- When in doubt, ask the reviewer for clarification before marking resolved
+- Document non-obvious fixes in your reply
+$0

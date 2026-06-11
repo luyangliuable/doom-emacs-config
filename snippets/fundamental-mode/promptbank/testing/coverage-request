@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: promptbank/testing/coverage-request
+# key: pb-testing-coverage-request
+# condition: t
+# source: promptbank/testing/coverage-request.txt
+# --
+${1:$$(yas-choose-value '("JavaScript/TypeScript coverage:\nnpm test -- --coverage\nnpm test -- --coverage path/to/file.test.ts" "Python coverage:\npytest --cov\npytest --cov=src tests/path_to_test.py" "Rust coverage:\ncargo tarpaulin\ncargo llvm-cov" "Go coverage:\ngo test ./... -cover\ngo test ./... -coverprofile=coverage.out"))}
+
+Aim for meaningful coverage of business logic, edge cases, error handling, and state transitions. Skip visual styling, static text, and simple prop passing.
+$0

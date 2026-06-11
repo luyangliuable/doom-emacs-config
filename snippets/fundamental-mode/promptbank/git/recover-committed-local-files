@@ -1,0 +1,96 @@
+# -*- mode: snippet -*-
+# name: promptbank/git/recover-committed-local-files
+# key: pb-git-recover-committed-local-files
+# condition: t
+# source: promptbank/git/recover-committed-local-files.txt
+# --
+# Recover: Local-Only Files Already Committed and Pushed
+
+When local-only configuration files were accidentally committed and pushed to a PR:
+
+## Scenario
+
+- Local database configs committed to feature branch
+- Changes already pushed to remote
+- Need to remove local-only files from commit history
+- Keep other intended changes
+
+## Recovery Workflow
+
+### 1. Identify Problem Files
+
+List files in last commit:
+git show --name-only HEAD
+
+Identify which are local-only configs that shouldn't be committed.
+
+### 2. Reset Last Commit (Keep Changes)
+
+git reset HEAD~1
+
+This removes the commit but keeps all changes in working directory.
+
+### 3. Unstage Local-Only Files
+
+git restore --staged app/constants/database.ts
+git restore --staged app/database/connections/*
+git restore --staged drizzle.config.ts
+
+Or for multiple files:
+git restore --staged ${1:file1} ${2:file2} ${3:file3}
+
+### 4. Verify Staged Files
+
+Check what will be committed:
+git diff --name-only --cached
+
+Ensure only intended changes are staged.
+
+### 5. Create Clean Commit
+
+git commit -m "Your original commit message"
+
+### 6. Force Push (With Caution)
+
+CRITICAL: Verify no one else has pulled your branch first.
+
+git push --force-with-lease origin ${4:branch-name}
+
+Using --force-with-lease ensures you don't overwrite others' work.
+
+### 7. Verify PR
+
+Check PR on GitHub to confirm:
+- Local-only files no longer in commit
+- Intended changes are present
+- CI/CD pipelines pass
+
+## Prevention
+
+Before every commit:
+1. Use: promptbank/git/local-only-files-check.txt
+2. Run: git diff --name-only --cached
+3. Verify no local-only files in list
+
+## Common Local-Only Files
+
+Database configs:
+- app/constants/database.ts
+- app/database/connections/*
+- drizzle.config.ts
+
+Environment overrides:
+- .env.local
+- config/environment.local.ts
+
+Test configs:
+- jest.config.local.js
+- vitest.config.local.ts
+
+## Notes
+
+- Always use --force-with-lease instead of --force
+- Communicate with team if branch is shared
+- Document project-specific local-only files in CLAUDE.md
+- This recovery works for feature branches, not main/develop
+$0
