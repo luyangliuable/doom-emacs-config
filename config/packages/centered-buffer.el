@@ -1,24 +1,51 @@
 ;;; config/packages/centered-buffer.el -*- lexical-binding: t; -*-
 
-(defun doom/toggle-centered-buffer-on ()
-  "Enable centered buffer mode."
-  (interactive)
-  (+zen/toggle))
+(defun luyangliuable/toggle-centered-buffer-status ()
+  "Check if centered buffer mode is on."
+  (bound-and-true-p writeroom-mode))
 
-(defhydra doom/centered-buffer-transient-state (:hint nil)
+(defun luyangliuable/toggle-centered-buffer ()
+  "Toggle centered buffer mode on and off.
+
+Centerize current buffer."
+  (interactive)
+  (require 'writeroom-mode)
+  (if (luyangliuable/toggle-centered-buffer-status)
+      (progn
+        (writeroom-mode -1)
+        (when (called-interactively-p 'any)
+          (message "Centered-buffer is disabled.")))
+    (let ((writeroom-maximize-window nil)
+          (writeroom-mode-line t))
+      (writeroom-mode 1))
+    (when (called-interactively-p 'any)
+      (message "Centered-buffer is enabled."))))
+
+(defun luyangliuable/toggle-centered-buffer-on ()
+  "Toggle centered buffer mode on."
+  (interactive)
+  (unless (luyangliuable/toggle-centered-buffer-status)
+    (luyangliuable/toggle-centered-buffer)))
+
+(defun luyangliuable/toggle-centered-buffer-off ()
+  "Toggle centered buffer mode off."
+  (interactive)
+  (when (luyangliuable/toggle-centered-buffer-status)
+    (luyangliuable/toggle-centered-buffer)))
+
+(defhydra luyangliuable/centered-buffer-transient-state (:hint nil)
   "
-Center buffer
-[_c_] center  [_C_] uncenter  [_+_] wider  [_-_] narrower  [_=_] reset  [_q_] quit
+Centered Buffer Transient State
+[_m_] modeline  [_[_] shrink  [_]_] enlarge  [_=_] adjust width  [_q_] quit
 "
-  ("c" doom/toggle-centered-buffer-on "center")
-  ("C" +zen/toggle "uncenter")
-  ("+" doom/global-text-scale-increase "wider")
-  ("-" doom/global-text-scale-decrease "narrower")
-  ("=" doom/global-text-scale-reset "reset")
+  ("m" writeroom-toggle-mode-line "modeline")
+  ("[" writeroom-decrease-width "shrink")
+  ("]" writeroom-increase-width "enlarge")
+  ("=" writeroom-adjust-width "adjust width")
   ("q" nil "quit" :exit t))
 
-(defun doom/centered-buffer-transient-state ()
+(defun luyangliuable/centered-buffer-transient-state ()
   "Center buffer and enable centering transient state."
   (interactive)
-  (doom/toggle-centered-buffer-on)
-  (doom/centered-buffer-transient-state/body))
+  (luyangliuable/toggle-centered-buffer-on)
+  (luyangliuable/centered-buffer-transient-state/body))
