@@ -10,6 +10,7 @@
 Centerize current buffer."
   (interactive)
   (require 'writeroom-mode)
+  (setq writeroom-mode-line-toggle-position 'mode-line-format)
   (if (luyangliuable/toggle-centered-buffer-status)
       (progn
         (writeroom-mode -1)
