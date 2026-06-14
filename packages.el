@@ -15,6 +15,8 @@
 (package! beacon)
 (package! doom-modeline)
 (package! drag-stuff)
+(package! prettier-elisp
+  :recipe (:host github :repo "KarimAziev/prettier-elisp"))
 (package! exec-path-from-shell)
 (package! git-timemachine)
 (package! golden-ratio)
