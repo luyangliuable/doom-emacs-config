@@ -67,9 +67,11 @@
   ;; zoom in on find file so default file text size is bigger
   ;; (dolist (hook '(find-file-hook magit-mode-hook shell-mode-hook fundamental-mode-hook))
   ;;   (add-hook hook (lambda () (text-scale-increase 3))))
+  (defvar my-scaled-mode-exclusions '(treemacs-mode magit-diff-mode +doom-dashboard-mode))
+
   (add-hook 'change-major-mode-after-body-hook
     (lambda ()
-      (unless (derived-mode-p 'treemacs-mode)
+      (unless (apply #'derived-mode-p my-scaled-mode-exclusions)
         (text-scale-increase 3))))
 
   ;; Good scroll - smooth scrolling
