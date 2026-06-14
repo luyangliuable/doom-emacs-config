@@ -9,6 +9,14 @@
 (use-package! exec-path-from-shell
   :if (memq window-system '(mac ns))
   :config
+  (dolist (var '("OPENAI_API_KEY"
+                 "OPENAI_BASE_URL"
+                 "ANTHROPIC_API_KEY"
+                 "ANTHROPIC_AUTH_TOKEN"
+                 "AIPE_PORTKEY_API_KEY"
+                 "ANTHROPIC_MODEL"
+                 "ANTHROPIC_SMALL_FAST_MODEL"))
+    (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 ;; Font configuration
 (setq doom-font (font-spec :family "Fira Code" :size 13 :weight 'semi-light))
