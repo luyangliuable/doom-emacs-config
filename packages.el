@@ -25,6 +25,7 @@
 (package! lsp-treemacs)
 (package! lsp-pyright)
 (package! lsp-vtsls :recipe (:host github :repo "sdvcrx/lsp-vtsls"))
+(package! math-preview :recipe (:host github :repo "emacsmirror/math-preview"))
 (package! minimap)
 (package! org-jira)
 (package! persistent-scratch)

@@ -36,7 +36,7 @@
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        (vc-gutter +pretty) ; vcs diff in the fringe
        (window-select +numbers)     ; visually switch windows
-       ;;(emoji +unicode)  ; 
+       (emoji +unicode)  ; render unicode symbols used by LaTeX previews
        ;;deft              ; notational velocity for Emacs
        ;;doom-quit         ; DOOM quit-message prompts when you quit Emacs
        indent-guides     ; highlighted indent columns
@@ -155,7 +155,7 @@
        json              ; At least it ain't XML
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
-       ;;latex             ; writing papers in Emacs has never been so fun
+       latex             ; writing papers in Emacs has never been so fun
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
        ;;lua               ; one-based indices? one-based indices

@@ -21,6 +21,7 @@
 (load! "config/packages/vertico")         ; vertico optimization
 (load! "config/packages/treemacs")        ; treemacs
 (load! "config/packages/org-jira")        ; org jira
+(load! "config/packages/latex-preview")  ; LaTeX previews in org/markdown
 (load! "config/packages/golden-ratio")    ; golden-ratio
 (load! "config/packages/centered-buffer") ; centered-buffer
 (load! "config/packages/persistent-scratch") ; persistent-scratch
