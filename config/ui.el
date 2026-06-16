@@ -49,19 +49,35 @@
     (beacon-mode 1))
 
   ;; Minimap configuration
-  ;; Lazy load after 10 seconds - use M-x minimap-mode when needed
+  ;; Enable minimap automatically for long files, but defer activation until
+  ;; after `find-file' finishes. Running `minimap-mode' inside
+  ;; `find-file-hook' can make first-time opens from gptel/magit stay in the
+  ;; original buffer because minimap temporarily switches buffers.
   (use-package! minimap
-    :defer 10
+    :defer t
     :ensure t
     :init
-    (setq minimap-window-location 'right) ;; Position minimap on the right
+    (setq minimap-window-location 'right)
     :config
     (defun luyangliuable/minimap-for-long-files ()
+      "Enable minimap for long file buffers after file opening settles."
       (when (and buffer-file-name
-              (> (count-lines (point-min) (point-max)) 100))
-        (minimap-mode 1)))
+                 (> (count-lines (point-min) (point-max)) 100))
+        (let ((buf (current-buffer)))
+          (run-at-time
+           0.5 nil
+           (lambda ()
+             (when (and (buffer-live-p buf)
+                        (get-buffer-window buf))
+               (with-selected-window (get-buffer-window buf)
+                 (when (and buffer-file-name
+                            (> (count-lines (point-min) (point-max)) 100)
+                            (not (bound-and-true-p minimap-mode)))
+                   (minimap-mode 1)))))))))
 
-    (add-hook 'find-file-hook #'luyangliuable/minimap-for-long-files))
+    (add-hook 'find-file-hook #'luyangliuable/minimap-for-long-files)
+    (add-hook 'after-change-major-mode-hook
+              #'luyangliuable/minimap-for-long-files))
 
 
   ;; zoom in on find file so default file text size is bigger
