@@ -8,7 +8,9 @@
   (map! :leader
         :desc "run agent shell" "o S" #'agent-shell)
   (map! :leader
-        :desc "run codex shell" "o C" #'agent-shell-openai-codex))
+        :desc "run codex shell" "o C" #'agent-shell-openai-codex)
+  (map! :leader
+        :desc "run pi shell" "o P" #'agent-shell-pi-start-agent))
 
 ;; Claude Code configuration
 (setq agent-shell-anthropic-claude-environment
@@ -30,7 +32,7 @@
 (setq agent-shell-openai-codex-environment
       (agent-shell-make-environment-variables
        "OPENAI_API_KEY" (or (getenv "OPENAI_API_KEY") "")
-       "ANTHROPIC_BASE_URL" "https://api.studio.genai.cba"
+       "ANTHROPIC_BASE_URL" (or (getenv "ANTHROPIC_BASE_URL") "https://portkey.aipe.cba")
        "NODE_TLS_REJECT_UNAUTHORIZED" "0"))
 
 ;; Explicitly set the default models
@@ -39,3 +41,10 @@
 
 ;; Set codex executable path if needed
 (setq agent-shell-openai-codex-executable "/opt/homebrew/bin/codex")
+
+;; Pi coding agent configuration
+(setq agent-shell-pi-acp-command '("/opt/homebrew/bin/pi-acp"))
+(setq agent-shell-pi-environment
+      (agent-shell-make-environment-variables
+       "PI_ACP_PI_COMMAND" (expand-file-name "config/pi-emacs-rpc" doom-user-dir)
+       :inherit-env t))

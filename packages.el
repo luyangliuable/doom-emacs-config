@@ -9,6 +9,12 @@
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;; (package! some-package)
 
+(package! shell-maker
+  :recipe (:host github :repo "xenodium/shell-maker")
+  :pin "43ee9e1862994cbaa89715d324edb7a424181f22")
+(package! acp
+  :recipe (:host github :repo "xenodium/acp.el")
+  :pin "c8ee1d7f70105fba8efa964ca63f38ca94a1e759")
 (package! agent-shell)
 (package! anki-editor)
 (package! auto-highlight-symbol)
@@ -33,6 +39,11 @@
 (package! terminal-here)
 (package! undo-tree)
 (package! zone)
+;; enime + its elisp deps (dash & s ship with Doom already)
+(package! mpv)
+(package! esxml)
+(package! request)
+(package! enime :recipe (:host github :repo "xl666/enime" :files ("*.el" "video_scrapping.sh")))
 ;;(package! helm-projectile)  ; Removed: Switching to Vertico for better performance
 
 ;; To install a package directly from a remote git repo, you must specify a

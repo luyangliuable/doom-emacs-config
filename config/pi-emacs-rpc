@@ -1,0 +1,8 @@
+#!/bin/sh
+# Wrapper used by agent-shell/Emacs via pi-acp.
+# Keeps terminal pi configuration untouched while forcing the Emacs ACP session
+# onto the provider/model known to work with the current corporate gateway.
+exec /opt/homebrew/bin/pi \
+  --provider portkey-openai \
+  --model '@az-eus2-ci018274955/prod-syd-gai-emergingte-east-gpt-55-2026-04-24-dz-federated' \
+  "$@"
