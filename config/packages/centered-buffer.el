@@ -1,5 +1,13 @@
 ;;; config/packages/centered-buffer.el -*- lexical-binding: t; -*-
 
+;; Doom's :ui zen module wraps writeroom-mode and, by default, scales text
+;; (+zen-text-scale = 2) and enables mixed-pitch in prose modes. Both effects
+;; cause Fira Code to be replaced by a fallback / variable-pitch font when
+;; centered-buffer (writeroom-mode) is toggled. Disable both so the configured
+;; doom-font is preserved.
+(setq +zen-text-scale 0
+      +zen-mixed-pitch-modes nil)
+
 (defun luyangliuable/toggle-centered-buffer-status ()
   "Check if centered buffer mode is on."
   (bound-and-true-p writeroom-mode))

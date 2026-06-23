@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/merge-pr
+# uuid:
+# key: merge pr
+# condition: t
+# --
+You are in plan mode and i'm merging to latest ${1:origin/develop}.
+
+${2: test}
+
+Can u please think of a strategy to merge file
+${3:/Users/liul31/insights-pal-ui/app/hooks/useAgentCommunication.ts} by
+
+Exploring thorughly of functionality of this branch comapred to $1 to ensure no feature or functionality is lost on both branches.

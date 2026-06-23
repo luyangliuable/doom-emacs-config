@@ -21,6 +21,7 @@
 (load! "config/packages/vertico")         ; vertico optimization
 (load! "config/packages/treemacs")        ; treemacs
 (load! "config/packages/org-jira")        ; org jira
+(load! "config/packages/org-brain")       ; org-brain concept map/wiki
 (load! "config/packages/latex-preview")  ; LaTeX previews in org/markdown
 (load! "config/packages/golden-ratio")    ; golden-ratio
 (load! "config/packages/centered-buffer") ; centered-buffer
@@ -48,3 +49,17 @@
 ;;   :config
 ;;   (setq anki-editor-create-decks t
 ;;         anki-editor-org-tags-as-anki-tags t))
+
+;; enime - watch anime in emacs (https://github.com/xl666/enime)
+(use-package! enime
+  :commands (enime-main-transient enime-anime-transient)
+  :config
+  (setq enime-tmp-dir "/tmp"
+        enime-storage-file "/tmp/enime.db"))
+
+(map! :leader
+      (:prefix ("a a" . "anime/enime")
+       :desc "Enime main (search/followed)" "a" #'enime-main-transient
+       :desc "Enime current anime actions"  "c" #'enime-anime-transient
+       :desc "Search for anime"             "s" #'enime-main-transient
+       :desc "Followed animes"              "f" #'enime-main-transient))

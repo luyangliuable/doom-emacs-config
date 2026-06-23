@@ -6,10 +6,6 @@
 # --
 # Parallel Pipeline Monitoring (Enhanced Approach)
 
-After EVERY push to GitHub, monitor ALL pipelines in parallel until ALL pass:
-
-## Workflow
-
 1. Push code changes
 
 2. Identify all running workflows:

@@ -4,5 +4,231 @@
 # condition: t
 # source: promptbank/testing/meaningful-unit-tests.txt
 # --
-${1:$$(yas-choose-value '("Quick checklist only:\n- Add at least 1 positive/happy-path test\n- Add at least 1 negative/error-path test\n- Add edge-case tests where relevant\n- Avoid duplicate, trivial, or conflicting tests\n- Use clear behavior-focused test names\n- Run tests and coverage before finishing" "Generate meaningful tests for this change:\nAdd unit tests that catch real bugs. Include:\n- one positive/happy-path test\n- one negative/error-path test\n- one edge-case test if relevant\nAvoid tests for styling, static text, simple rendering, prop pass-through, or implementation details. Ensure test names describe expected behavior." "Review existing tests:\nReview the tests for meaningful coverage. Flag and fix:\n- duplicate tests covering the same path\n- trivial assertions\n- conflicting expectations\n- missing positive or negative paths\n- vague test names\n- tests without assertions\n- tests that depend on implementation details" "Full standards summary:\nWrite tests that verify behavior, not implementation details. Cover business logic, data transformations, edge cases, error handling, state transitions, and integration points. Avoid CSS/static-text/simple-render tests. Every feature change should have at least one positive and one negative test, clear names, no duplicates, no conflicts, and coverage around meaningful logic."))}
-$0
+
+# Meaningful Unit Test Standards
+
+Write unit tests that provide real value and catch actual bugs. Avoid trivial, duplicate, or conflicting tests.
+
+## Core Principles
+
+### 1. Meaningful Tests Only
+
+**DO write tests for:**
+- Business logic and data transformations
+- Edge cases and boundary conditions
+- Error handling and exception paths
+- State transitions and side effects
+- Complex calculations or algorithms
+- Integration points and data flow
+
+**DO NOT write tests for:**
+- CSS classes or styling (e.g., "should have correct classes")
+- Simple prop passing with no logic
+- Static text content that doesn't change
+- Trivial getters/setters with no logic
+- Component rendering without assertions on behavior
+- Tests that just verify the code exists
+
+### 2. No Duplicate Tests
+
+**Before adding a test:**
+- [ ] Search for existing tests covering the same code path
+- [ ] Check if edge case is already tested
+- [ ] Verify test name doesn't overlap with existing tests
+- [ ] Ensure test assertions are unique and specific
+
+**Example of duplicates to avoid:**
+```typescript
+// ❌ BAD: Duplicate tests
+it('should handle empty input', () => { ... });
+it('should work with empty string', () => { ... }); // Same as above
+
+// ✅ GOOD: Single comprehensive test
+it('should return default value when input is empty', () => { ... });
+```
+
+### 3. No Conflicting Tests
+
+**Avoid tests that contradict each other:**
+- Tests with same name but different assertions
+- Tests that expect opposite outcomes from same input
+- Tests that modify shared state inconsistently
+
+**Example of conflicts to avoid:**
+```typescript
+// ❌ BAD: Conflicting expectations
+it('should validate email format', () => {
+  expect(validate('test@example.com')).toBe(true);
+});
+it('should validate email format', () => {
+  expect(validate('test@example.com')).toBe(false); // Conflict!
+});
+
+// ✅ GOOD: Clear, specific test names
+it('should accept valid email format', () => {
+  expect(validate('test@example.com')).toBe(true);
+});
+it('should reject email without domain', () => {
+  expect(validate('test@')).toBe(false);
+});
+```
+
+## Mandatory Test Coverage for Feature Changes
+
+**When fixing or adding a feature, ALWAYS add 2 unit tests minimum:**
+
+### Positive Test (Happy Path)
+Tests that the feature works correctly under normal conditions:
+```typescript
+/**
+ * Positive test: Verify feature works as expected with valid input
+ */
+it('should calculate total price correctly with valid items', () => {
+  const items = [{ price: 10, quantity: 2 }, { price: 5, quantity: 3 }];
+  const result = calculateTotal(items);
+  expect(result).toBe(35); // (10*2) + (5*3)
+});
+```
+
+### Negative Test (Error Path)
+Tests that the feature handles errors and edge cases properly:
+```typescript
+/**
+ * Negative test: Verify feature handles invalid input gracefully
+ */
+it('should throw error when items array is empty', () => {
+  expect(() => calculateTotal([])).toThrow('Items array cannot be empty');
+});
+
+it('should return 0 when items have negative prices', () => {
+  const items = [{ price: -10, quantity: 2 }];
+  expect(calculateTotal(items)).toBe(0);
+});
+```
+
+## Test Quality Checklist
+
+Before submitting tests, verify:
+- [ ] Test descriptions are complete sentences (not "works correctly" or "handles edge case")
+- [ ] Each test has a clear purpose and unique assertions
+- [ ] Tests cover both success and failure scenarios
+- [ ] No duplicate tests covering same code path
+- [ ] No trivial tests (CSS classes, static text, simple renders)
+- [ ] No conflicting tests with contradictory expectations
+- [ ] Test names explain WHAT is being tested and EXPECTED outcome
+- [ ] Tests execute in <5 seconds per file
+- [ ] Minimum 70% line coverage for the file
+
+## Test Description Format
+
+**Use descriptive sentences that explain behavior:**
+
+```typescript
+// ❌ BAD: Vague descriptions
+it('works correctly', () => { ... });
+it('handles edge case', () => { ... });
+it('should validate', () => { ... });
+
+// ✅ GOOD: Clear, specific descriptions
+it('should parse ISO date string into Date object', () => { ... });
+it('should throw TypeError when input is null', () => { ... });
+it('should return empty array when no matches are found', () => { ... });
+```
+
+## Example: Complete Test Suite for Feature
+
+```typescript
+describe('calculateShippingCost', () => {
+  // Positive tests
+  it('should calculate standard shipping cost for domestic orders', () => {
+    const order = { weight: 2, country: 'US' };
+    expect(calculateShippingCost(order)).toBe(5.99);
+  });
+
+  it('should calculate international shipping cost with weight multiplier', () => {
+    const order = { weight: 3, country: 'CA' };
+    expect(calculateShippingCost(order)).toBe(14.99);
+  });
+
+  // Negative tests
+  it('should throw error when weight is negative', () => {
+    const order = { weight: -1, country: 'US' };
+    expect(() => calculateShippingCost(order)).toThrow('Weight must be positive');
+  });
+
+  it('should throw error when country code is invalid', () => {
+    const order = { weight: 2, country: 'INVALID' };
+    expect(() => calculateShippingCost(order)).toThrow('Invalid country code');
+  });
+
+  // Edge cases
+  it('should apply free shipping for orders over $100', () => {
+    const order = { weight: 5, country: 'US', total: 150 };
+    expect(calculateShippingCost(order)).toBe(0);
+  });
+});
+```
+
+## Pre-Commit Test Checklist
+
+Before committing code with tests:
+1. [ ] Run all tests: `npm test` (all pass)
+2. [ ] Check coverage: `npm run test:coverage` (≥70% line coverage)
+3. [ ] Review test names for clarity and uniqueness
+4. [ ] Verify no duplicate or trivial tests added
+5. [ ] Confirm both positive and negative scenarios covered
+6. [ ] Ensure test execution time <5s per file
+
+## Common Anti-Patterns to Avoid
+
+**1. Testing Implementation Details**
+```typescript
+// ❌ BAD: Tests internal state
+it('should set loading to true', () => {
+  component.instance().setState({ loading: true });
+  expect(component.state().loading).toBe(true);
+});
+
+// ✅ GOOD: Tests observable behavior
+it('should show loading spinner while fetching data', () => {
+  render(<Component />);
+  expect(screen.getByRole('progressbar')).toBeInTheDocument();
+});
+```
+
+**2. Multiple Assertions Testing Same Thing**
+```typescript
+// ❌ BAD: Redundant assertions
+expect(result).toBe(5);
+expect(result).toEqual(5);
+expect(result === 5).toBe(true);
+
+// ✅ GOOD: Single clear assertion
+expect(result).toBe(5);
+```
+
+**3. Tests Without Assertions**
+```typescript
+// ❌ BAD: No assertion
+it('should call api', () => {
+  callApi();
+});
+
+// ✅ GOOD: Clear assertion
+it('should call api with correct parameters', () => {
+  const spy = vi.spyOn(api, 'fetch');
+  callApi({ id: 123 });
+  expect(spy).toHaveBeenCalledWith({ id: 123 });
+});
+```
+
+## Summary
+
+**Every feature change requires:**
+1. At least 2 unit tests (1 positive, 1 negative)
+2. Meaningful tests that catch real bugs
+3. No duplicate or trivial tests
+4. Clear, descriptive test names
+5. ≥70% line coverage
+
+**Quality over quantity:** 5 meaningful tests > 20 trivial tests.

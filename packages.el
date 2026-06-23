@@ -34,6 +34,8 @@
 (package! math-preview :recipe (:host github :repo "emacsmirror/math-preview"))
 (package! minimap)
 (package! org-jira)
+(package! org-brain
+  :recipe (:host github :repo "Kungsgeten/org-brain"))
 (package! persistent-scratch)
 (package! projectile)
 (package! terminal-here)

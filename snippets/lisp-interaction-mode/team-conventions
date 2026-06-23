@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/team-conventions
+# uuid:
+# key: merge pr
+# condition: t
+# --
+
+Conventions established from PR reviews:
+
+- Absolute imports over relative imports - Use `@/` path alias instead of `./` or `../`
+- No TODO comments - SonarQube flags these as tech debt
+- Use native HTML elements for accessibility - Use `<button>` instead of `<div role="button">`
+- Never import from app/ in lib/ - lib/ is a standalone npm package, must not depend on app/ code
+- Import types from original source files - Never re-export types from barrel files; always import from the original type definition file (DRY principle)
+- ALWAYS use nullish coalescing (??) instead of logical OR (||) for default values - `||` incorrectly treats empty string `''`, `0`, and `false` as falsy; `??` only falls back for `null`/`undefined`. Example: `value ?? 'default'` not `value || 'default'`

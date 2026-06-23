@@ -26,6 +26,7 @@
 (setq blink-cursor-mode t)                  ;; show blinking cursor
 (setq-default truncate-lines nil)           ;; wrap long lines by default
 (setq-default word-wrap t)                  ;; wrap at word boundaries
+(setq-default tab-width 8)                  ;; org parser requires tab width 8
 (scroll-bar-mode -1)                         ;; don't show scrollbar
 (evil-goggles-mode t)                       ;; enable evil-goggles-mode
 

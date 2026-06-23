@@ -17,4 +17,7 @@
   (map! :map markdown-mode-map
         :localleader
         :desc "Preview math at point" "l" #'math-preview-at-point
-        :desc "Preview all math" "L" #'math-preview-all))
+        :desc "Preview all math" "L" #'math-preview-all)
+  (map! :map gfm-mode-map
+        :localleader
+        :desc "Align table" "ta" #'markdown-table-align))

@@ -101,6 +101,6 @@
 (when (featurep 'native-compile)
   (setq native-comp-async-report-warnings-errors nil)  ; Silence warnings
   (setq native-comp-deferred-compilation t)            ; Compile in background
-  (setq native-comp-speed 2))                          ; Optimize for speed
+  (setq native-comp-speed 3))                          ; Max optimization
 
 ;;; early-init.el ends here

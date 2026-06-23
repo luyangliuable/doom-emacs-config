@@ -109,6 +109,7 @@
 
  ;; File operations
  :desc "treemacs" "ft" #'treemacs
+ :desc "Open file externally" "fo" #'luyangliuable/open-file-or-directory-in-external-app
  :desc "yank file directory" "fyd" #'luyangliuable/copy-directory-path
  :desc "yank file name" "fyn" #'luyangliuable/copy-file-name
  :desc "yank file file path" "fyy" #'luyangliuable/copy-file-path
@@ -169,3 +170,16 @@
                          (let ((text (read-string "Say: ")))
                            (when (not (string-empty-p text))
                              (start-process "say-text" nil "say" text)))))
+
+;; Use plain Consult buffer switching instead of Doom workspace-aware switching.
+(map! :leader
+      (:prefix ("b" . "buffer")
+       :desc "Switch buffer" "b" #'consult-buffer
+       :desc "Switch buffer" "B" #'consult-buffer))
+
+;; Browse remote links with explicit line/region anchors.
+(map! :leader
+      :desc "Browse remote line" "gol" #'luyangliuable/browse-at-remote-line)
+
+(map! :leader
+      :desc "Browse remote region" :v "goL" #'luyangliuable/browse-at-remote-region)
