@@ -21,6 +21,7 @@
 (package! beacon)
 (package! doom-modeline)
 (package! drag-stuff)
+(package! evil-iedit-state)
 (package! prettier-elisp
   :recipe (:host github :repo "KarimAziev/prettier-elisp"))
 (package! exec-path-from-shell)

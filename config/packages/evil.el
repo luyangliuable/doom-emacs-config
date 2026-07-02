@@ -10,8 +10,7 @@
   :config
   ;; Force initialize operator system after evil loads
   (when (fboundp 'evil-normalize-keymaps)
-    (evil-normalize-keymaps))
-  (message "Evil package configured with operator support"))
+    (evil-normalize-keymaps)))
 
 ;; Configure evil-collection to not interfere with operators
 (use-package! evil-collection
@@ -20,10 +19,8 @@
   ;; PERFORMANCE: Removed (evil-collection-init) to enable lazy per-mode loading
   ;; Evil-collection will automatically load modes when they're first activated
   ;; This prevents loading 20+ modes synchronously at startup
-  ;; Ensure operators still work after evil-collection loads
-  (add-hook 'evil-collection-setup-hook
-            (lambda (_mode keymaps)
-              (message "Evil-collection loaded for mode: %s" _mode))))
+  ;; Keep evil-collection lazy without logging every mode it initializes.
+  nil)
 
 ;;; ============================================================================
 ;;; DEBUGGING HELPERS

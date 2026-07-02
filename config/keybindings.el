@@ -15,7 +15,8 @@
   (load! "keybindings/undo-tree")
   (load! "keybindings/narrow")
   (load! "keybindings/frames")
-  (load! "keybindings/snippets"))
+  (load! "keybindings/snippets")
+  (load! "keybindings/workspaces"))
 
 ;;; ============================================================================
 ;;; KEYBINDINGS
@@ -35,7 +36,8 @@
  :leader "tl" nil
  :leader "tz" nil
  :leader "tZ" nil
- :leader "tc" nil)
+ :leader "tc" nil
+ :leader "se" nil)
 
 ;; Visual mode text wrapping keybindings
 (map!
@@ -160,6 +162,8 @@
  :desc "evilnc comment operator" ";" #'evilnc-comment-operator
 
  ;; Search operations
+ :desc "iedit mode" "s e" (cmd! (require 'evil-iedit-state)
+                               (call-interactively #'evil-iedit-state/iedit-mode))
  :desc "Toggle symbol highlight" "sh" #'auto-highlight-symbol-mode
 
  ;; Frame operations

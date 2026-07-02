@@ -4,6 +4,8 @@
 ;; Projectile configuration
 (after! projectile
   ;; Add directories to ignore list
+  (setq projectile-project-root-files-bottom-up
+        (remove ".git" projectile-project-root-files-bottom-up))
   (add-to-list 'projectile-globally-ignored-directories ".git")
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
   ;; Add file suffixes to ignore

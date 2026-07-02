@@ -8,7 +8,6 @@
 ;; Doom modeline customization
 (progn
   (use-package! doom-modeline
-    :ensure t
     :init
     (setq doom-modeline-hud t) ;; Enable the HUD feature
 
@@ -31,7 +30,6 @@
   ;; Lazy load after 5 seconds to improve startup performance
   (use-package! beacon
     :defer 5
-    :ensure t
     :init
     ;; Beacon appearance settings (optimized for faster animation)
     (setq beacon-blink-duration 0.3 ;; Faster animation (was 0.8)
@@ -55,7 +53,6 @@
   ;; original buffer because minimap temporarily switches buffers.
   (use-package! minimap
     :defer t
-    :ensure t
     :init
     (setq minimap-window-location 'right)
     :config
@@ -94,7 +91,6 @@
   ;; Lazy load after 3 seconds with optimized settings
   (use-package good-scroll
     :defer 3
-    :ensure t
     :config
     ;; Optimized scrolling settings for better performance
     (setq good-scroll-duration 0.05) ;; Faster duration for better performance (was 0.1)
