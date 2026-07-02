@@ -2,7 +2,7 @@
 # name: promptbank/code-review/resolve-pr-comments
 # key: pb-code-review-resolve-pr-comments
 # condition: t
-# source: promptbank/code-review/resolve-pr-comments.txt
+# contributor: promptbank/code-review/resolve-pr-comments.txt
 # --
 # Systematic PR Comment Resolution Workflow
 

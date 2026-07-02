@@ -2,7 +2,7 @@
 # name: promptbank/code-review/nitpick-template
 # key: pb-code-review-nitpick-template
 # condition: t
-# source: promptbank/code-review/nitpick-template.txt
+# contributor: promptbank/code-review/nitpick-template.txt
 # --
 **Nitpick:** ${1:Minor suggestion}
 

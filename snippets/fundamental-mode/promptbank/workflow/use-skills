@@ -2,7 +2,7 @@
 # name: promptbank/workflow/use-skills
 # key: pb-workflow-use-skills
 # condition: t
-# source: promptbank/workflow/use-skills
+# contributor: promptbank/workflow/use-skills
 # --
 
 Invoke appropriate agent skills when:

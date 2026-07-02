@@ -2,7 +2,7 @@
 # name: promptbank/code-review/review-checklist
 # key: pb-code-review-review-checklist
 # condition: t
-# source: promptbank/code-review/review-checklist.txt
+# contributor: promptbank/code-review/review-checklist.txt
 # --
 ## Code Quality
 [ ] Absolute imports used (not relative)

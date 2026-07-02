@@ -2,7 +2,7 @@
 # name: promptbank/git/branch-workflow
 # key: pb-git-branch-workflow
 # condition: t
-# source: promptbank/git/branch-workflow.txt
+# contributor: promptbank/git/branch-workflow.txt
 # --
 Create new branch from current commit:
 

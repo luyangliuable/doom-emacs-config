@@ -2,7 +2,7 @@
 # name: promptbank/git/commit-message
 # key: pb-git-commit-message
 # condition: t
-# source: promptbank/git/commit-message.txt
+# contributor: promptbank/git/commit-message.txt
 # --
 Update component to handle edge case in validation logic
 

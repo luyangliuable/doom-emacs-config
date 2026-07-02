@@ -2,7 +2,7 @@
 # name: promptbank/git/recover-committed-local-files
 # key: pb-git-recover-committed-local-files
 # condition: t
-# source: promptbank/git/recover-committed-local-files.txt
+# contributor: promptbank/git/recover-committed-local-files.txt
 # --
 # Recover: Local-Only Files Already Committed and Pushed
 

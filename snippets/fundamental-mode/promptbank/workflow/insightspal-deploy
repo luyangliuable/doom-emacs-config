@@ -2,7 +2,7 @@
 # name: promptbank/workflow/insightspal-deploy
 # key: pb-workflow-insightspal-deploy
 # condition: t
-# source: promptbank/workflow/insightspal-deploy.txt
+# contributor: promptbank/workflow/insightspal-deploy.txt
 # --
 Can you invoke ${1:deployment skill} and grab ${2:https://github.com/org/repo/actions/runs/run_id} and deploy using ${3:https://github.com/org/deployment-repo/actions/workflows/deploy.yml?query=actor%3Ausername} by looking at past GitHub Action runs.
 $0

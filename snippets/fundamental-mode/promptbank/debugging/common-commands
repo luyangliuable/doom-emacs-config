@@ -2,7 +2,7 @@
 # name: promptbank/debugging/common-commands
 # key: pb-debugging-common-commands
 # condition: t
-# source: promptbank/debugging/common-commands.txt
+# contributor: promptbank/debugging/common-commands.txt
 # --
 Common debugging commands:
 

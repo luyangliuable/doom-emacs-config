@@ -2,7 +2,7 @@
 # name: promptbank/testing/meaningful-unit-tests
 # key: pb-testing-meaningful-unit-tests
 # condition: t
-# source: promptbank/testing/meaningful-unit-tests.txt
+# contributor: promptbank/testing/meaningful-unit-tests.txt
 # --
 
 # Meaningful Unit Test Standards

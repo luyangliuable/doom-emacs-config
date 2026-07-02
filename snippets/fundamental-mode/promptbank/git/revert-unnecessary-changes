@@ -2,7 +2,7 @@
 # name: promptbank/git/revert-unnecessary-changes
 # key: pb-git-revert-unnecessary-changes
 # condition: t
-# source: promptbank/git/revert-unnecessary-changes.txt
+# contributor: promptbank/git/revert-unnecessary-changes.txt
 # --
 # Revert Unnecessary File Changes
 

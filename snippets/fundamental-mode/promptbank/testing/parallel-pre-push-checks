@@ -2,7 +2,7 @@
 # name: promptbank/testing/parallel-pre-push-checks
 # key: pb-testing-parallel-pre-push-checks
 # condition: t
-# source: promptbank/testing/parallel-pre-push-checks.txt
+# contributor: promptbank/testing/parallel-pre-push-checks.txt
 # --
 # Parallel Pre-Push Verification (Fast Approach)
 

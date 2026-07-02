@@ -2,7 +2,7 @@
 # name: promptbank/code-review/lgtm-template
 # key: pb-code-review-lgtm-template
 # condition: t
-# source: promptbank/code-review/lgtm-template.txt
+# contributor: promptbank/code-review/lgtm-template.txt
 # --
 LGTM!
 

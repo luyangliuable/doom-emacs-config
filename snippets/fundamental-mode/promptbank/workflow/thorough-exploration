@@ -2,7 +2,7 @@
 # name: promptbank/workflow/thorough-exploration
 # key: pb-workflow-thorough-exploration
 # condition: t
-# source: promptbank/workflow/thorough-exploration.txt
+# contributor: promptbank/workflow/thorough-exploration.txt
 # --
 Explore the entire codebase thoroughly before making changes:
 

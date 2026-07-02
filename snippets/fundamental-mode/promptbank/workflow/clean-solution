@@ -2,7 +2,7 @@
 # name: promptbank/workflow/clean-solution
 # key: pb-workflow-clean-solution
 # condition: t
-# source: promptbank/workflow/clean-solution.txt
+# contributor: promptbank/workflow/clean-solution.txt
 # --
 Ensure the solution is:
 - Clean and easy to understand

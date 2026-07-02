@@ -2,7 +2,7 @@
 # name: promptbank/git/pr-description
 # key: pb-git-pr-description
 # condition: t
-# source: promptbank/git/pr-description.txt
+# contributor: promptbank/git/pr-description.txt
 # --
 ## Summary
 

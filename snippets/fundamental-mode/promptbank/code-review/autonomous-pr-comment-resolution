@@ -2,7 +2,7 @@
 # name: promptbank/code-review/autonomous-pr-comment-resolution
 # key: pb-code-review-autonomous-pr-comment-resolution
 # condition: t
-# source: promptbank/code-review/autonomous-pr-comment-resolution.txt
+# contributor: promptbank/code-review/autonomous-pr-comment-resolution.txt
 # --
 PR: ${1:https://github.com/org/repo/pull/pr_number}
 Check set:

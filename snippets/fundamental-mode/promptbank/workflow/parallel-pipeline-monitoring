@@ -2,7 +2,7 @@
 # name: promptbank/workflow/parallel-pipeline-monitoring
 # key: pb-workflow-parallel-pipeline-monitoring
 # condition: t
-# source: promptbank/workflow/parallel-pipeline-monitoring.txt
+# contributor: promptbank/workflow/parallel-pipeline-monitoring.txt
 # --
 # Parallel Pipeline Monitoring (Enhanced Approach)
 

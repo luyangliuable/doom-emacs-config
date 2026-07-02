@@ -2,7 +2,7 @@
 # name: promptbank/workflow/concise-plan
 # key: pb-workflow-concise-plan
 # condition: t
-# source: promptbank/workflow/concise-plan.txt
+# contributor: promptbank/workflow/concise-plan.txt
 # --
 Ensure the final plan is:
 - Concise (only essential information, no fluff)

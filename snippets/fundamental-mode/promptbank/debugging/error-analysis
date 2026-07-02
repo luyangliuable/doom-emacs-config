@@ -2,7 +2,7 @@
 # name: promptbank/debugging/error-analysis
 # key: pb-debugging-error-analysis
 # condition: t
-# source: promptbank/debugging/error-analysis.txt
+# contributor: promptbank/debugging/error-analysis.txt
 # --
 ## Problem Statement
 ${1:Describe the issue clearly and concisely}

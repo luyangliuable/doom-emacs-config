@@ -2,7 +2,7 @@
 # name: promptbank/git/local-only-files-check
 # key: pb-git-local-only-files-check
 # condition: t
-# source: promptbank/git/local-only-files-check.txt
+# contributor: promptbank/git/local-only-files-check.txt
 # --
 # Local-Only Files Check (Pre-Commit)
 

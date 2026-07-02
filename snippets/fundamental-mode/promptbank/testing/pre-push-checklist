@@ -2,7 +2,7 @@
 # name: promptbank/testing/pre-push-checklist
 # key: pb-testing-pre-push-checklist
 # condition: t
-# source: promptbank/testing/pre-push-checklist.txt
+# contributor: promptbank/testing/pre-push-checklist.txt
 # --
 Pre-push verification checklist:
 

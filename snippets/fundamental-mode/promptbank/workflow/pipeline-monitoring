@@ -2,7 +2,7 @@
 # name: promptbank/workflow/pipeline-monitoring
 # key: pb-workflow-pipeline-monitoring
 # condition: t
-# source: promptbank/workflow/pipeline-monitoring.txt
+# contributor: promptbank/workflow/pipeline-monitoring.txt
 # --
 After EVERY push to GitHub, monitor pipelines until ALL pass:
 

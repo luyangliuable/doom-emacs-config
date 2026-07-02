@@ -2,7 +2,7 @@
 # name: promptbank/debugging/rca-template
 # key: pb-debugging-rca-template
 # condition: t
-# source: promptbank/debugging/rca-template.txt
+# contributor: promptbank/debugging/rca-template.txt
 # --
 ## Root Cause Analysis
 
