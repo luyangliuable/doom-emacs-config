@@ -35,8 +35,25 @@
       (propertize "│" 'face 'mode-line-inactive))
 
     (defface luyangliuable-modeline-minor-mode
-      '((t (:inherit mode-line :foreground "black" :background unspecified)))
+      '((t (:inherit mode-line :weight bold :background unspecified)))
       "Face for compact minor mode indicators.")
+
+    (defface luyangliuable-modeline-minor-mode-inactive
+      '((t (:inherit (mode-line warning)
+             :weight bold
+             :strike-through t
+             :background unspecified)))
+      "Face for modeline minor modes disabled from their circle button.")
+
+    (defface luyangliuable-modeline-minor-mode-hover
+      '((t (:inherit mode-line-highlight :weight bold)))
+      "Hover face for active modeline minor mode indicators.")
+
+    (defface luyangliuable-modeline-minor-mode-inactive-hover
+      '((t (:inherit (mode-line-highlight warning)
+             :weight bold
+             :strike-through t)))
+      "Hover face for disabled modeline minor mode indicators.")
 
     (defvar luyangliuable/modeline-minor-mode-whitelist
       '(yas-minor-mode
@@ -51,6 +68,9 @@
         beacon-mode)
       "Minor modes allowed in the compact modeline indicator.")
 
+    (defvar luyangliuable/modeline-minor-mode-button-disabled nil
+      "Minor modes disabled from their modeline circle button.")
+
     (defun luyangliuable/circled-letter (char)
       "Return uppercase circled unicode version of CHAR."
       (let ((char (upcase char)))
@@ -61,27 +81,79 @@
                 (char-to-string (+ ?Ⓐ index))
               (char-to-string char))))))
 
+    (defun luyangliuable/modeline-minor-mode-active-p (mode)
+      "Return non-nil when MODE is active."
+      (and (boundp mode) (symbol-value mode)))
+
     (defun luyangliuable/active-modeline-minor-modes ()
       "Return active whitelisted minor modes."
-      (seq-filter (lambda (mode)
-                    (and (boundp mode) (symbol-value mode)))
+      (seq-filter #'luyangliuable/modeline-minor-mode-active-p
                   luyangliuable/modeline-minor-mode-whitelist))
 
-    (defun luyangliuable/modeline-minor-mode-menu ()
-      "Show active whitelisted minor modes in a completion menu."
+    (defun luyangliuable/modeline-shown-minor-modes ()
+      "Return active modes plus modes disabled through circle buttons."
+      (setq luyangliuable/modeline-minor-mode-button-disabled
+            (seq-filter (lambda (mode)
+                          (not (luyangliuable/modeline-minor-mode-active-p mode)))
+                        luyangliuable/modeline-minor-mode-button-disabled))
+      (seq-filter (lambda (mode)
+                    (or (luyangliuable/modeline-minor-mode-active-p mode)
+                        (memq mode luyangliuable/modeline-minor-mode-button-disabled)))
+                  luyangliuable/modeline-minor-mode-whitelist))
+
+    (defun luyangliuable/modeline-toggle-minor-mode (mode)
+      "Toggle MODE from the modeline."
       (interactive)
-      (let* ((modes (luyangliuable/active-modeline-minor-modes))
-             (names (mapcar #'symbol-name modes))
-             (choice (and names
-                          (completing-read "Toggle minor mode: " names nil t))))
-        (if (and choice (not (string-empty-p choice)))
-            (let ((mode (intern choice)))
-              (call-interactively mode)
-              (force-mode-line-update t)
-              (redraw-display)
-              (luyangliuable/modeline-minor-mode-menu))
-          (unless modes
-            (message "No active whitelisted minor modes")))))
+      (when (fboundp mode)
+        (call-interactively mode)
+        (if (luyangliuable/modeline-minor-mode-active-p mode)
+            (setq luyangliuable/modeline-minor-mode-button-disabled
+                  (delq mode luyangliuable/modeline-minor-mode-button-disabled))
+          (add-to-list 'luyangliuable/modeline-minor-mode-button-disabled mode))
+        (force-mode-line-update t)
+        (redraw-display)))
+
+    (defun luyangliuable/modeline-minor-mode-hover-face (mode index active)
+      "Return a unique hover face for MODE at INDEX."
+      (let ((face (intern (format "luyangliuable-modeline-%s-%s-%s-hover"
+                                  mode index
+                                  (if active "active" "inactive")))))
+        (unless (facep face)
+          (make-empty-face face)
+          (set-face-attribute
+           face nil :inherit
+           (if active
+               'luyangliuable-modeline-minor-mode-hover
+             'luyangliuable-modeline-minor-mode-inactive-hover)))
+        face))
+
+    (defun luyangliuable/modeline-minor-mode-button (mode label)
+      "Return clickable modeline LABEL for MODE."
+      (let* ((active (luyangliuable/modeline-minor-mode-active-p mode))
+             (face (if active
+                       'luyangliuable-modeline-minor-mode
+                     'luyangliuable-modeline-minor-mode-inactive))
+             (index 0))
+        (mapconcat
+         (lambda (char)
+           (let ((button
+                  (propertize
+                   (char-to-string char)
+                   'face face
+                   'mouse-face
+                   (luyangliuable/modeline-minor-mode-hover-face
+                    mode index active)
+                   'help-echo (symbol-name mode)
+                   'local-map
+                   (let ((map (make-sparse-keymap)))
+                     (define-key map [mode-line mouse-1]
+                       (lambda ()
+                         (interactive)
+                         (luyangliuable/modeline-toggle-minor-mode mode)))
+                     map))))
+             (setq index (1+ index))
+             button))
+         (string-to-list label) "")))
 
     (defun luyangliuable/minor-mode-label (mode duplicate-firsts)
       "Return a compact circled label for MODE."
@@ -92,7 +164,7 @@
 
     (doom-modeline-def-segment luyangliuable-minor-mode-circles
       (let* ((active-modes
-              (luyangliuable/active-modeline-minor-modes))
+              (luyangliuable/modeline-shown-minor-modes))
              (firsts (mapcar (lambda (mode)
                                (car (string-to-list
                                      (replace-regexp-in-string
@@ -104,18 +176,14 @@
               (seq-filter (lambda (char)
                             (> (cl-count char firsts) 1))
                           (delete-dups (copy-sequence firsts))))
-             (labels (mapcar (lambda (mode)
-                               (luyangliuable/minor-mode-label mode duplicate-firsts))
-                             active-modes)))
-        (when labels
-          (propertize (string-join labels "")
-                      'face 'luyangliuable-modeline-minor-mode
-                      'mouse-face 'mode-line-highlight
-                      'help-echo "mouse-1: show active minor modes"
-                      'local-map (let ((map (make-sparse-keymap)))
-                                   (define-key map [mode-line mouse-1]
-                                     #'luyangliuable/modeline-minor-mode-menu)
-                                   map)))))
+             (buttons (mapcar (lambda (mode)
+                                (luyangliuable/modeline-minor-mode-button
+                                 mode
+                                 (luyangliuable/minor-mode-label
+                                  mode duplicate-firsts)))
+                              active-modes)))
+        (when buttons
+          (string-join buttons ""))))
 
     (doom-modeline-def-modeline 'main
       '(eldoc          ; Show eldoc/help text in the modeline
@@ -180,36 +248,64 @@
     :config
     (beacon-mode 1))
 
-  ;; Minimap configuration
-  ;; Enable minimap automatically for long files, but defer activation until
-  ;; after `find-file' finishes. Running `minimap-mode' inside
-  ;; `find-file-hook' can make first-time opens from gptel/magit stay in the
-  ;; original buffer because minimap temporarily switches buffers.
+  ;; Minimap configuration. Uses standalone `minimap', not Doom `demap'.
   (use-package! minimap
     :defer t
     :init
-    (setq minimap-window-location 'right)
-    :config
-    (defun luyangliuable/minimap-for-long-files ()
-      "Enable minimap for file buffers longer than 100 lines."
-      (when (and buffer-file-name
-              (> (count-lines (point-min) (point-max)) 100))
-        (let ((buf (current-buffer)))
-          (run-at-time
-            0.5 nil
-            (lambda ()
-              (when (buffer-live-p buf)
-                (with-current-buffer buf
-                  (when (and buffer-file-name
-                          (> (count-lines (point-min) (point-max)) 100)
-                          (not (bound-and-true-p minimap-mode)))
-                    (require 'minimap)
-                    (minimap-mode 1)))))))))
+    (setq minimap-window-location 'right
+          minimap-major-modes '(prog-mode))
 
-    (add-hook 'find-file-hook #'luyangliuable/minimap-for-long-files)
-    (add-hook 'after-change-major-mode-hook
-      #'luyangliuable/minimap-for-long-files))
+    (defvar luyangliuable/minimap-debug nil)
+    (defvar luyangliuable/minimap--last-buffer nil)
+    (defvar luyangliuable/minimap--last-tick nil)
+    (defvar luyangliuable/minimap--last-eligible nil)
 
+    (defun luyangliuable/minimap-buffer-over-100-lines-p ()
+      (save-excursion
+        (goto-char (point-min))
+        (forward-line 100)
+        (not (eobp))))
+
+    (defun luyangliuable/minimap-eligible-buffer-p ()
+      (and buffer-file-name
+           (not (minibufferp))
+           (not (string= (buffer-name) " *MINIMAP*"))
+           (luyangliuable/minimap-buffer-over-100-lines-p)))
+
+    (defun luyangliuable/minimap-auto-sync ()
+      (unless (or (active-minibuffer-window)
+                  (minibufferp)
+                  (string= (buffer-name) " *MINIMAP*"))
+        (let ((buffer (current-buffer))
+              (tick (buffer-chars-modified-tick)))
+          (unless (and (eq buffer luyangliuable/minimap--last-buffer)
+                       (eq tick luyangliuable/minimap--last-tick))
+            (let* ((eligible (luyangliuable/minimap-eligible-buffer-p))
+                   (buffer-changed
+                    (not (eq buffer luyangliuable/minimap--last-buffer)))
+                   (eligibility-changed
+                    (not (eq eligible luyangliuable/minimap--last-eligible))))
+              (setq luyangliuable/minimap--last-buffer buffer
+                    luyangliuable/minimap--last-tick tick
+                    luyangliuable/minimap--last-eligible eligible)
+              (when luyangliuable/minimap-debug
+                (message "minimap auto: buffer=%s eligible=%s active=%s"
+                         (buffer-name) eligible
+                         (bound-and-true-p minimap-mode)))
+              (when (or buffer-changed eligibility-changed)
+                (cond
+                 (eligible
+                  (add-to-list 'minimap-major-modes major-mode)
+                  (unless (or (bound-and-true-p minimap-mode)
+                              (memq 'minimap-mode
+                                    (bound-and-true-p
+                                     luyangliuable/modeline-minor-mode-button-disabled)))
+                    (minimap-mode 1)))
+                 ((bound-and-true-p minimap-mode)
+                  (minimap-mode -1)))))))))
+
+    (add-hook 'post-command-hook
+              #'luyangliuable/minimap-auto-sync))
 
   ;; zoom in on find file so default file text size is bigger
   ;; (dolist (hook '(find-file-hook magit-mode-hook shell-mode-hook fundamental-mode-hook))

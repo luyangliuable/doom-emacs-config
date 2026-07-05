@@ -66,6 +66,7 @@
  ;; Buffer operations
  :desc "Switch to last buffer" "TAB" #'luyangliuable/switch-to-last-buffer
  :desc "Go to scratch buffer" "bs" #'luyangliuable/goto-scratch-buffer
+ :desc "Open dashboard" "bh" #'+doom-dashboard/open
  :desc "Copy entire buffer to clipboard" "bY" #'luyangliuable/copy-whole-buffer-to-clipboard
 
  :desc "Run shell in project" "p$." #'projectile-run-shell
