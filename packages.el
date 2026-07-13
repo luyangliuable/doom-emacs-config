@@ -20,6 +20,12 @@
 (package! auto-highlight-symbol)
 (package! beacon)
 (package! doom-modeline)
+(package! bongo-cat-mode
+  :recipe (:local-repo "~/bongo-cat-mode"
+           :files ("bongo-cat-mode.el" "img")))
+(package! minor-mode-badges
+  :recipe (:local-repo "~/Dev/minor-mode-badges"
+           :files ("minor-mode-badges.el")))
 (package! drag-stuff)
 (package! evil-iedit-state)
 (package! prettier-elisp
