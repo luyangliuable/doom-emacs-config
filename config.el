@@ -28,7 +28,13 @@
 (load! "config/packages/persistent-scratch") ; persistent-scratch
 (load! "config/debug-file-open")           ; temporary file-open debugging
 (load! "config/keybindings")              ; Keybindings after packages
-(load! "config/ui")                       ; UI packages after core
+(load! "config/packages/beacon")          ; beacon cursor highlight
+(load! "config/packages/bongo-cat-mode")  ; bongo cat modeline companion
+(load! "config/packages/doom-modeline")   ; doom-modeline
+(load! "config/packages/minor-mode-badges") ; minor-mode-badges (after doom-modeline)
+(load! "config/packages/good-scroll")     ; smooth scrolling
+(load! "config/packages/minimap")         ; code minimap
+(load! "config/ui")                       ; package-agnostic UI behaviors
 (ignore-errors
     (load! "config/packages/lsp-vtsls")) ; lsp-vtsls
 
