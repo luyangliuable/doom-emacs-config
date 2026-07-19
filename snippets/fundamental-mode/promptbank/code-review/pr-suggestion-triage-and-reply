@@ -1,0 +1,63 @@
+# -*- mode: snippet -*-
+# name: promptbank/code-review/pr-suggestion-triage-and-reply
+# key: pb-code-review-pr-suggestion-triage-reply
+# condition: t
+# contributor: promptbank/code-review/pr-suggestion-triage-and-reply.txt
+# --
+# PR Suggestion Triage and Reply Workflow
+
+For PR ${1:PR_URL_OR_NUMBER}, review every suggestion thread and choose one outcome before changing code.
+
+## 1. Classify each suggestion
+
+| Thread | Suggestion | Actually issue? | Introduced here? | Fix now? | Not applicable? | Follow-up? | Reason |
+|---|---|---:|---:|---:|---:|---:|---|
+| ${2:thread/link} | ${3:summary} | ${4:yes/no} | ${5:yes/no} | ${6:yes/no} | ${7:yes/no} | ${8:yes/no} | ${9:reason} |
+
+## 2. Pick the action
+
+### A. Fix in this PR
+Use when the issue was introduced here, is blocking, is small/low-risk, or affects packaging, CI, tests, dependencies, typing consistency, or obvious correctness.
+
+Before replying: implement, test, push if linking GitHub code, and confirm CI where relevant.
+
+Reply format for code changes:
+Updated ${10:short description of change} here:
+
+${11:path/to/file}
+
+Lines ${12:start} to ${13:end} in ${14:commit}
+
+```python
+${15:relevant code snippet}
+```
+
+Resolve only after the reply is posted and the fix is verified.
+
+### B. Not applicable
+Use when the suggestion does not apply, the code is stale, the path is already handled, the condition cannot occur, or the change would be incorrect.
+
+Reply: This does not apply here because ${16:short reason}, as shown by ${17:CODE_LINK_WITH_LINE}.
+Alternative: I checked this path and it is already handled here: ${18:CODE_LINK_WITH_LINE}.
+Resolve only after the reply is posted and the evidence is clear.
+
+### C. Create follow-up issue
+Use when the suggestion is valid but broader than this PR, changes behaviour/architecture, is tech debt/uplift, was pre-existing, or would expand scope too much.
+
+Issue body:
+Follow-up from PR ${19:PR_NUMBER} review.
+
+Context: ${20:short context}
+Relevant code: ${21:CODE_OR_SOURCE_LINK_WITH_LINE}
+Original PR review comment:
+> ${22:PASTE_REVIEW_COMMENT_VERBATIM}
+
+Reply: Created ${23:ISSUE_LINK} to track this as a follow-up since ${24:short reason}.
+If carried over: Created ${25:ISSUE_LINK} to track this follow-up since the ${26:behaviour/pattern} was directly carried over from ${27:SOURCE_LINK_WITH_LINE}.
+Resolve only after the issue exists, is labelled, and is linked in the thread.
+
+## 3. Reply and resolve rules
+Replies must be one sentence, generic, professional, non-defensive, posted in the original thread, and linked to code, issue, or evidence.
+Resolve only when fixed and verified, confirmed not applicable with evidence, or tracked in a labelled follow-up issue.
+
+$0
