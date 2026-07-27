@@ -81,4 +81,16 @@
        battery        ; Laptop battery status
        luyangliuable-modeline-space)) ; Right padding
 
-  (doom-modeline-mode 1))
+  (defun luyangliuable/use-main-doom-modeline ()
+    "Use the main Doom modeline layout in the current buffer."
+    (when (bound-and-true-p doom-modeline-mode)
+      (doom-modeline-set-modeline 'main)))
+
+  (add-hook 'fundamental-mode-hook #'luyangliuable/use-main-doom-modeline)
+
+  (doom-modeline-mode 1)
+
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (when (eq major-mode 'fundamental-mode)
+        (luyangliuable/use-main-doom-modeline)))))

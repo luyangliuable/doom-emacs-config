@@ -4,7 +4,8 @@
 (use-package! bongo-cat-mode
   :init
   (setq bongo-cat-color-scheme 'white
-    bongo-cat-height 22)
+    bongo-cat-height 32
+    bongo-cat-track-width 20)
   :config
   (bongo-cat-mode-clear-cache)
-  (bongo-cat-mode 1))
+  (bongo-cat-scroll-mode 1))

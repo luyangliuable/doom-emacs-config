@@ -1,0 +1,22 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/visual-recap-from-pr
+# key: pb-workflow-visual-recap-from-pr
+# condition: t
+# contributor: promptbank/workflow/visual-recap-from-pr.txt
+# --
+/visual-recap
+
+Review PR ${1:https://github.com/org/repo/pull/pr_number} and produce a visual recap of the changes.
+
+- Read the PR (gh pr view/diff) and the real files/symbols it touches; ground
+  the recap in the actual diff, not assumptions.
+- This is review only — do NOT edit any source. The deliverable is the recap.
+- Use local-files privacy mode (no hosted DB writes). Author it under
+  .agent-native/recaps/<slug>/ with kind: "recap" and localOnly: true, and lint
+  with \`plan local check\`.
+- At the end, START the local bridge as a detached background process
+  (\`plan local serve --kind recap\`) and OPEN the rendered recap in Chrome, then
+  give me the live URL. Keep the bridge running until I say stop.
+- Put review concerns, risks, and anything needing a decision in focused review
+  notes with a recommended default for each.
+$0

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/plan-mode
+# key: pb-plan-mode
+# condition: t
+# contributor: promptbank/workflow/plan-mode.txt
+# --
+You are in plan mode.

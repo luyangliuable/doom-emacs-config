@@ -1,0 +1,24 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/visualize-repo-pr
+# key: pb-workflow-visualize-repo-pr
+# condition: t
+# contributor: promptbank/workflow/visualize-repo-pr.txt
+# --
+/visualize-repo
+
+Create or update the repo-native visual docs, focused on the area touched by
+PR ${1:https://github.com/org/repo/pull/pr_number}.
+
+- Read the PR (gh pr view/diff) to scope which components, APIs, data models,
+  and flows to document; ground every doc in real files/symbols, not
+  assumptions.
+- This is documentation only — do NOT edit source. The deliverable is the
+  visual repo docs.
+- Use local-files privacy mode (no hosted DB writes). Create/update
+  agent-native.json and the Plan MDX under .agent-native/visual-docs/, and lint
+  with \`visualize-repo check\`.
+- At the end, START the local bridge as a detached background process
+  (\`visualize-repo --open\`) and OPEN the viewer in Chrome, then give me the
+  live URL. Keep the bridge running until I say stop.
+- Collect any doc gaps or decisions as Plan comments with a recommended default.
+$0
