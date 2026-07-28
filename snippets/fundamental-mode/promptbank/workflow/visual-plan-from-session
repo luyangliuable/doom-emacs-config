@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/visual-plan-from-session
+# key: pb-workflow-visual-plan-from-session
+# condition: t
+# contributor: promptbank/workflow/visual-plan-from-session.txt
+# --
+/visual-plan
+
+Take the plan we've been discussing in this session and turn it into a visual
+plan. Use it as the source — do NOT start over or re-explore from scratch.
+
+- Ground every step in the real files/symbols already identified in this
+  session; keep the plan standalone (a reader with no chat history must
+  understand it) and drop any "this revision / earlier draft" framing.
+- This is planning only — do NOT edit any source. The deliverable is the plan.
+- Use local-files privacy mode (no hosted DB writes). Author it under
+  .agent-native/plans/<slug>/ and lint with \`plan local check\`.
+- At the end, START the local bridge as a detached background process and OPEN
+  the rendered plan in Chrome, then give me the live URL. Keep the bridge
+  running until I say stop.
+- Put unresolved decisions in the bottom Open Questions form with a recommended
+  default for each.
+$0

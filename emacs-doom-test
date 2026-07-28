@@ -1,0 +1,3 @@
+#!/bin/bash
+# Airlock migration: old: exec /opt/homebrew/opt/emacs-plus@29/Emacs.app/Contents/MacOS/Emacs --init-directory ~/.config/doom-emacs "$@"
+exec /opt/homebrew/opt/emacs-plus@29/Emacs.app/Contents/MacOS/Emacs --init-directory /Users/liul31/Dev/.config/doom-emacs "$@"
