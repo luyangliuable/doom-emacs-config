@@ -54,5 +54,8 @@
                 ((bound-and-true-p minimap-mode)
                   (minimap-mode -1)))))))))
 
-  (add-hook 'post-command-hook
-    #'luyangliuable/minimap-auto-sync))
+  ;; PERF: previously ran on `post-command-hook', i.e. after *every* keystroke,
+  ;; forcing a buffer-eligibility scan on each edit. Debounce via a single idle
+  ;; timer so the sync only runs when typing pauses (0.5s idle), keeping the
+  ;; typing hot-path free of minimap work.
+  (run-with-idle-timer 0.5 t #'luyangliuable/minimap-auto-sync))
