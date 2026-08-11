@@ -8,9 +8,10 @@
 
 ;; Load core configuration modules (order matters)
 (load! "config/core")                     ; Core settings first
+(load! "config/packages/performance")     ; Performance tuning (GC, read-process-output-max, company/flycheck delays)
 (load! "config/modes")                    ; Mode hooks
 (load! "config/packages/evil")            ; Evil configuration EARLY
-(load! "config/packages/agent-shell")     ; agent-shell
+;; (load! "config/packages/agent-shell")     ; agent-shell (disabled temporarily)
 (load! "config/packages/auto-highlight-symbol") ; auto-highlight-symbol
 (load! "config/packages/drag-stuff")      ; dragstuff
 (load! "config/packages/editorconfig")    ; editorconfig

@@ -2,49 +2,54 @@
 ;; LSP Mode Package Configuration - Optimized for Performance
 
 ;;; ============================================================================
-;;; SECTION 1: EMACS-LSP-BOOSTER SETUP (TEMPORARILY DISABLED FOR TESTING)
+;;; SECTION 1: EMACS-LSP-BOOSTER SETUP
 ;;; ============================================================================
 
-;; DISABLED: Testing if booster is causing performance issues
-;; Configure emacs-lsp-booster if available (4x faster JSON parsing)
-;; (when (executable-find "emacs-lsp-booster")
-;;   (message "✓ emacs-lsp-booster detected - enabling 4x faster JSON parsing")
-;;
-;;   ;; Advice to parse bytecode from booster
-;;   (defun lsp-booster--advice-json-parse (old-fn &rest args)
-;;     "Try to parse bytecode instead of json."
-;;     (or
-;;      (when (equal (following-char) ?#)
-;;        (let ((bytecode (read (current-buffer))))
-;;          (when (byte-code-function-p bytecode)
-;;            (funcall bytecode))))
-;;      (apply old-fn args)))
-;;
-;;   (advice-add (if (progn (require 'json)
-;;                          (fboundp 'json-parse-buffer))
-;;                   'json-parse-buffer
-;;                 'json-read)
-;;               :around #'lsp-booster--advice-json-parse)
-;;
-;;   ;; Advice to wrap LSP server commands with booster (FIXED VERSION)
-;;   (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
-;;     "Prepend emacs-lsp-booster command to lsp CMD."
-;;     (let ((orig-result (funcall old-fn cmd test?)))
-;;       (if (and (not test?)                             ;; Don't wrap during server detection!
-;;                (not (file-remote-p default-directory)) ;; Don't wrap remote servers
-;;                lsp-use-plists                          ;; Only if using plists
-;;                (not (functionp 'json-rpc-connection))  ;; Not native json-rpc
-;;                (executable-find "emacs-lsp-booster"))
-;;           (progn
-;;             ;; Resolve command from exec-path (in case not found in $PATH)
-;;             (when-let ((command-from-exec-path (executable-find (car orig-result))))
-;;               (setcar orig-result command-from-exec-path))
-;;             (message "Using emacs-lsp-booster for %s!" orig-result)
-;;             (cons "emacs-lsp-booster" orig-result))  ;; Use cons, not concat!
-;;         orig-result)))
-;;
-;;   (advice-add 'lsp-resolve-final-command
-;;               :around #'lsp-booster--advice-final-command))
+;; Configure emacs-lsp-booster if available. The booster wraps the language
+;; server process and streams pre-parsed Emacs bytecode instead of raw JSON,
+;; giving ~4x faster deserialization. This is the single biggest win for large
+;; payload servers like vtsls (completions, semantic tokens, diagnostics),
+;; where unbuffered JSON parsing on the main thread causes typing stutter.
+;; Requires `lsp-use-plists' (set in early-init.el) and a `doom build' so the
+;; lsp packages are byte-compiled with plist support.
+(when (executable-find "emacs-lsp-booster")
+  (message "✓ emacs-lsp-booster detected - enabling 4x faster JSON parsing")
+
+  ;; Advice to parse bytecode from booster
+  (defun lsp-booster--advice-json-parse (old-fn &rest args)
+    "Try to parse bytecode instead of json."
+    (or
+     (when (equal (following-char) ?#)
+       (let ((bytecode (read (current-buffer))))
+         (when (byte-code-function-p bytecode)
+           (funcall bytecode))))
+     (apply old-fn args)))
+
+  (advice-add (if (progn (require 'json)
+                         (fboundp 'json-parse-buffer))
+                  'json-parse-buffer
+                'json-read)
+              :around #'lsp-booster--advice-json-parse)
+
+  ;; Advice to wrap LSP server commands with booster (FIXED VERSION)
+  (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+    "Prepend emacs-lsp-booster command to lsp CMD."
+    (let ((orig-result (funcall old-fn cmd test?)))
+      (if (and (not test?)                             ;; Don't wrap during server detection!
+               (not (file-remote-p default-directory)) ;; Don't wrap remote servers
+               lsp-use-plists                          ;; Only if using plists
+               (not (functionp 'json-rpc-connection))  ;; Not native json-rpc
+               (executable-find "emacs-lsp-booster"))
+          (progn
+            ;; Resolve command from exec-path (in case not found in $PATH)
+            (when-let ((command-from-exec-path (executable-find (car orig-result))))
+              (setcar orig-result command-from-exec-path))
+            (message "Using emacs-lsp-booster for %s!" orig-result)
+            (cons "emacs-lsp-booster" orig-result))  ;; Use cons, not concat!
+        orig-result)))
+
+  (advice-add 'lsp-resolve-final-command
+              :around #'lsp-booster--advice-final-command))
 
 ;;; ============================================================================
 ;;; SECTION 2: CORE LSP SETTINGS (PRESERVED FROM ORIGINAL)
@@ -57,19 +62,35 @@
   (setq lsp-enable-file-watchers t)            ; Enable file watching for auto-updates
   (setq lsp-log-io nil)                        ; Keep logging disabled for performance
 
-  ;; UI Features: Enable all features for full functionality
+  ;; UI Features: Enable all features for full functionality.
+  ;;
+  ;; PERF NOTE (Phase 2 - intentionally left ENABLED per user request):
+  ;; The following features add per-keystroke / per-cursor-move cost in TSX
+  ;; because each one issues extra requests to vtsls or re-renders on change.
+  ;; If typing still lags after enabling emacs-lsp-booster, these are the next
+  ;; knobs to turn off (set to nil):
+  ;;   - lsp-ui-doc-show-with-cursor : fires a `textDocument/hover' request every
+  ;;     time the cursor idles on a symbol, then renders a child-frame popup.
+  ;;   - lsp-ui-sideline-show-hover  : issues hover requests on cursor movement
+  ;;     and repaints the sideline overlay to the right of the current line.
+  ;;   - lsp-ui-sideline-show-diagnostics : recomputes/repaints diagnostic text
+  ;;     in the sideline as diagnostics arrive and the cursor moves.
+  ;;   - lsp-lens-enable : requests code lenses (reference/impl counts) and
+  ;;     recomputes them on buffer changes; expensive for TypeScript.
+  ;;   - lsp-modeline-code-actions-enable : requests available code actions on
+  ;;     cursor move to display the lightbulb/action count in the modeline.
   (setq lsp-ui-doc-enable t)                   ; Enable popup documentation
   (setq lsp-ui-doc-delay 0.5)                  ; Show docs after 0.5s hover
-  (setq lsp-ui-doc-show-with-cursor t)         ; Show docs on cursor hover
+  (setq lsp-ui-doc-show-with-cursor t)         ; Show docs on cursor hover (hover req per idle)
   (setq lsp-ui-doc-position 'at-point)         ; Show docs at point
 
   (setq lsp-ui-sideline-enable t)              ; Enable sideline information
-  (setq lsp-ui-sideline-show-hover t)          ; Show hover messages in sideline
-  (setq lsp-ui-sideline-show-diagnostics t)    ; Show diagnostics in sideline
+  (setq lsp-ui-sideline-show-hover t)          ; Show hover messages in sideline (hover req on move)
+  (setq lsp-ui-sideline-show-diagnostics t)    ; Show diagnostics in sideline (repaint on move)
   (setq lsp-ui-sideline-delay 0.5)             ; Update sideline after 0.5s
 
-  (setq lsp-lens-enable t)                     ; Enable code lens
-  (setq lsp-modeline-code-actions-enable t)    ; Enable modeline code actions
+  (setq lsp-lens-enable t)                     ; Enable code lens (recomputed on change)
+  (setq lsp-modeline-code-actions-enable t)    ; Enable modeline code actions (req on cursor move)
   (setq lsp-modeline-diagnostics-enable t)     ; Show diagnostics in modeline
   (setq lsp-signature-auto-activate t)         ; Auto-show function signatures
   (setq lsp-signature-render-documentation t)  ; Include documentation in signatures
