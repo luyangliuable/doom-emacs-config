@@ -95,9 +95,8 @@
   (setq lsp-signature-auto-activate t)         ; Auto-show function signatures
   (setq lsp-signature-render-documentation t)  ; Include documentation in signatures
 
-  ;; LSP headerline breadcrumb navigation
+  ;; LSP enables this buffer-local mode through `lsp-configure-hook`.
   (setq lsp-headerline-breadcrumb-enable t)
-  (lsp-headerline-breadcrumb-mode 1)
 
   ;; Ensure electric-indent works in LSP buffers
   (add-hook 'lsp-mode-hook #'electric-indent-local-mode)

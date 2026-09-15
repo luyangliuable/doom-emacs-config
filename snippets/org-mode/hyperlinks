@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: hyperlinks
+# uuid: 
+# key: hyperlinks
+# condition: t
+# --
+
+[[${1:LINK}][${2:DESCRIPTION}]

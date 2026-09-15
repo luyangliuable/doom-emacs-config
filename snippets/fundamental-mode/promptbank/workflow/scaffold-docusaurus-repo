@@ -1,0 +1,88 @@
+# -*- mode: snippet -*-
+# name: promptbank/workflow/scaffold-docusaurus-repo
+# key: pb-workflow-scaffold-docusaurus-repo
+# condition: t
+# contributor: promptbank/workflow/scaffold-docusaurus-repo.txt
+# --
+Set up documentation assets for an existing or new repository by mirroring ONLY
+the README.md format, Docusaurus website structure, and GitHub Actions -> GitHub
+Pages deployment from ${1:https://github.com/<owner>/<reference-repository>}. Do NOT mirror the reference
+project's application code, package architecture, tests, Python project setup, or
+product-specific implementation. Only the documentation/public-site layer should
+be copied structurally; content must be rewritten for the target project.
+
+## Step 0 - Mandatory documentation-site exploration (do this first, miss nothing)
+Read these documentation-related files before writing anything, and mirror their
+README/Docusaurus/GitHub-Pages structure only:
+- README.md (centered header div, badges, section order, documentation tables,
+  documentation links, image placement, callouts)
+- website/package.json (Docusaurus 3.10.2 classic + faster, React 19, node >=20)
+- website/docusaurus.config.js (title/tagline/favicon, url, baseUrl,
+  organizationName, projectName, trailingSlash, classic preset, navbar, footer,
+  prism languages)
+- website/sidebars.js (manual sidebar categories and doc ordering)
+- website/src/pages/index.js + index.module.css (docs landing page hero,
+  CodeBlock, button, homepage layout)
+- website/src/components/HomepageFeatures/index.js + styles.module.css (3 docs
+  landing-page feature cards)
+- website/src/css/custom.css (Infima color overrides)
+- website/docs/*.md (frontmatter, page structure, docs navigation shape)
+- website/static/img/, website/static/.nojekyll, website/.gitignore
+- .github/workflows/deploy-docs.yaml (GitHub Pages build+deploy jobs)
+- assets/ (README/site logo and documentation images only)
+
+Do not use src/, tests/, pyproject.toml, package/runtime code, CLI structure, or
+other application files as templates except when describing the target project's
+own architecture in README/docs.
+
+## New project details (fill these in)
+- Project name / title: ${2:My Project}
+- One-line pitch / tagline: ${3:Do the thing, fast.}
+- GitHub org: ${4:my-org}
+- GitHub repo: ${5:my-repo}
+- Primary language + version badge: ${6:Python 3.12+}
+- "Built on" badge target (optional, blank to omit): ${7:}
+
+## Deliverables (documentation layer only)
+- README.md with the same visual/structural format as the reference README:
+  centered header (optional logo + title + bold pitch + paragraph + badges +
+  pipe-separated docs links), "Why <project>" bullets, Quickstart,
+  Prerequisites, "What you get" tree, Commands/Usage table, "Where things go"
+  table, callout, Documentation link list, Development, Architecture tree, and
+  example walkthrough/images where appropriate. Keep the README style identical,
+  but rewrite every word for the target project.
+- website/ Docusaurus documentation site matching the reference website's file
+  layout, config style, navbar/footer/sidebar pattern, landing page, CSS, and
+  docs page format.
+- .github/workflows/deploy-docs.yaml workflow for building website/ and deploying
+  it to GitHub Pages.
+- Full generic doc set under website/docs/: intro (slug: /), getting-started,
+  commands-or-usage, build/setup/customization pages, operate/deploy/troubleshoot
+  pages, comparison, and migration/how-it-works. Keep the reference sidebar shape
+  but choose generic page names/content that fit the target project. Do NOT copy
+  reference-project-specific wording unless the target project actually has
+  those concepts.
+
+## GitHub Pages: CI runner + npm registry
+${8:$$(yas-choose-value '("Internal runner: use the target organization-approved runner and registry configuration; do not copy credentials or private endpoints." "Portable/public: use runs-on: ubuntu-latest and the default public npm registry; drop the custom .npmrc step."))}
+
+## GitHub Pages: URL type (sets url, baseUrl, trailingSlash)
+${9:$$(yas-choose-value '("Project page: url https://<org>.github.io , baseUrl \"/<repo>/\" , trailingSlash false. Standard public GitHub Pages for a project repo." "User/org page: url https://<org>.github.io , baseUrl \"/\" , trailingSlash false. For a <org>.github.io repo served at root." "Private-repo generated subdomain (like the reference): url https://<generated>.pages.github.io , baseUrl \"/\" , trailingSlash false."))}
+
+## Logo handling
+${10:$$(yas-choose-value '("Auto-generate a placeholder: create assets/logo.svg + website/static/img/logo.svg + a favicon (rounded-square mark), wired into README header and navbar." "Only if supplied: wire up assets/logo.svg + website/static/img/logo.svg + favicon when I provide one; otherwise reference paths but leave a TODO." "Omit logo: no logo image; use a text-only centered README header and default Docusaurus favicon."))}
+
+## Fidelity rules
+- Match README/Docusaurus/GitHub-Pages formatting exactly: centered divs, badge
+  markup, table style, doc frontmatter fields, Docusaurus config key names/order,
+  sidebar shape, landing-page layout, and workflow structure.
+- Do NOT mirror the reference project's application source tree, CLI internals,
+  Python packaging, tests, runtime architecture, or product-specific features.
+- Set title, tagline, organizationName, projectName, url, baseUrl, editUrl, and
+  all doc links from the details and the choices above.
+
+## Verification
+- cd website && npm install && npm run build; fix any broken links/build errors.
+- Confirm README renders and every doc link/image resolves.
+- Remind me to set the repo's Pages source to "GitHub Actions" in Settings.
+$0

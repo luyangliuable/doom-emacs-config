@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: create-skill
+# key: pb-create-skill
+# condition: t
+# --
+
+Skill docs: ${1:https://github.com/<owner>/<docs-repository>}
+
+Please read my current SKILL.md file and look at the external references/links it points to. I want to transition this skill away from using progressive disclosure reference files and make it completely self-contained.
+
+Using your tools, clone/read the documentation repository located at `$1`. Fetch all the relevant instructions, technical rules, and workflow context mentioned in my current references.
+
+Then, merge all that new information directly into a single, comprehensive SKILL.md file. When rewriting the file:
+1. Preserve the existing frontmatter (name and description).
+2. Completely remove the old hyperlinks, markdown links, or file paths that pointed to external references.
+3. Replace those references by writing out the actual, detailed technical details and step-by-step procedures directly into the body of the SKILL.md.
+4. Ensure the structural workflow remains logical, dense, and clean.
+
+Show me the updated file or write it directly back to my skill directory.

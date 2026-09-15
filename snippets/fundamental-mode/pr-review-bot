@@ -1,0 +1,52 @@
+# -*- mode: snippet -*-
+# name: pr-review-bot
+# key: pb-pr-review-bot
+# condition: t
+# --
+
+${1:/path/to/pr-review-bot.sh} \
+    --repo ${2:owner/repository} \
+    --interval 10 \
+    --debounce-minutes 15 \
+    --include-own \
+    --blacklist-author Pippa-Cadywould_cba Andrew-Weaver_cba \
+    --skill ${3:https://github.com/<owner>/<skill-repository>} \
+    --skill ${4:https://github.com/<owner>/<skill-repository>} \
+    --append-prompt "Be rigorous and correct: only raise a suggestion when you are confident it is a real issue, and phrase it as a concrete, actionable point tied to the exact line. Before commenting, verify the concern is not already handled elsewhere in the diff or the referenced repos, and apply a fix consistently across all parallel code paths (for example initial vs refresh, all callbacks, every affected file).
+
+When suggesting or approving with comments responses must be:
+- hapzard (doesn't seem like ai)
+- typos with non technical words
+- use abbreviations (btw, lgtm, ppl, wanna, use 'u' instead of 'you')
+- never use any punctuation marks like (e.g. '.', '!', ',' or any dashes)
+
+Before submitting the review, iterate over every CI/CD check on the PR and wait for all of them to finish running.
+If ANY critical check fails, add a code suggestion on how to address the PR failure when it is fixable.
+
+Verification discipline (run before raising any finding, on top of the above):
+- baseline: read the '-' side / main first. if old code already behaved the same
+  its not a regression at most pre-existing. only say 'regression' if confirmed new
+- trace the failure mechanism (leak/race/crash) in real code before asserting it.
+  if the source is unreadable mark it unverified and downgrade to a question never
+  phrase it as definitive
+- treat a referenced/sibling PR as a lead not proof: confirm its pattern is actually
+  correct and effective before telling ppl to copy it
+- confirm the fix targets the path that actually fails (startup vs per-request vs
+  hot-reload vs shutdown) and skip cosmetic ones (e.g. a resource reclaimed at process exit)
+- for resources handed to a library (clients/sessions/pools) check if the library
+  already closes them (e.g. Client.close()) before demanding the caller does
+- state environment and blast radius per finding separate prod impact from dev-only/cosmetic
+
+Claim ledger (drop the finding if any box is empty):
+  baseline checked / mechanism traced / fix validated / impact assessed
+
+Specifically check for:
+- Dead or unused code, debug/test endpoints, and leftover scaffolding that should be removed.
+- Security exposure: secrets, tokens, or sensitive fields (e.g. IDs) sent to the client or logged; publicly accessible routes with no auth.
+- Data that is tracked, returned, or stored but never used - recommend removing it.
+- Missing startup validation for required environment variables that the code depends on.
+- Missing default/fallback values for fields that may be absent in a response, applied consistently everywhere.
+- Redundant or duplicated operations (e.g. the same DB call from two callbacks) and unnecessary wrapper functions.
+- Correct file placement per project conventions (e.g. non server-actions kept out of server-actions directories).
+- Import consistency and use of absolute imports where the project expects them.
+- Unnecessary non-null assertions when types already guarantee non-null."

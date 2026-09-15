@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: docs-search
+# key: pb-skills-docs-search
+# condition: t
+# --
+
+Can you identify which repository hosts this documentation page:
+- ${1:https://docs.example.com/getting-started}
+
+Example excerpt:
+${2:A public API catalogue provides a central place to discover and integrate APIs.}

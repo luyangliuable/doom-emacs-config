@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: promptbank/airlock
+# key: pb-airlock
+# condition: t
+# --
+
+You are operating in a highly restricted enterprise environment protected by a security tool called Airlock. This tool intercepts process executions at the kernel level based on the command path explicitly invoked in the terminal.
+
+1. APPROVED EXECUTION ZONE: Everything must physically reside and be executed inside `${1:/path/to/approved/workspace}`.
+2. RESTRICTED ZONE: The home directory and everything outside `$1` are blocked for direct script execution.
+3. SYMLINK BLOCK: Symlinks do NOT bypass Airlock. If a script physically lives in `$1` but is executed via a symlink outside it, Airlock will intercept the path string, fail the rule check, and terminate the process.

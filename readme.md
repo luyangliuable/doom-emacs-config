@@ -14,7 +14,7 @@ Personal Doom Emacs configuration with enhanced features, Spacemacs-inspired key
 
 2. Clone this config:
    ```bash
-   git clone <your-repo> ~/.doom.d
+   git clone https://github.com/luyangliuable/doom-emacs-config.git ~/.doom.d
    cd ~/.doom.d
    ```
 
@@ -25,6 +25,18 @@ Personal Doom Emacs configuration with enhanced features, Spacemacs-inspired key
    ```
 
 4. Restart Emacs!
+
+### Credentials and integrations
+
+Keep credentials outside this repository. Optional integrations read these
+environment variables when present:
+
+- `ANTHROPIC_API_KEY` and optional `ANTHROPIC_MODEL`
+- `OPENAI_API_KEY`
+- `JIRA_URL`
+
+Do not place tokens, private endpoints, or organization-specific settings in
+`config.el` or `config/local.el`.
 
 ##  Performance Features
 

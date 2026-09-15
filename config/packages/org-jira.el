@@ -4,5 +4,7 @@
 (use-package! org-jira
   :defer t
   :config
-  (make-directory "~/.org-jira")
-  (setq jiralib-url "https://commbank.atlassian.net"))
+  (make-directory "~/.org-jira" t)
+  (setq jiralib-url
+        (let ((url (getenv "JIRA_URL")))
+          (and url (not (equal url "")) url))))

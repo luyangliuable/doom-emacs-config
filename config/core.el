@@ -13,11 +13,11 @@
                  "OPENAI_BASE_URL"
                  "ANTHROPIC_API_KEY"
                  "ANTHROPIC_AUTH_TOKEN"
-                 "AIPE_PORTKEY_API_KEY"
                  "ANTHROPIC_MODEL"
                  "ANTHROPIC_SMALL_FAST_MODEL"))
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
+
 ;; Font configuration
 (setq doom-font (font-spec :family "Fira Code" :size 13 :weight 'semi-light))
 
@@ -31,11 +31,29 @@
 (evil-goggles-mode t)                       ;; enable evil-goggles-mode
 
 ;; (add-hook 'find-file-hook 'undo-tree-mode)  ;; enable undo-tree-mode for all buffer
-;; (set-fringe-mode 1)                      ;; fringe mode minimal
+;; Keep a compact fringe that is wide enough for Doom's diff-hl bitmaps.
+(add-hook 'find-file-hook
+          (lambda ()
+            (set-fringe-mode 4)))
+
 
 ;; Window management - maximize on startup
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;;; ============================================================================
+;;; RIPGREP CONFIGURATION
+;;; ============================================================================
+
+;; Use ripgrep if available, otherwise use default grep
+(when (executable-find "rg")
+  ;; Ensure ripgrep is found
+  (setq-default grep-command "rg --color=never --no-heading --line-number --smart-case ")
+  (setq-default grep-use-null-device nil)
+
+  ;; Use ripgrep for project-wide searches
+  (setq xref-search-program 'ripgrep))
+
 
 ;; Focus Emacs window on startup (bring to front) - DISABLED (causes hang with Emacs Plus)
 ;; (when (display-graphic-p)
@@ -53,16 +71,3 @@
 
 ;; Ensure proxy is used for all HTTP/HTTPS requests
 ;; (setq url-gateway-method 'native)
-
-;;; ============================================================================
-;;; RIPGREP CONFIGURATION
-;;; ============================================================================
-
-;; Use ripgrep if available, otherwise use default grep
-(when (executable-find "rg")
-  ;; Ensure ripgrep is found
-  (setq-default grep-command "rg --color=never --no-heading --line-number --smart-case ")
-  (setq-default grep-use-null-device nil)
-
-  ;; Use ripgrep for project-wide searches
-  (setq xref-search-program 'ripgrep))

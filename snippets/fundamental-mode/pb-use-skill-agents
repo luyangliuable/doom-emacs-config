@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: use-skill-agents
+# key: pb-use-skill-agents
+# condition: t
+# --
+
+invoke skill: ${1:https://github.com/<owner>/<skill-repository>}
+
+docs:
+- ${2:https://github.com/<owner>/<documentation-repository>}
+- ${3:https://github.com/<owner>/<playbook-repository>}

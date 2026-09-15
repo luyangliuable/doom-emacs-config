@@ -3,7 +3,9 @@
 
 ;; Override magit quit function to handle window cleanup properly
 (after! magit
-  (define-key magit-mode-map "q" #'luyangliuable/magit-quit))
+  (define-key magit-mode-map "q" #'luyangliuable/magit-quit)
+  (map! :map magit-mode-map
+        :n "H" #'luyangliuable/close-fold-at-point))
 
 ;; Also handle evil-collection-magit if it's loaded
 (after! evil-collection-magit

@@ -20,41 +20,17 @@
   :config
   ;; Completely reset and reconfigure gptel to disable streaming
   (setq gptel-stream nil)               ; Global streaming disable
-  ;; Set the API key and backend configuration with explicit non-streaming
-  (require 'url-parse)
+  ;; Use the public Anthropic backend with credentials from the environment.
   (require 'gptel-anthropic)
-  (let*
-      ((base-url (or (getenv "ANTHROPIC_BASE_URL")
-                     "https://portkey.aipe.cba"))
-       (parsed-url (url-generic-parse-url base-url))
-       (base-path (replace-regexp-in-string
-                   "/\\'" ""
-                   (or (url-filename parsed-url) "")))
-       (endpoint (if (string-suffix-p "/messages" base-path)
-                     base-path
-                   (concat (if (string= base-path "") "/v1" base-path)
-                           "/messages")))
-       (api-key (or (getenv "AIPE_PORTKEY_API_KEY")
-                    (getenv "ANTHROPIC_AUTH_TOKEN")
-                    (getenv "ANTHROPIC_API_KEY")
-                    ""))
-       (default-model-name (or (getenv "ANTHROPIC_MODEL") ""))
-       (small-model-name (getenv "ANTHROPIC_SMALL_FAST_MODEL"))
-       (default-model (intern default-model-name))
-       (models
-        (delete-dups
-         (mapcar #'intern
-                 (delq nil (list default-model-name small-model-name))))))
-    (setq gptel-model default-model
-          gptel-backend (gptel-make-anthropic "Custom-Claude"
-                          :stream nil   ; Explicit streaming disable
-                          :protocol (or (url-type parsed-url) "https")
-                          :host (or (url-host parsed-url) "portkey.aipe.cba")
-                          :key api-key
-                          :header `(("Authorization" . ,(concat "Bearer " api-key))
-                                    ("anthropic-version" . "2023-06-01"))
-                          :endpoint endpoint
-                          :models models)))
+  (let ((model-name (getenv "ANTHROPIC_MODEL")))
+    (setq gptel-backend
+          (gptel-make-anthropic "Anthropic"
+                                 :stream nil
+                                 :key (getenv "ANTHROPIC_API_KEY"))
+          gptel-model
+          (and model-name
+               (not (equal model-name ""))
+               (intern model-name))))
   ;; Force disable any existing streaming processes
   (when (boundp 'gptel-stream)
     (setq gptel-stream nil))

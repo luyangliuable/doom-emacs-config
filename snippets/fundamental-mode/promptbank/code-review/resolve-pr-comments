@@ -23,7 +23,7 @@ Use this workflow to ensure ALL PR review comments are properly addressed and re
 PR_URL=\$(gh pr view --json url -q '.url')
 
 # Fetch unresolved comments using script
-~/claude-setup/fetch-unresolved-comments.sh "\$PR_URL"
+${1:/path/to/fetch-unresolved-comments.sh} "\$PR_URL"
 ```
 
 ### 2. For Each Comment Thread
@@ -43,7 +43,7 @@ b) **Verify 100% addressed**
 c) **Reply to the exact comment thread**
    ```bash
    # Reply to specific comment in thread
-   gh pr comment ${1:pr-number} --body "Addressed: ${2:explain what you did}"
+   gh pr comment ${2:pr-number} --body "Addressed: ${3:explain what you did}"
    ```
 
    Example reply formats:
@@ -81,14 +81,14 @@ Before marking as resolved, confirm:
 
 ```bash
 # 1. Fetch unresolved comments
-~/claude-setup/fetch-unresolved-comments.sh ${3:https://github.com/org/repo/pull/pr_number}
+$1 ${4:https://github.com/org/repo/pull/pr_number}
 
 # 2. Read output, identify files/lines to fix
 
 # 3. Make code changes, commit
 
 # 4. Reply to each thread
-gh pr comment ${1} --body "Fixed: Now using absolute imports (@/) instead of relative imports"
+gh pr comment $2 --body "Fixed: Now using absolute imports (@/) instead of relative imports"
 
 # 5. Verify and resolve in GitHub UI
 ```

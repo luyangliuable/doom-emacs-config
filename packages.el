@@ -10,23 +10,39 @@
 ;; (package! some-package)
 
 (package! shell-maker
-  :recipe (:host github :repo "xenodium/shell-maker")
-  :pin "43ee9e1862994cbaa89715d324edb7a424181f22")
+  :recipe (:host github :repo "xenodium/shell-maker"))
 (package! acp
-  :recipe (:host github :repo "xenodium/acp.el")
-  :pin "c8ee1d7f70105fba8efa964ca63f38ca94a1e759")
+  :recipe (:host github :repo "xenodium/acp.el"))
 (package! agent-shell)
+(package! agent-shell-workspace
+  :recipe (:host github :repo "gveres/agent-shell-workspace"))
+(package! workspace-hud
+  :recipe (:host github
+           :repo "nohzafk/emacs-workspace-hud"
+           :pre-build (("bash" "-c" "cargo_bin=\"${CARGO_HOME:-$HOME/.cargo}/bin\"; export PATH=\"$cargo_bin:$PATH\"; if command -v rustup >/dev/null 2>&1; then rustup target add wasm32-unknown-unknown || exit $?; rustc_path=\"$(rustup which rustc)\" || exit $?; export PATH=\"$(dirname \"$rustc_path\"):$PATH\"; fi; git submodule update --init --recursive && cd ui && wasm-pack build --target web --release"))
+           :files (("lisp/" "lisp/*.el")
+                   ("emacs-egui/lisp/" "emacs-egui/lisp/*.el")
+                   ("ui/" "ui/index.html")
+                   ("ui/pkg/" "ui/pkg/*"))))
+(package! agent-shell-hud
+  :recipe (:host github :repo "nohzafk/agent-shell-hud"))
 (package! anki-editor)
 (package! auto-highlight-symbol)
+(package! copilot
+  :recipe (:host github :repo "copilot-emacs/copilot.el"
+           :files ("*.el")))
 (package! beacon)
 (package! doom-modeline)
 (package! bongo-cat-mode
-  :recipe (:local-repo "~/bongo-cat-mode"
+  :recipe (:host github
+           :repo "luyangliuable/bongo-cat-model.el"
            :files ("bongo-cat-mode.el" "img")))
 (package! minor-mode-badges
-  :recipe (:local-repo "~/Dev/minor-mode-badges"
+  :recipe (:host github
+           :repo "luyangliuable/minor-mode-badges.el"
            :files ("minor-mode-badges.el")))
 (package! drag-stuff)
+(package! origami)
 (package! evil-iedit-state)
 (package! prettier-elisp
   :recipe (:host github :repo "KarimAziev/prettier-elisp"))
@@ -41,18 +57,25 @@
 (package! math-preview :recipe (:host github :repo "emacsmirror/math-preview"))
 (package! minimap)
 (package! org-jira)
+(package! agent-shell-sidebar
+  :recipe (:host github :repo "cmacrae/agent-shell-sidebar"))
 (package! org-brain
   :recipe (:host github :repo "Kungsgeten/org-brain"))
 (package! persistent-scratch)
+;; TODO we need plantuml-mode since plantuml is already declared in init.el
+(package! plantuml-mode
+:recipe (:host github :repo "skuro/plantuml-mode"))
 (package! projectile)
+;; undo-tree 0.8.2 requires GNU ELPA queue >= 0.2.  Make the dependency
+;; explicit so Doom cannot reach `global-undo-tree-mode' without it installed.
+(package! queue)
 (package! terminal-here)
-(package! undo-tree)
 (package! zone)
 ;; enime + its elisp deps (dash & s ship with Doom already)
 (package! mpv)
 (package! esxml)
 (package! request)
-(package! enime :recipe (:host github :repo "xl666/enime" :files ("*.el" "video_scrapping.sh")))
+;; (package! enime :recipe (:host github :repo "xl666/enime" :files ("*.el" "video_scrapping.sh")))
 ;;(package! helm-projectile)  ; Removed: Switching to Vertico for better performance
 
 ;; To install a package directly from a remote git repo, you must specify a

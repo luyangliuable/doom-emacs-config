@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: use-skill-project
+# key: pb-use-skill-project
+# condition: t
+# --
+
+invoke skill: ${1:https://github.com/<owner>/<skill-repository>}

@@ -1,82 +1,87 @@
 ;;; Theme Configuration
 
-(defvar luyangliuable/themes
-  '(frutiger-aero
-    doom-zenburn
-    doom-nord
-    doom-solarized-light
-    doom-solarized-dark
-    doom-moonlight
-    doom-challenger-deep
-    doom-one
-    doom-plain
-    doom-plain-dark)
+(require 'cl-lib)
+
+(defvar luyangliuable/themes nil
   "List of available themes to cycle through.")
 
+;; `defvar` preserves its old value when this file is reloaded.
+(setq luyangliuable/themes
+      '(frutiger-aero
+        doom-monokai-machine
+        doom-one-light
+        doom-ayu-light
+        doom-zenburn
+        doom-nord
+        doom-solarized-light
+        doom-solarized-dark
+        doom-moonlight
+        doom-challenger-deep
+        doom-one
+        doom-plain
+        doom-plain-dark))
+
+(setq default-dark-theme 'doom-monokai-machine)
+(setq default-light-theme 'doom-one-light)
+
+(defvar luyangliuable/current-theme-index nil
+  "Index of the active theme in `luyangliuable/themes`.")
+
+(defvar luyangliuable/theme-cycle-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "n") #'luyangliuable/cycle-theme-next)
+    (define-key map (kbd "N") #'luyangliuable/cycle-theme-previous)
+    map)
+  "Keymap active while cycling themes.")
+
+(defun luyangliuable/theme-index (theme)
+  "Return THEME's index in `luyangliuable/themes`."
+  (or (cl-position theme luyangliuable/themes)
+      (user-error "Theme `%s' is not available for cycling" theme)))
+
+(defun luyangliuable/set-doom-theme (theme)
+  "Load THEME and update the current theme index."
+  (setq doom-theme theme
+        luyangliuable/current-theme-index
+        (luyangliuable/theme-index theme))
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme theme t))
 
 (let ((current-hour (nth 2 (decode-time))))
-  (if (or (< current-hour 6) (>= current-hour 20))
-      ;; Night time (before 6 AM or after 8 PM)
-      (progn
-        (message "Good evening!")
-        (setq doom-theme 'doom-moonlight)
-        (defvar luyangliuable/current-theme-index 5
-          "Index of the currently active theme.")
-        ;; Add your night-time actions here
-        )
-    ;; Day time
-    (progn
-      (message "Good day!")
-      (setq doom-theme 'doom-solarized-light)
-      (defvar luyangliuable/current-theme-index 3
-        ;; Add your day-time actions here
-        ))))
-
-
-(load-theme doom-theme t)
+  (luyangliuable/set-doom-theme
+   (if (or (< current-hour 6) (>= current-hour 19))
+       (progn
+         (message "Good evening!")
+         default-dark-theme)
+     (progn
+       (message "Good day!")
+        default-light-theme))))
 
 ;;; Theme Management
 
-;; Disable other themes before loading new one
-(defadvice load-theme (before theme-dont-propagate activate)
-  "Disable theme before loading new one."
-  (mapc #'disable-theme custom-enabled-themes))
+(defun luyangliuable/cycle-theme (offset)
+  "Load the theme OFFSET positions from the current theme."
+  (let* ((current-index (luyangliuable/theme-index doom-theme))
+         (next-index (mod (+ current-index offset)
+                          (length luyangliuable/themes)))
+         (theme (nth next-index luyangliuable/themes)))
+    (luyangliuable/set-doom-theme theme)
+    (message "Loaded theme: %s (press 'n' for next, 'N' for previous)" theme))
+  (set-transient-map luyangliuable/theme-cycle-map t))
 
 (defun luyangliuable/cycle-theme-next ()
   "Cycle to the next theme."
   (interactive)
-  (setq luyangliuable/current-theme-index
-        (mod (1+ luyangliuable/current-theme-index)
-             (length luyangliuable/themes)))
-  (let ((theme (nth luyangliuable/current-theme-index luyangliuable/themes)))
-    (load-theme theme t)
-    (message "Loaded theme: %s (press 'n' for next, 'N' for previous)" theme))
-  (set-transient-map
-   (let ((map (make-sparse-keymap)))
-     (define-key map (kbd "n") #'luyangliuable/cycle-theme-next)
-     (define-key map (kbd "N") #'luyangliuable/cycle-theme-previous)
-     map)
-   t))
+  (luyangliuable/cycle-theme 1))
 
 (defun luyangliuable/cycle-theme-previous ()
   "Cycle to the previous theme."
   (interactive)
-  (setq luyangliuable/current-theme-index
-        (mod (1- luyangliuable/current-theme-index)
-             (length luyangliuable/themes)))
-  (let ((theme (nth luyangliuable/current-theme-index luyangliuable/themes)))
-    (load-theme theme t)
-    (message "Loaded theme: %s (press 'n' for next, 'N' for previous)" theme))
-  (set-transient-map
-   (let ((map (make-sparse-keymap)))
-     (define-key map (kbd "n") #'luyangliuable/cycle-theme-next)
-     (define-key map (kbd "N") #'luyangliuable/cycle-theme-previous)
-     map)
-   t))
+  (luyangliuable/cycle-theme -1))
 
 ;;; Keybindings
 
 (map!
- :leader
- :desc "cycle theme next"     "Tn" #'luyangliuable/cycle-theme-next
- :desc "cycle theme previous" "TN" #'luyangliuable/cycle-theme-previous)
+  :leader
+  :desc "cycle theme next"     "Tn" #'luyangliuable/cycle-theme-next
+  :desc "cycle theme previous" "TN" #'luyangliuable/cycle-theme-previous)

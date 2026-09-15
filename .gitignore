@@ -33,6 +33,9 @@ Thumbs.db # Windows
 # Agent shell files
 .agent-shell/
 
+# Per-machine Doom configuration (copy config/local.example.el)
+config/local.el
+
 # Node.js (for formatting scripts)
 node_modules/
 npm-debug.log*

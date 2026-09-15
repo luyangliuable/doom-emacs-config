@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: log-agents-tasks-to-org
+# key: pb-log-agents-tasks-to-org
+# condition: t
+# --
+
+If doing any substantive work or task/plan tracking, first read ${1:https://github.com/<owner>/<repository>/blob/main/path/to/daily-todo-sync.md}.

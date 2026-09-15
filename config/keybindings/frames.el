@@ -36,3 +36,6 @@ Frame commands
   ("O" doom/dired-other-frame "dired")
   ("n" make-frame "new frame")
   ("q" nil "quit" :exit t))
+
+(map! :leader
+      :desc "Frame transient state" "t F" #'toggle-frame-fullscreen)

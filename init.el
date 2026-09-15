@@ -76,7 +76,7 @@
        ;;ibuffer         ; interactive buffer management
        dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
-       undo              ; persistent, smarter undo for your inevitable mistakes
+       (undo +tree)      ; branching, persistent undo with a visualizer
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
@@ -163,7 +163,7 @@
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        ;;php               ; perl's insecure younger brother
-       ;;plantuml          ; diagrams for confusing people more
+       plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
