@@ -1,6 +1,12 @@
 ;;; config/keybindings.el -*- lexical-binding: t; -*-
 ;; All Keybinding Configurations
 
+(autoload 'password-generator-simple "password-generator" nil t)
+(autoload 'password-generator-strong "password-generator" nil t)
+(autoload 'password-generator-paranoid "password-generator" nil t)
+(autoload 'password-generator-phonetic "password-generator" nil t)
+(autoload 'password-generator-numeric "password-generator" nil t)
+
 ;; Load individual keybinding files (standalone map!/after! blocks only)
 (ignore-errors
   (load! "keybindings/gptel")
@@ -37,6 +43,7 @@
   :leader "tz" nil
   :leader "tZ" nil
   :leader "tc" nil
+  :leader "ip" nil
   :leader "se" nil)
 
 ;; Visual mode text wrapping keybindings
@@ -171,6 +178,14 @@
   ;; Misc operations
   :desc "M-x" "SPC" #'execute-extended-command
   :desc "evilnc comment operator" ";" #'evilnc-comment-operator
+
+  ;; Password generation
+  (:prefix ("ip" . "passwords")
+   :desc "Simple password" "1" #'password-generator-simple
+   :desc "Strong password" "2" #'password-generator-strong
+   :desc "Paranoid password" "3" #'password-generator-paranoid
+   :desc "Phonetic password" "p" #'password-generator-phonetic
+   :desc "Numeric password" "n" #'password-generator-numeric)
 
   ;; Search operations
   :desc "iedit mode" "s e" (cmd! (require 'evil-iedit-state)

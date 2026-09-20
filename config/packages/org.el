@@ -6,8 +6,8 @@
 ;; (so DONE and CANCELLED are left behind as a record of what was completed).
 ;;
 ;; Usage:
-;;   M-x rollover                              ; move unfinished tasks into today
-;;   C-u M-x rollover                          ; dry-run (report only)
+;;   M-x luyangliuable/org-rollover            ; move unfinished tasks into today
+;;   C-u M-x luyangliuable/org-rollover        ; dry-run (report only)
 ;; Runs automatically at most once per calendar day on Emacs startup.
 
 (after! org
@@ -129,7 +129,7 @@
     (let ((kw (org-get-todo-state)))
       (and kw (not (member kw org-done-keywords)))))
 
-  (defun rollover (&optional dry-run)
+  (defun luyangliuable/org-rollover (&optional dry-run)
     "Move unfinished tasks from previous daily files into today's file.
 With DRY-RUN (\\[universal-argument]) only report what would move."
     (interactive "P")
@@ -168,14 +168,16 @@ With DRY-RUN (\\[universal-argument]) only report what would move."
       (when (called-interactively-p 'any)
         (switch-to-buffer today-buf))))
 
+  (defalias 'rollover #'luyangliuable/org-rollover)
+
   ;; Run automatically at most once per calendar day.
   (defvar luyangliuable/org-rollover--last-run nil)
   (defun luyangliuable/org-rollover-maybe ()
-    "Run `rollover' at most once per calendar day."
+    "Run `luyangliuable/org-rollover' at most once per calendar day."
     (let ((today (format-time-string "%Y-%m-%d")))
       (unless (equal luyangliuable/org-rollover--last-run today)
         (setq luyangliuable/org-rollover--last-run today)
-        (ignore-errors (rollover)))))
+        (ignore-errors (luyangliuable/org-rollover)))))
 
   (add-hook 'emacs-startup-hook #'luyangliuable/org-rollover-maybe)
 

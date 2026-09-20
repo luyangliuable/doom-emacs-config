@@ -62,6 +62,7 @@
 (package! org-brain
   :recipe (:host github :repo "Kungsgeten/org-brain"))
 (package! persistent-scratch)
+(package! password-generator)
 ;; TODO we need plantuml-mode since plantuml is already declared in init.el
 (package! plantuml-mode
 :recipe (:host github :repo "skuro/plantuml-mode"))
