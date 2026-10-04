@@ -1,12 +1,23 @@
 ;;; config/packages/minimap.el -*- lexical-binding: t; -*-
 ;; Minimap configuration. Uses standalone `minimap', not Doom `demap'.
 
+(require 'cl-lib)
+
+(defun luyangliuable/minimap-new-minimap-safely (orig-fn &rest args)
+  "Create a minimap even before its window has a measurable line height."
+  (let ((window-line-height-function (symbol-function 'window-line-height)))
+    (cl-letf (((symbol-function 'window-line-height)
+               (lambda (&rest height-args)
+                 (or (apply window-line-height-function height-args)
+                     (list (frame-char-height))))))
+      (apply orig-fn args))))
+
 (use-package! minimap
   :defer t
   :init
   (setq minimap-window-location 'right
-    minimap-minimum-width 15
-    minimap-width-fraction 0.1
+    minimap-minimum-width 17
+    minimap-width-fraction 0.07
     minimap-major-modes '(prog-mode))
 
   (defvar luyangliuable/minimap-debug nil)
@@ -14,6 +25,7 @@
   (defvar luyangliuable/minimap--last-tick nil)
   (defvar luyangliuable/minimap--last-eligible nil)
   (defvar luyangliuable/minimap--last-only-window nil)
+  (defvar luyangliuable/minimap--last-major-mode nil)
 
   (defun luyangliuable/minimap-only-window-p ()
     (let ((window-count 0))
@@ -33,6 +45,7 @@
       (not (minibufferp))
       (not (derived-mode-p 'org-mode))
       (not (derived-mode-p 'plantuml-mode))
+      (not (derived-mode-p 'image-mode))
       (not (string= (buffer-name) " *MINIMAP*"))
       (luyangliuable/minimap-only-window-p)
       (luyangliuable/minimap-buffer-over-100-lines-p)))
@@ -46,7 +59,8 @@
              (only-window (luyangliuable/minimap-only-window-p)))
         (unless (and (eq buffer luyangliuable/minimap--last-buffer)
                   (eq tick luyangliuable/minimap--last-tick)
-                  (eq only-window luyangliuable/minimap--last-only-window))
+                  (eq only-window luyangliuable/minimap--last-only-window)
+                  (eq major-mode luyangliuable/minimap--last-major-mode))
           (let* ((eligible (luyangliuable/minimap-eligible-buffer-p))
                   (buffer-changed
                     (not (eq buffer luyangliuable/minimap--last-buffer)))
@@ -55,7 +69,8 @@
             (setq luyangliuable/minimap--last-buffer buffer
               luyangliuable/minimap--last-tick tick
               luyangliuable/minimap--last-eligible eligible
-              luyangliuable/minimap--last-only-window only-window)
+              luyangliuable/minimap--last-only-window only-window
+              luyangliuable/minimap--last-major-mode major-mode)
             (when luyangliuable/minimap-debug
               (message "minimap auto: buffer=%s eligible=%s only-window=%s active=%s"
                 (buffer-name) eligible only-window
@@ -70,8 +85,14 @@
                 ((bound-and-true-p minimap-mode)
                   (minimap-mode -1)))))))))
 
-  ;; PERF: previously ran on `post-command-hook', i.e. after *every* keystroke,
-  ;; forcing a buffer-eligibility scan on each edit. Debounce via a single idle
-  ;; timer so the sync only runs when typing pauses (0.5s idle), keeping the
-  ;; typing hot-path free of minimap work.
-  (run-with-idle-timer 0.5 t #'luyangliuable/minimap-auto-sync))
+  ;; Sync once typing pauses; drop earlier timers so reloads keep just one.
+  (dolist (timer timer-idle-list)
+    (when (eq (timer--function timer) #'luyangliuable/minimap-auto-sync)
+      (cancel-timer timer)))
+  (run-with-idle-timer 0.5 t #'luyangliuable/minimap-auto-sync)
+
+  :config
+  (unless (advice-member-p #'luyangliuable/minimap-new-minimap-safely
+                           'minimap-new-minimap)
+    (advice-add 'minimap-new-minimap :around
+                #'luyangliuable/minimap-new-minimap-safely)))

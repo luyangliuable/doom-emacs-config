@@ -1,15 +1,32 @@
 ;;; config/packages/agent-shell.el -*- lexical-binding: t; -*-
 ;; Agent Shell Package Configuration
 
+;; Agent Shell loads after startup, but its agents inherit the startup environment.
+(defvar luyangliuable/agent-shell-startup-environment nil)
+(setq luyangliuable/agent-shell-startup-environment process-environment)
+(defvar luyangliuable/agent-shell-preload-timer nil)
+
 (use-package agent-shell
-  :ensure-system-package ((claude-code-acp . "npm install -g @zed-industries/claude-code-acp"))
-  :config
+  :commands (agent-shell)
+  :init
+  ;; Load Agent Shell (and its :config) before any agent's own library.
+  (dolist (command '(agent-shell-openai-start-codex agent-shell-pi-start-agent))
+    (autoload command "agent-shell" nil t))
+  ;; Preload once idle, a file per step, then LSP (see lsp.el); reloading the
+  ;; config replaces the pending timer.
+  (when (timerp luyangliuable/agent-shell-preload-timer)
+    (cancel-timer luyangliuable/agent-shell-preload-timer))
+  (setq luyangliuable/agent-shell-preload-timer
+        (unless (featurep 'agent-shell)
+          (run-with-idle-timer 1.5 nil #'luyangliuable/preload-when-idle
+                               'agent-shell #'luyangliuable/preload-lsp)))
   (map! :leader
         :desc "run agent shell" "o S" #'agent-shell)
   (map! :leader
-        :desc "run codex shell" "o C" #'agent-shell-openai-codex)
+        :desc "run codex shell" "o C" #'agent-shell-openai-start-codex)
   (map! :leader
         :desc "run pi shell" "o P" #'agent-shell-pi-start-agent)
+  :config
   (setq agent-shell-header-style 'text
         agent-shell-show-config-icons nil)
   (map! :map agent-shell-mode-map
@@ -51,51 +68,28 @@
          :desc "Transcript" "t" #'agent-shell-open-transcript)
         :desc "Increase image scale" "+" #'agent-shell-image-scale-increase
         :desc "Decrease image scale" "-" #'agent-shell-image-scale-decrease
-        :desc "Reset image scale" "0" #'agent-shell-image-scale-reset))
+        :desc "Reset image scale" "0" #'agent-shell-image-scale-reset)
 
-;; Use Doom-managed package paths so this configuration is portable.
-(defun my/doom-straight-build-dir (package)
-  "Return the Doom-managed Straight build directory for PACKAGE."
-  (expand-file-name
-   (format "straight/build-%s/%s/" emacs-version package)
-   doom-local-dir))
+  ;; Agent clients inherit credentials and provider settings from the environment.
+  ;; Never store endpoint or credential overrides in shared configuration.
+  (let ((process-environment luyangliuable/agent-shell-startup-environment))
+    (setq agent-shell-anthropic-claude-environment
+          (agent-shell-make-environment-variables :inherit-env t)
+          agent-shell-opencode-environment
+          (agent-shell-make-environment-variables :inherit-env t)
+          agent-shell-openai-codex-environment
+          (agent-shell-make-environment-variables :inherit-env t)
+          agent-shell-pi-environment
+          (agent-shell-make-environment-variables
+           "PI_ACP_PI_COMMAND" (expand-file-name "config/pi-emacs-rpc" doom-user-dir)
+           :inherit-env t)
+          agent-shell-anthropic-default-model-id nil
+          agent-shell-openai-default-model-id nil)))
 
-(dolist (package '("agent-shell-workspace" "agent-shell-hud"))
-  (add-to-list 'load-path (my/doom-straight-build-dir package)))
-(add-to-list 'load-path
-             (expand-file-name "lisp/"
-                               (my/doom-straight-build-dir "workspace-hud")))
-
-(use-package! agent-shell-workspace
-  :after agent-shell
-  :config
-  (map! :map agent-shell-mode-map
-        :localleader
-        :desc "Toggle agent workspace" "w" #'agent-shell-workspace-toggle))
-
-(use-package! workspace-hud
-  :demand t
-  :config
-  ;; Keep the HUD framework available for Agent Shell status tracking, but do
-  ;; not create or update the graphical panel automatically.
-  (workspace-hud-auto-mode -1))
-
-(use-package! agent-shell-hud
-  :after (workspace-hud agent-shell)
-  :demand t
-  :config
-  (agent-shell-hud-mode 1))
-
-;; Agent clients inherit credentials and provider settings from the environment.
-;; Never store endpoint or credential overrides in shared configuration.
-(setq agent-shell-anthropic-claude-environment
-      (agent-shell-make-environment-variables :inherit-env t)
-      agent-shell-opencode-environment
-      (agent-shell-make-environment-variables :inherit-env t)
-      agent-shell-openai-codex-environment
-      (agent-shell-make-environment-variables :inherit-env t)
-      agent-shell-anthropic-default-model-id nil
-      agent-shell-openai-default-model-id nil)
+;; Check for the client at startup, not when the deferred package loads.
+(use-package agent-shell
+  :no-require t
+  :ensure-system-package ((claude-code-acp . "npm install -g @zed-industries/claude-code-acp")))
 
 ;; Resolve optional agent CLIs from the current Emacs environment.
 (setq agent-shell-openai-codex-executable
@@ -104,7 +98,3 @@
 ;; Pi coding agent configuration
 (setq agent-shell-pi-acp-command
       (list (or (executable-find "pi-acp") "pi-acp")))
-(setq agent-shell-pi-environment
-      (agent-shell-make-environment-variables
-       "PI_ACP_PI_COMMAND" (expand-file-name "config/pi-emacs-rpc" doom-user-dir)
-       :inherit-env t))

@@ -242,7 +242,7 @@ Ignores common directories that shouldn't trigger LSP file watching."
 
 (defun my/add-gitignore-to-lsp-watch-ignore ()
   "Parse .gitignore and add patterns to lsp-file-watch-ignored-directories.
-Runs immediately during startup to ensure patterns are ready."
+Runs at the first LSP start, for that buffer's project."
   (when (and (fboundp 'projectile-project-root)
              (projectile-project-p))
     (let* ((project-root (projectile-project-root))
@@ -272,9 +272,7 @@ Runs immediately during startup to ensure patterns are ready."
 
 ;; Setup file watch ignores immediately after lsp-mode loads
 (after! lsp-mode
-  (my/setup-lsp-file-watch-ignored)
-  ;; Parse .gitignore immediately (adds ~50-100ms, but ensures patterns ready)
-  (my/add-gitignore-to-lsp-watch-ignore))
+  (my/setup-lsp-file-watch-ignored))
 
 ;;; ============================================================================
 ;;; SECTION 5: LANGUAGE-SPECIFIC HOOKS (Refactored - Symmetric Pattern)
@@ -300,12 +298,104 @@ Runs immediately during startup to ensure patterns are ready."
 ;;; SECTION 6: LSP INTEGRATIONS (PRESERVED FROM ORIGINAL)
 ;;; ============================================================================
 
-;; LSP-Treemacs integration
+;; LSP-Treemacs integration, loaded at the first LSP start (see section 7)
 (use-package! lsp-treemacs
-  :after lsp-mode
+  :defer t
   :config
   (map! :map lsp-mode-map
         :localleader
         :desc "lsp-treemacs-errors-list" "ge" #'lsp-treemacs-errors-list))
 
 ;; Note: Standalone map!/after! blocks moved to config/keybindings/lsp.el
+
+;; lsp-volar registers the global `typescript.tsdk' setting, which vtsls asks
+;; for too.  It means to fall back to "" when TypeScript isn't installed, but
+;; `lsp-package-path' signals first, failing the server's settings request.
+(defun luyangliuable/lsp-volar-tsdk-path-a (fn)
+  (condition-case nil (funcall fn) (error "")))
+(advice-add 'lsp-volar-get-typescript-tsdk-path :around
+            #'luyangliuable/lsp-volar-tsdk-path-a)
+
+;;; ============================================================================
+;;; SECTION 7: IDLE PRELOAD
+;;; ============================================================================
+
+;; lsp-mode loads while idle (see agent-shell.el), so the parts that need a
+;; project or a running LSP wait for the first start: `lsp-deferred', or
+;; `lsp--require-packages', which `lsp' and the server install commands call
+;; before anything else.
+(defun luyangliuable/lsp-first-start-a (&rest _)
+  "Add the project's .gitignore patterns and load lsp-treemacs, once."
+  (dolist (fn '(lsp-deferred lsp--require-packages))
+    (advice-remove fn #'luyangliuable/lsp-first-start-a))
+  (my/add-gitignore-to-lsp-watch-ignore)
+  (require 'lsp-treemacs nil t))
+(dolist (fn '(lsp-deferred lsp--require-packages))
+  (advice-add fn :before #'luyangliuable/lsp-first-start-a))
+
+(defun luyangliuable/preload-lsp ()
+  "Load lsp-mode, then the client packages `lsp' would load, while idle."
+  (luyangliuable/preload-when-idle
+   'lsp-mode
+   (lambda ()
+     ;; As `lsp--require-packages', which then finds them all loaded except
+     ;; lsp-clojure: it loads lsp-treemacs, and so treemacs, for a capability.
+     (when (and lsp-auto-configure (not lsp--client-packages-required))
+       (luyangliuable/require-when-idle
+        (mapcar (lambda (package) (list package nil t))
+                (remq 'lsp-clojure lsp-client-packages)))))))
+
+;;; ============================================================================
+;;; SECTION 8: FLYCHECK WHILE LSP STARTS
+;;; ============================================================================
+
+;; Between `lsp-deferred' and LSP taking over the buffer's diagnostics, hold
+;; Flycheck's automatic checks (they would run the major mode's checkers, e.g.
+;; a slow eslint, only for LSP to replace their results).  If LSP doesn't take
+;; over, run the held check as Flycheck would have.
+(defvar-local luyangliuable/lsp-flycheck-pending nil
+  "Non-nil while LSP may still take over this buffer's Flycheck checks.")
+
+(defun luyangliuable/lsp-flycheck-hold-a (&rest _)
+  (unless (bound-and-true-p lsp-managed-mode)
+    (setq luyangliuable/lsp-flycheck-pending t)))
+
+(defun luyangliuable/lsp-flycheck-release (&rest _)
+  "Stop holding automatic checks and run the held one, if any."
+  (when luyangliuable/lsp-flycheck-pending
+    (setq luyangliuable/lsp-flycheck-pending nil)
+    (when (bound-and-true-p flycheck-mode)
+      (flycheck-perform-deferred-syntax-check))))
+
+;; Deferred checks then wait, as for a hidden buffer, until released.
+(defun luyangliuable/lsp-flycheck-defer-a (fn &optional condition force-deferred)
+  (funcall fn condition (or force-deferred luyangliuable/lsp-flycheck-pending)))
+
+(defun luyangliuable/lsp-flycheck-takeover-a (&rest _)
+  ;; Its own `flycheck-mode' call then checks as without the hold.
+  (setq luyangliuable/lsp-flycheck-pending nil))
+
+(defun luyangliuable/lsp-flycheck-start-a (fn &rest args)
+  (unwind-protect (apply fn args)
+    (unless lsp--buffer-workspaces
+      (luyangliuable/lsp-flycheck-release))))
+
+(defun luyangliuable/lsp-flycheck-server-exit-h (workspace)
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (unless (remq workspace lsp--buffer-workspaces)
+        (luyangliuable/lsp-flycheck-release)))))
+
+(defun luyangliuable/lsp-flycheck-disconnect-h ()
+  (unless lsp-mode
+    (luyangliuable/lsp-flycheck-release)))
+
+(advice-add 'lsp-deferred :after #'luyangliuable/lsp-flycheck-hold-a)
+(advice-add 'flycheck-buffer-automatically :around #'luyangliuable/lsp-flycheck-defer-a)
+(advice-add 'lsp-diagnostics-flycheck-enable :before
+            #'luyangliuable/lsp-flycheck-takeover-a)
+(advice-add 'lsp :around #'luyangliuable/lsp-flycheck-start-a)
+;; The server chose other diagnostics (e.g. Flymake) or none.
+(advice-add 'lsp-configure-buffer :after #'luyangliuable/lsp-flycheck-release)
+(add-hook 'lsp-after-uninitialized-functions #'luyangliuable/lsp-flycheck-server-exit-h)
+(add-hook 'lsp-mode-hook #'luyangliuable/lsp-flycheck-disconnect-h)

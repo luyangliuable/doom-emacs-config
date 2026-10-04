@@ -22,8 +22,12 @@
   (when (file-exists-p local-config)
     (load local-config nil 'nomessage)))
 (load! "config/packages/performance")     ; Performance tuning (GC, read-process-output-max, company/flycheck delays)
+(load! "config/packages/git")             ; Magit/vc-git run git without the xcrun shim
 (load! "config/modes")                    ; Mode hooks
 (load! "config/packages/evil")            ; Evil configuration EARLY
+(load! "config/packages/agent-shell-hud") ; agent-shell-hud
+(load! "config/packages/agent-shell-workspace") ; agent-shell-workspace
+(load! "config/packages/workspace-hud")   ; workspace-hud
 (load! "config/packages/agent-shell")     ; agent-shell
 (load! "config/packages/agent-shell-sidebar") ; agent-shell-sidebar
 (load! "config/packages/auto-highlight-symbol") ; auto-highlight-symbol
@@ -32,6 +36,7 @@
 (load! "config/packages/copilot")         ; GitHub Copilot inline completions and chat
 (load! "config/packages/gptel")           ; gptel
 (load! "config/packages/lsp")             ; lsp
+(load! "config/packages/notebook")        ; Jupyter notebooks
 (load! "config/packages/projectile")      ; projectile
 (load! "config/packages/consult")         ; consult + ripgrep
 (load! "config/packages/vertico")         ; vertico optimization
