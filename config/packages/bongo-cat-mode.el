@@ -12,7 +12,8 @@
 (defun luyangliuable/bongo-cat-contrasting-rail-scheme ()
   "Return the rail asset scheme that contrasts with the active mode-line.
 The package's white rail asset is black and its black rail asset is amber."
-  (if (luyangliuable/bongo-cat-mode-line-dark-p) 'black 'white))
+  (if (luyangliuable/bongo-cat-mode-line-d
+ark-p) 'black 'white))
 
 (defun luyangliuable/bongo-cat-rail-image-with-contrast
     (function kind &optional _scheme)

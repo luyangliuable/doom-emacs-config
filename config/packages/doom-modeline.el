@@ -32,7 +32,7 @@
   (display-battery-mode 1)
   (display-time-mode 1)
 
-  (setq doom-modeline-height 28
+  (setq doom-modeline-height 24
     doom-modeline-icon t
     doom-modeline-time-icon nil
     doom-modeline-buffer-encoding t

@@ -8,6 +8,9 @@
 ;; `defvar` preserves its old value when this file is reloaded.
 (setq luyangliuable/themes
       '(frutiger-aero
+        frutiger-aero-light
+        frutiger-aero-v2
+        frutiger-aero-v2-light
         doom-monokai-machine
         doom-one-light
         doom-ayu-light

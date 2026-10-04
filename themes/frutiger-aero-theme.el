@@ -1,219 +1,196 @@
-;;; frutiger-aero-theme.el --- Authentic Frutiger Aero Dark theme for Emacs
+;;; frutiger-aero-theme.el --- Frutiger Aero, deep ocean / aurora night -*- lexical-binding: t; no-byte-compile: t; -*-
 
-;; Copyright (C) 2026
-
-;; Author: Custom Theme
-;; Version: 2.0.0
-;; Package-Requires: ((emacs "25.1"))
+;; Version: 3.0.0
+;; Package-Requires: ((emacs "27.1") (doom-themes "2.2"))
 ;; Keywords: faces, theme, frutiger, aero, dark
 
 ;;; Commentary:
 ;;
-;; An authentic Frutiger Aero Dark theme inspired by the VSCode theme,
-;; featuring deep space backgrounds, electric neon accents,
-;; and the signature glass-like translucent aesthetic.
+;; A dark Frutiger Aero theme (mid-2000s Vista/Win7 Aero, Wii, Web 2.0 gloss):
+;; "technology in harmony with nature" seen at night -- deep ocean water,
+;; aqua glass, sky blue, grass green and soft aurora tones, never harsh neon.
+;; Built on `def-doom-theme' so the palette covers every doom-themes package face.
+;; See `frutiger-aero-light' for the daytime "sky & grass" variant.
 
 ;;; Code:
 
-(deftheme frutiger-aero
-  "Authentic Frutiger Aero Dark theme with deep backgrounds and neon accents.")
+(require 'doom-themes)
 
-;; Authentic Frutiger Aero Dark Color Palette
-(let* (
-       ;; Background Colors - Deep Ocean/Space
-       (frutiger-bg-primary   "#0B0F1A")    ; Very dark blue-black
-       (frutiger-bg-secondary "#111827")    ; Dark slate blue
-       (frutiger-bg-tertiary  "#1E293B")    ; Darker slate
-       (frutiger-bg-highlight "#2D3748")    ; Highlighted background
-       (frutiger-bg-selection "#334155")    ; Selection background
+(defgroup frutiger-aero-theme nil
+  "Options for the `frutiger-aero' theme."
+  :group 'doom-themes)
 
-       ;; Foreground Colors - Ice and Glass
-       (frutiger-fg-primary   "#E2E8F0")    ; Icy white
-       (frutiger-fg-secondary "#CBD5E0")    ; Cool gray
-       (frutiger-fg-tertiary  "#A0AEC0")    ; Muted blue-gray
-       (frutiger-fg-comment   "#64748B")    ; Darker blue-gray
+(def-doom-theme frutiger-aero
+  "Dark Frutiger Aero: deep ocean water, aqua glass, sky blue and grass green."
+  :family 'frutiger-aero
+  :background-mode 'dark
 
-       ;; Accent Colors - Neon Blues and Cyans
-       (frutiger-cyan-bright  "#00E5FF")    ; Electric cyan
-       (frutiger-cyan-medium  "#26C6DA")    ; Medium cyan
-       (frutiger-cyan-soft    "#4DD0E1")    ; Soft cyan
-       (frutiger-blue-electric "#1E90FF")   ; Electric blue
-       (frutiger-blue-deep    "#0066CC")    ; Deep blue
-       (frutiger-blue-soft    "#4FC3F7")    ; Soft blue
+  ;; name        default   256       16
+  ((bg         '("#0A1A24" "#081c26" "black"        ))
+   (fg         '("#D8ECF4" "#dfefff" "brightwhite"  ))
 
-       ;; Nature Colors - Neon Greens
-       (frutiger-green-neon   "#00FF80")    ; Neon green
-       (frutiger-green-bright "#26A69A")    ; Bright teal-green
-       (frutiger-green-soft   "#66BB6A")    ; Soft green
-       (frutiger-green-lime   "#9CCC65")    ; Lime green
+   (bg-alt     '("#07141C" "#06121a" "black"        ))
+   (fg-alt     '("#6E8E9E" "#6e8e9e" "white"        ))
 
-       ;; Warning/Error Colors - Neon Accents
-       (frutiger-orange-neon  "#FF9500")    ; Neon orange
-       (frutiger-red-neon     "#FF1744")    ; Neon red
-       (frutiger-pink-neon    "#E91E63")    ; Neon pink
-       (frutiger-purple-neon  "#AA00FF")    ; Neon purple
-       (frutiger-yellow-neon  "#FFEB3B")    ; Neon yellow
+   ;; deep water -> ice
+   (base0      '("#050F15" "#050f15" "black"        ))
+   (base1      '("#0D2130" "#0d2130" "brightblack"  ))
+   (base2      '("#112939" "#112939" "brightblack"  ))
+   (base3      '("#173345" "#173345" "brightblack"  ))
+   (base4      '("#24485E" "#24485e" "brightblack"  ))
+   (base5      '("#3E6378" "#3e6378" "brightblack"  ))
+   (base6      '("#5D8396" "#5d8396" "brightblack"  ))
+   (base7      '("#8EAFBF" "#8eafbf" "brightblack"  ))
+   (base8      '("#E4F3F9" "#e4f3f9" "white"        ))
 
-       ;; Glass Effects - Translucent Colors
-       (frutiger-glass-blue   "#1565C020")  ; Translucent blue
-       (frutiger-glass-cyan   "#00ACC120")  ; Translucent cyan
-       (frutiger-glass-green  "#2E7D3220")  ; Translucent green
+   (grey       base5)
+   (red        '("#FF6B7A" "#ff6b7a" "red"          ))
+   (orange     '("#FFA857" "#ffa857" "brightred"    ))
+   (green      '("#8CD656" "#8cd656" "green"        )) ; grass
+   (teal       '("#3CCFB0" "#3ccfb0" "brightgreen"  ))
+   (yellow     '("#F5D76E" "#f5d76e" "yellow"       )) ; sun
+   (blue       '("#5CB8FF" "#5cb8ff" "brightblue"   )) ; sky
+   (dark-blue  '("#2F7AD0" "#2f7ad0" "blue"         ))
+   (magenta    '("#F08BD8" "#f08bd8" "magenta"      )) ; orchid
+   (violet     '("#A99BFF" "#a99bff" "brightmagenta")) ; aurora
+   (cyan       '("#4FE0E8" "#4fe0e8" "brightcyan"   )) ; aqua
+   (dark-cyan  '("#2BB0C0" "#2bb0c0" "cyan"         ))
 
-       ;; Semantic Colors - Green-Cyan Frutiger Aero Style
-       (frutiger-success      frutiger-green-neon)
-       (frutiger-warning      frutiger-orange-neon)
-       (frutiger-error        frutiger-red-neon)
-       (frutiger-info         frutiger-cyan-bright))
+   ;; universal syntax classes
+   (highlight      cyan)
+   (vertical-bar   base3)
+   (selection      dark-blue)
+   (builtin        dark-cyan)
+   (comments       '("#6A93A8" "#6a93a8" "brightblack"))
+   (doc-comments   '("#7FC8A6" "#7fc8a6" "green"))
+   (constants      yellow)
+   (functions      blue)
+   (keywords       cyan)
+   (methods        blue)
+   (operators      '("#9FD8E8" "#9fd8e8" "cyan"))
+   (type           teal)
+   (strings        green)
+   (variables      '("#B9DDF0" "#b9ddf0" "white"))
+   (numbers        orange)
+   (region         '("#1A3A50" "#1a3a50" "brightblack"))
+   (error          red)
+   (warning        orange)
+   (success        green)
+   (vc-modified    blue)
+   (vc-added       green)
+   (vc-deleted     red)
 
-  ;; Base theme faces
-  (custom-theme-set-faces
-   'frutiger-aero
+   ;; theme-local
+   (glass          (doom-blend cyan bg 0.16))
+   (modeline-fg          fg)
+   (modeline-fg-alt      fg-alt)
+   (modeline-bg          '("#10293A" "#10293a" "brightblack"))
+   (modeline-bg-inactive bg-alt)
+   (modeline-gloss       (doom-blend cyan modeline-bg 0.45)))
 
-   ;; Basic faces - Dark Background
-   `(default ((t (:background ,frutiger-bg-primary :foreground ,frutiger-fg-primary))))
-   `(cursor ((t (:background ,frutiger-cyan-bright))))
-   `(region ((t (:background ,frutiger-bg-selection :foreground ,frutiger-fg-primary))))
-   `(highlight ((t (:background ,frutiger-bg-highlight :foreground ,frutiger-cyan-bright))))
-   `(hl-line ((t (:background ,frutiger-bg-secondary))))
-   `(fringe ((t (:background ,frutiger-bg-primary :foreground ,frutiger-fg-tertiary))))
-   `(show-paren-match ((t (:background ,frutiger-cyan-bright :foreground ,frutiger-bg-primary :weight bold))))
-   `(show-paren-mismatch ((t (:background ,frutiger-error :foreground ,frutiger-fg-primary :weight bold))))
+  ;;;; Face overrides
+  (((font-lock-comment-face &override) :slant 'italic)
+   ((font-lock-doc-face &override) :slant 'italic)
+   ((font-lock-keyword-face &override) :weight 'semi-bold)
+   ((font-lock-function-name-face &override) :weight 'semi-bold)
+   (cursor :background cyan)
+   (hl-line :background base1)
+   ((line-number &override) :foreground "#4E7488")
+   ((line-number-current-line &override) :foreground cyan :background base1 :weight 'bold)
+   (fringe :background bg :foreground base5)
+   (show-paren-match :background glass :foreground cyan :weight 'bold)
+   (secondary-selection :background glass :extend t)
+   (lazy-highlight :background (doom-blend blue bg 0.3) :foreground base8 :distant-foreground base0)
+   (isearch :background yellow :foreground bg :weight 'bold)
+   (link :foreground blue :underline t)
+   (minibuffer-prompt :foreground cyan :weight 'bold)
+   (tooltip :background base2 :foreground fg)
 
-   ;; Font lock (syntax highlighting) - Balanced Cyan-Green Mix
-   `(font-lock-builtin-face ((t (:foreground ,frutiger-cyan-bright :weight semi-bold))))
-   `(font-lock-comment-face ((t (:foreground ,frutiger-fg-comment :slant italic))))
-   `(font-lock-comment-delimiter-face ((t (:foreground ,frutiger-fg-comment))))
-   `(font-lock-constant-face ((t (:foreground ,frutiger-green-neon :weight bold))))
-   `(font-lock-function-name-face ((t (:foreground ,frutiger-cyan-bright :weight bold))))
-   `(font-lock-keyword-face ((t (:foreground ,frutiger-green-bright :weight bold))))
-   `(font-lock-string-face ((t (:foreground ,frutiger-cyan-soft))))
-   `(font-lock-type-face ((t (:foreground ,frutiger-cyan-medium :weight semi-bold))))
-   `(font-lock-variable-name-face ((t (:foreground ,frutiger-green-soft))))
-   `(font-lock-warning-face ((t (:foreground ,frutiger-warning :weight bold))))
-   `(font-lock-doc-face ((t (:foreground ,frutiger-green-lime :slant italic))))
+   ;; glossy glass mode-line with an aqua top edge
+   (mode-line
+    :background modeline-bg :foreground modeline-fg
+    :overline modeline-gloss :box `(:line-width 3 :color ,modeline-bg))
+   (mode-line-inactive
+    :background modeline-bg-inactive :foreground modeline-fg-alt
+    :overline base3 :box `(:line-width 3 :color ,modeline-bg-inactive))
+   (mode-line-emphasis :foreground cyan)
+   (mode-line-buffer-id :foreground cyan :weight 'bold)
+   (header-line :background base1 :foreground fg :overline modeline-gloss)
 
-   ;; Line numbers - Aqua Blue Theme
-   `(line-number ((t (:foreground ,frutiger-cyan-medium :background ,frutiger-bg-primary))))
-   `(line-number-current-line ((t (:foreground ,frutiger-cyan-bright :background ,frutiger-bg-secondary :weight bold))))
+   ;;;; doom-modeline
+   (doom-modeline-bar :background cyan)
+   (doom-modeline-bar-inactive :background base3)
+   (doom-modeline-buffer-file :foreground fg :weight 'bold)
+   (doom-modeline-buffer-path :foreground blue)
+   (doom-modeline-project-dir :foreground green :weight 'bold)
+   (doom-modeline-buffer-modified :foreground orange :weight 'bold)
+   (doom-modeline-buffer-major-mode :foreground cyan :weight 'bold)
+   (doom-modeline-evil-normal-state :foreground cyan)
+   (doom-modeline-evil-insert-state :foreground green)
+   (doom-modeline-evil-visual-state :foreground violet)
+   ;;;; solaire-mode
+   (solaire-mode-line-face :inherit 'mode-line :background modeline-bg)
+   (solaire-mode-line-inactive-face :inherit 'mode-line-inactive :background modeline-bg-inactive)
+   (solaire-hl-line-face :background base1)
 
-   ;; Mode line - Green-Cyan Mixed Glass Effect
-   `(mode-line ((t (:background ,frutiger-bg-secondary :foreground ,frutiger-green-neon
-                   :box (:line-width 1 :color ,frutiger-green-bright)))))
-   `(mode-line-inactive ((t (:background ,frutiger-bg-primary :foreground ,frutiger-green-soft
-                             :box (:line-width 1 :color ,frutiger-green-lime)))))
-   `(mode-line-buffer-id ((t (:foreground ,frutiger-cyan-bright :weight bold))))
+   ;;;; completion
+   (vertico-current :background glass :foreground base8 :weight 'bold :extend t)
+   (corfu-default :background base1 :foreground fg)
+   (corfu-current :background glass :foreground base8 :weight 'bold)
+   (corfu-border :background base4)
+   (company-tooltip :background base1 :foreground fg)
+   (company-tooltip-selection :background glass :foreground base8 :weight 'bold)
+   (orderless-match-face-0 :foreground cyan :weight 'bold)
+   (orderless-match-face-1 :foreground green :weight 'bold)
+   (orderless-match-face-2 :foreground blue :weight 'bold)
+   (orderless-match-face-3 :foreground yellow :weight 'bold)
 
-   ;; Minibuffer
-   `(minibuffer-prompt ((t (:foreground ,frutiger-cyan-bright :weight bold))))
+   ;;;; org / outline -- sky to aurora ramp
+   ((outline-1 &override) :foreground cyan)
+   ((outline-2 &override) :foreground blue)
+   ((outline-3 &override) :foreground green)
+   ((outline-4 &override) :foreground teal)
+   ((outline-5 &override) :foreground violet)
+   ((outline-6 &override) :foreground yellow)
+   ((outline-7 &override) :foreground magenta)
+   ((outline-8 &override) :foreground orange)
+   ((org-block &override) :background base1)
+   ((org-block-begin-line &override) :background base1 :foreground comments)
+   ((org-quote &override) :background base1)
+   (org-ellipsis :underline nil :foreground cyan)
+   ;;;; markdown
+   (markdown-header-face :inherit 'bold :foreground cyan)
+   ((markdown-code-face &override) :background base1)
 
-   ;; Search - Neon Highlights
-   `(isearch ((t (:background ,frutiger-orange-neon :foreground ,frutiger-bg-primary :weight bold))))
-   `(lazy-highlight ((t (:background ,frutiger-bg-highlight :foreground ,frutiger-cyan-bright))))
+   ;;;; magit
+   (magit-section-heading :foreground blue :weight 'bold)
+   (magit-branch-local :foreground cyan)
+   (magit-branch-remote :foreground green)
+   (magit-diff-hunk-heading :background base2 :foreground fg-alt)
+   (magit-diff-hunk-heading-highlight :background base3 :foreground fg :weight 'bold)
 
-   ;; Links
-   `(link ((t (:foreground ,frutiger-blue-electric :underline t))))
-   `(link-visited ((t (:foreground ,frutiger-blue-soft :underline t))))
+   ;;;; treemacs
+   (treemacs-root-face :foreground cyan :weight 'bold :height 1.15)
+   (treemacs-directory-face :foreground blue)
+   (doom-themes-treemacs-root-face :foreground cyan :weight 'bold :height 1.15)
 
-   ;; Org mode - No Purple Headers
-   `(org-level-1 ((t (:foreground ,frutiger-cyan-bright :weight bold :height 1.3))))
-   `(org-level-2 ((t (:foreground ,frutiger-blue-electric :weight bold :height 1.2))))
-   `(org-level-3 ((t (:foreground ,frutiger-orange-neon :weight bold :height 1.1))))
-   `(org-level-4 ((t (:foreground ,frutiger-cyan-medium :weight semi-bold))))
-   `(org-link ((t (:foreground ,frutiger-blue-electric :underline t))))
-   `(org-done ((t (:foreground ,frutiger-green-neon :weight bold))))
-   `(org-todo ((t (:foreground ,frutiger-warning :weight bold))))
+   ;;;; which-key
+   (which-key-key-face :foreground cyan :weight 'bold)
+   (which-key-group-description-face :foreground blue)
+   (which-key-command-description-face :foreground fg)
 
-   ;; Company (completion) - Glass Effect
-   `(company-tooltip ((t (:background ,frutiger-bg-tertiary :foreground ,frutiger-fg-primary))))
-   `(company-tooltip-selection ((t (:background ,frutiger-bg-highlight :foreground ,frutiger-cyan-bright))))
-   `(company-tooltip-common ((t (:foreground ,frutiger-cyan-bright :weight bold))))
-   `(company-scrollbar-bg ((t (:background ,frutiger-bg-secondary))))
-   `(company-scrollbar-fg ((t (:background ,frutiger-cyan-medium))))
+   ;;;; lsp
+   (lsp-face-highlight-textual :background glass :foreground base8 :weight 'bold)
+   (lsp-face-highlight-read :background glass :foreground base8 :weight 'bold)
+   (lsp-face-highlight-write :background (doom-blend green bg 0.2) :foreground base8 :weight 'bold)
+   (lsp-ui-doc-background :background base1))
 
-   ;; Doom specific - Green-Blue Mix
-   `(doom-modeline-bar ((t (:background ,frutiger-green-bright))))
-   `(doom-modeline-project-dir ((t (:foreground ,frutiger-green-neon :weight bold))))
-   `(doom-modeline-buffer-file ((t (:foreground ,frutiger-cyan-bright :weight bold))))
-   `(doom-modeline-buffer-modified ((t (:foreground ,frutiger-orange-neon))))
-
-   ;; Treemacs - No Purple File Tree
-   `(treemacs-directory-face ((t (:foreground ,frutiger-cyan-bright :weight bold))))
-   `(treemacs-file-face ((t (:foreground ,frutiger-fg-primary))))
-   `(treemacs-root-face ((t (:foreground ,frutiger-orange-neon :weight bold :height 1.2))))
-
-   ;; Magit - Green-Blue Git Interface
-   `(magit-branch-local ((t (:foreground ,frutiger-green-bright :weight bold))))
-   `(magit-branch-remote ((t (:foreground ,frutiger-blue-electric :weight bold))))
-   `(magit-diff-added ((t (:background ,frutiger-glass-green :foreground ,frutiger-green-neon))))
-   `(magit-diff-removed ((t (:background ,frutiger-bg-highlight :foreground ,frutiger-red-neon))))
-   `(magit-hash ((t (:foreground ,frutiger-fg-comment))))
-   `(magit-section-heading ((t (:foreground ,frutiger-green-lime :weight bold))))
-
-   ;; Flycheck/Flymake - Neon Underlines
-   `(flycheck-error ((t (:underline (:style wave :color ,frutiger-error)))))
-   `(flycheck-warning ((t (:underline (:style wave :color ,frutiger-warning)))))
-   `(flycheck-info ((t (:underline (:style wave :color ,frutiger-info)))))
-
-   ;; Shell and compilation errors
-   `(compilation-error ((t (:foreground ,frutiger-orange-neon :weight bold))))
-   `(compilation-warning ((t (:foreground ,frutiger-warning :weight bold))))
-   `(compilation-info ((t (:foreground ,frutiger-info :weight bold))))
-   `(compilation-line-number ((t (:foreground ,frutiger-cyan-medium))))
-   `(compilation-column-number ((t (:foreground ,frutiger-cyan-soft))))
-
-   ;; LSP - Glass Highlights
-   `(lsp-face-highlight-textual ((t (:background ,frutiger-glass-cyan))))
-   `(lsp-face-highlight-read ((t (:background ,frutiger-glass-cyan))))
-   `(lsp-face-highlight-write ((t (:background ,frutiger-glass-blue))))
-
-   ;; Ivy/Counsel/Swiper - Aqua Blue Selection
-   `(ivy-current-match ((t (:background ,frutiger-bg-highlight :foreground ,frutiger-cyan-bright :weight bold))))
-   `(ivy-minibuffer-match-face-1 ((t (:background ,frutiger-glass-cyan))))
-   `(ivy-minibuffer-match-face-2 ((t (:background ,frutiger-glass-blue :foreground ,frutiger-cyan-bright))))
-
-   ;; Which-key - Aqua Blue
-   `(which-key-key-face ((t (:foreground ,frutiger-cyan-bright :weight bold))))
-   `(which-key-description-face ((t (:foreground ,frutiger-fg-primary))))
-   `(which-key-group-description-face ((t (:foreground ,frutiger-blue-electric :weight bold))))
-   `(which-key-command-description-face ((t (:foreground ,frutiger-blue-soft))))
-
-   ;; Success/Warning/Error states - Neon
-   `(success ((t (:foreground ,frutiger-success :weight bold))))
-   `(warning ((t (:foreground ,frutiger-warning :weight bold))))
-   `(error ((t (:foreground ,frutiger-error :weight bold))))
-
-   ;; Selection - Glass Effect
-   `(secondary-selection ((t (:background ,frutiger-glass-cyan))))
-
-   ;; Trailing whitespace
-   `(trailing-whitespace ((t (:background ,frutiger-red-neon))))
-
-   ;; YAML mode - Balanced colors for config files
-   `(yaml-tab-face ((t (:background ,frutiger-bg-highlight))))
-
-   ;; Recentf - Fix purple text issue
-   `(recentf-file-face ((t (:foreground ,frutiger-fg-primary))))
-
-   ;; Additional mode-specific fixes - No Purple
-   `(default-italic ((t (:foreground ,frutiger-fg-primary :slant italic))))
-   `(emphasize ((t (:foreground ,frutiger-fg-primary))))
-   `(font-lock-negation-char-face ((t (:foreground ,frutiger-orange-neon))))
-   `(font-lock-preprocessor-face ((t (:foreground ,frutiger-cyan-bright))))
-   `(font-lock-regexp-grouping-construct ((t (:foreground ,frutiger-cyan-medium))))
-   `(font-lock-regexp-grouping-backslash ((t (:foreground ,frutiger-cyan-medium)))))
-
-  ;; Custom theme variables - Green-Blue Terminal Colors
-  (custom-theme-set-variables
-   'frutiger-aero
-   `(ansi-color-names-vector
-     [,frutiger-bg-primary ,frutiger-red-neon ,frutiger-green-neon ,frutiger-orange-neon
-      ,frutiger-blue-electric ,frutiger-cyan-medium ,frutiger-cyan-bright ,frutiger-fg-primary])))
+  ;;;; Variable overrides
+  ())
 
 ;;;###autoload
 (when load-file-name
   (add-to-list 'custom-theme-load-path
                (file-name-as-directory (file-name-directory load-file-name))))
-
-(provide-theme 'frutiger-aero)
 
 ;;; frutiger-aero-theme.el ends here
