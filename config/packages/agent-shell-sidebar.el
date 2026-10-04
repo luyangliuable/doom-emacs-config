@@ -1,8 +1,15 @@
+;; Bind before Agent Shell loads; the commands load it (and this :config) first.
+(dolist (command '(agent-shell-sidebar-toggle
+                   agent-shell-sidebar-toggle-focus
+                   agent-shell-sidebar-change-provider
+                   agent-shell-sidebar-reset))
+  (autoload command "agent-shell" nil t))
+(map! :leader
+  :desc "toggle Pi sidebar" "f a" #'agent-shell-sidebar-toggle)
+
 (use-package agent-shell-sidebar
   :after agent-shell
   :config
-  (map! :leader
-    :desc "toggle Pi sidebar" "f a" #'agent-shell-sidebar-toggle)
   ;; Sidebar default agent config (default: nil
   (setq agent-shell-sidebar-default-config 'pi)
 

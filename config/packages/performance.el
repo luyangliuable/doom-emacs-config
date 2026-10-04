@@ -110,3 +110,58 @@
 
 ;; Reduce echo area message delay
 (setq echo-keystrokes 0.02)                   ; Show keystrokes immediately
+
+;;; ============================================================================
+;;; IDLE LOADING
+;;; ============================================================================
+
+(defun luyangliuable/require-when-idle (features &optional then)
+  "Require FEATURES in order while Emacs is idle, then call THEN.
+Each element is a feature or a list of `require' arguments.  Every file loads
+whole; between files (and before THEN) this yields to pending input or after
+50 ms, and resumes once Emacs is idle again."
+  (let ((deadline (+ (float-time) 0.05)) yield)
+    (while (and features (not yield))
+      (apply #'require (ensure-list (pop features)))
+      (setq yield (or (input-pending-p) (>= (float-time) deadline))))
+    (cond ((and yield (or features then))
+           (run-with-idle-timer (time-add (or (current-idle-time) 0) 0.05) nil
+                                #'luyangliuable/require-when-idle features then))
+          (then (funcall then)))))
+
+(defun luyangliuable/preload-when-idle (library &optional then)
+  "Load LIBRARY via `luyangliuable/require-when-idle', then call THEN.
+The `require's that open LIBRARY's code (after \";;; Code:\") load as steps of
+their own first, except those in `eval-when-compile', which LIBRARY's compiled
+file skips as well."
+  (let (requires form)
+    (with-temp-buffer
+      (when-let* ((file (locate-library (format "%s.el" library) t)))
+        (insert-file-contents file))
+      (re-search-forward "^;;; Code:" nil t)
+      (while (memq (car-safe (setq form (ignore-errors (read (current-buffer)))))
+                   '(require eval-when-compile))
+        (when (eq (car form) 'require)
+          (push (mapcar #'eval (cdr form)) requires))))
+    (luyangliuable/require-when-idle (nreverse (cons library requires)) then)))
+
+;;; ============================================================================
+;;; DOOM ELISP HELPERS
+;;; ============================================================================
+
+;; Doom native-compiles two emacs-lisp helpers in a blocking `emacs --batch'
+;; (~1.4 s each, every session).  Byte-compiling them instead is Doom's own
+;; non-native path and takes a few ms.
+(defun luyangliuable/byte-compile-functions (fns)
+  "Byte-compile each function in FNS that isn't compiled yet."
+  (require 'bytecomp)                   ; before binding its variable below
+  (let (byte-compile-warnings)
+    (dolist (fn fns)
+      (unless (compiled-function-p (indirect-function fn))
+        (byte-compile fn)))))
+
+(defun luyangliuable/doom-compile-functions-a (&rest fns)
+  "Byte-compile FNS once Emacs has been idle for 1.5 s."
+  (run-with-idle-timer 1.5 nil #'luyangliuable/byte-compile-functions fns))
+
+(advice-add 'doom-compile-functions :override #'luyangliuable/doom-compile-functions-a)

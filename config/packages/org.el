@@ -18,7 +18,7 @@
     :group 'org)
 
   (defcustom luyangliuable/org-daily-dir
-    "/Users/lucas.liu/Dev/today/"
+    "/Users/blackfish/today/"
     "Directory containing per-day org files."
     :type 'directory
     :group 'luyangliuable/org-rollover)

@@ -6,22 +6,95 @@ Personal Doom Emacs configuration with enhanced features, Spacemacs-inspired key
 
 ### Installation
 
+#### Required tools
+
+Doom needs a few CLI tools at runtime, `doom sync` needs build tools to compile
+native package components (`zmq`, `workspace-hud`), and the enabled language
+modules need their toolchains and LSP servers.
+
+**Core — required by Doom itself:**
+
+```bash
+brew install git ripgrep fd coreutils
+```
+
+| Tool | Needed by |
+|------|-----------|
+| `git` | straight.el package management (clones every package) |
+| `ripgrep` 11+ | Doom search, consult, projectile |
+| `fd` | faster file lookup (recommended) |
+| GNU `coreutils` | Doom doctor / GNU `ls` (recommended on macOS) |
+
+**Build-time — required for `doom sync` to complete:**
+
+```bash
+xcode-select --install                      # clang, make, git
+brew install emacs pkgconf zeromq           # Emacs (with modules) + libzmq
+brew install autoconf automake libtool      # zmq package runs `autoreconf -i`
+brew install rustup                         # workspace-hud builds a wasm bundle
+cargo install wasm-pack
+rustup target add wasm32-unknown-unknown
+```
+
+| Tool | Needed by |
+|------|-----------|
+| `autoconf` `automake` `libtool` | `zmq` pre-build (`make` runs `autoreconf -i` to generate `configure`) |
+| `pkgconf` `zeromq` | `zmq` pre-build (pkg-config lookup of `libzmq`) |
+| `rustup` `wasm-pack` wasm32 target | `workspace-hud` pre-build (`wasm-pack build`) |
+| Emacs with module support | loading the built `emacs-zmq.dylib` (Homebrew formula has it) |
+
+**Languages & features — install what you use:**
+
+| Tool | Install | Needed by |
+|------|---------|-----------|
+| Node.js + npm | `brew install node` | `copilot.el`, LSP server installers, `scripts/format-elisp.js` |
+| Python 3 + Jupyter | `brew install python` then `pip install jupyter ipykernel` | `jupyter` REPL, `:lang python` |
+| rust-analyzer | `rustup component add rust-analyzer` | `:lang (rust +lsp)` |
+| LaTeX (`latexmk`, `dvisvgm`) | BasicTeX or MacTeX | `:lang latex`, org/markdown math previews |
+| `plantuml` + `graphviz` + `temurin` | `brew install plantuml graphviz temurin` | `:lang plantuml` (PlantUML needs Java) |
+| `shellcheck` | `brew install shellcheck` | flycheck (`:checkers syntax`) for `:lang sh` |
+| `poppler` | `brew install poppler` | `:tools pdf` (build epdfinfo with `M-x pdf-tools-install`) |
+| Docker CLI | `brew install docker` | `:tools docker` (optional) |
+| `emacs-lsp-booster` | [GitHub releases](https://github.com/blahgeek/emacs-lsp-booster) | faster LSP responses (optional) |
+| `codex` / `pi-acp` | npm / GitHub releases | `agent-shell` backends (optional) |
+
+LSP servers for the enabled languages (js/ts, web, json/yaml, python, rust,
+sh): let lsp-mode install them with `M-x lsp-install-server`, or preinstall
+them globally:
+
+```bash
+npm i -g typescript @vtsls/language-server pyright \
+  vscode-langservers-extracted bash-language-server yaml-language-server
+```
+
+Environment rules:
+
+- Run `doom sync` from a terminal whose `PATH` includes `/opt/homebrew/bin` and `~/.cargo/bin`.
+- Never append `$path`/`$PATH` to `CFLAGS`, `CPPFLAGS`, `LDFLAGS`, or `PKG_CONFIG_PATH` in shell profiles — a full PATH string inside compiler flags breaks every C build with `C compiler cannot create executables`.
+- If you launch Emacs.app from the Dock, run `doom env` once so GUI Emacs sees the same `PATH`.
+
 1. Install Doom Emacs:
    ```bash
    git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
    ~/.config/emacs/bin/doom install
    ```
 
-2. Clone this config:
+2. Clone this config (either `~/.config/doom` or `~/.doom.d` works):
    ```bash
-   git clone https://github.com/luyangliuable/doom-emacs-config.git ~/.doom.d
-   cd ~/.doom.d
+   git clone https://github.com/luyangliuable/doom-emacs-config.git ~/.config/doom
+   cd ~/.config/doom
+   git submodule update --init --recursive    # elisp-functions submodule
    ```
 
 3. Sync and compile:
    ```bash
-   doom sync
+   doom sync                  # installs packages and runs all :pre-build steps
    ./scripts/compile-doom-config.sh
+   ```
+   If a package's `:pre-build` step fails (e.g. the `zmq` recipe's `make`),
+   install the missing tool from the Required tools list above, then re-run:
+   ```bash
+   doom sync --rebuild        # force :pre-build commands to run again
    ```
 
 4. Restart Emacs!
@@ -289,6 +362,23 @@ cd ~/.doom.d && ./scripts/compile-doom-config.sh
 - Check mode hooks: `M-x describe-variable RET typescript-mode-hook`
 - Restart LSP: `M-x lsp-workspace-restart`
 
+### If `doom sync` fails with `:pre-build command error in "zmq" recipe`:
+
+The `zmq` package runs `make`, which needs autotools and a working C toolchain:
+
+```bash
+autoreconf --version             # brew install autoconf automake libtool
+make --version
+pkg-config --modversion libzmq   # brew install pkgconf zeromq
+env | grep -E "^(CFLAGS|CPPFLAGS|LDFLAGS)="
+```
+
+The flags must contain only compiler flags — never `PATH` entries. Then re-run:
+
+```bash
+doom sync --rebuild
+```
+
 ### If startup is slow:
 - Run `doom doctor` to check for issues
 - Run `M-x doom/info` for startup time breakdown
@@ -296,7 +386,7 @@ cd ~/.doom.d && ./scripts/compile-doom-config.sh
 
 ### If compiled config causes issues:
 ```bash
-cd ~/.doom.d
+cd ~/.config/doom
 ./scripts/compile-doom-config.sh clean
 ```
 
@@ -313,4 +403,4 @@ MIT License - See individual package licenses for third-party components
 
 ---
 
-**Last Updated**: 2026-05-13
+**Last Updated**: 2026-10-04

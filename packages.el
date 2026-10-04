@@ -16,10 +16,12 @@
 (package! agent-shell)
 (package! agent-shell-workspace
   :recipe (:host github :repo "gveres/agent-shell-workspace"))
+;; Straight runs pre-build recipes on forced syncs.  Reuse the generated HUD
+;; bundle when it is complete and newer than its Rust inputs.
 (package! workspace-hud
   :recipe (:host github
            :repo "nohzafk/emacs-workspace-hud"
-           :pre-build (("bash" "-c" "cargo_bin=\"${CARGO_HOME:-$HOME/.cargo}/bin\"; export PATH=\"$cargo_bin:$PATH\"; if command -v rustup >/dev/null 2>&1; then rustup target add wasm32-unknown-unknown || exit $?; rustc_path=\"$(rustup which rustc)\" || exit $?; export PATH=\"$(dirname \"$rustc_path\"):$PATH\"; fi; git submodule update --init --recursive && cd ui && wasm-pack build --target web --release"))
+           :pre-build (("bash" "-c" "git submodule update --init --recursive || exit $?; wasm=ui/pkg/workspace_hud_bg.wasm; if [ -s \"$wasm\" ] && [ -s ui/pkg/package.json ] && [ -s ui/pkg/workspace_hud.d.ts ] && [ -s ui/pkg/workspace_hud.js ] && [ -s ui/pkg/workspace_hud_bg.wasm.d.ts ] && ! [ ui/Cargo.toml -nt \"$wasm\" ] && ! [ emacs-egui/sdk/Cargo.toml -nt \"$wasm\" ] && { [ ! -e ui/Cargo.lock ] || ! [ ui/Cargo.lock -nt \"$wasm\" ]; } && [ -z \"$(find ui/src emacs-egui/sdk/src -type f -newer \"$wasm\" -print -quit)\" ]; then exit 0; fi; cargo_bin=\"${CARGO_HOME:-$HOME/.cargo}/bin\"; export PATH=\"$cargo_bin:$PATH\"; if command -v rustup >/dev/null 2>&1; then rustup target add wasm32-unknown-unknown || exit $?; rustc_path=\"$(rustup which rustc)\" || exit $?; export PATH=\"$(dirname \"$rustc_path\"):$PATH\"; fi; cd ui && wasm-pack build --target web --release"))
            :files (("lisp/" "lisp/*.el")
                    ("emacs-egui/lisp/" "emacs-egui/lisp/*.el")
                    ("ui/" "ui/index.html")
@@ -31,6 +33,13 @@
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el"
            :files ("*.el")))
+(package! code-cells)
+(package! jupyter)
+(package! zmq
+  :recipe (:host github
+           :repo "nnicandro/emacs-zmq"
+           :files ("*.el" "emacs-zmq.*")
+           :pre-build (("make"))))
 (package! beacon)
 (package! doom-modeline)
 (package! bongo-cat-mode
