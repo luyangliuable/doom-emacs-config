@@ -18,7 +18,8 @@
     :group 'org)
 
   (defcustom luyangliuable/org-daily-dir
-    "/Users/blackfish/today/"
+    (let ((candidates (mapcar #'expand-file-name '("~/Dev/today/" "~/today/"))))
+      (or (seq-find #'file-directory-p candidates) (car candidates)))
     "Directory containing per-day org files."
     :type 'directory
     :group 'luyangliuable/org-rollover)
@@ -35,12 +36,6 @@
     :type '(choice (const :tag "No shared schedule" nil)
                    file)
     :group 'luyangliuable/org-rollover)
-
-  (setq luyangliuable/org-daily-dir "/Users/lucas.liu/Dev/today/"
-        luyangliuable/org-daily-template
-        (expand-file-name "templates/daily.org" luyangliuable/org-daily-dir)
-        luyangliuable/org-schedule-file
-        (expand-file-name "schedule.org" luyangliuable/org-daily-dir))
 
   (defcustom luyangliuable/org-rollover-heading "Carried Over"
     "Top-level heading under which carried tasks are filed in today's file."

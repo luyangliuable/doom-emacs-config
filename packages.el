@@ -46,6 +46,9 @@
   :recipe (:host github
            :repo "luyangliuable/bongo-cat-model.el"
            :files ("bongo-cat-mode.el" "img")))
+;; (package! bongo-cat-mode
+;;   :recipe (:local-repo "~/Dev/bongo-cat-mode"
+;;            :files ("bongo-cat-mode.el" "img")))
 (package! minor-mode-badges
   :recipe (:host github
            :repo "luyangliuable/minor-mode-badges.el"
@@ -72,6 +75,7 @@
   :recipe (:host github :repo "Kungsgeten/org-brain"))
 (package! persistent-scratch)
 (package! password-generator)
+(package! valign)
 ;; TODO we need plantuml-mode since plantuml is already declared in init.el
 (package! plantuml-mode
 :recipe (:host github :repo "skuro/plantuml-mode"))

@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: new-task
+# uuid:
+# key: new-task
+# condition: t
+# --
+
+
+${1:**} ${2:TODO} [#${3:A}] ${4:task}
+:PROPERTIES:
+:PROJECT: ${5:project}
+:END:
+:CONTEXT:
+- Goal:
+:END:
+:LINKS:
+- Tool: [[${6:file:/Users/lucas.liu/Dev}][${7:Dev}]]
+- Source configuration: [[${8:https://github.com/test-org/test-repo/pull/205}}][{9:PR#205}]]
+:END:
+:LOGBOOK:
+:END:

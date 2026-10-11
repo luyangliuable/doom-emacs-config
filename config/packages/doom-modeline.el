@@ -17,12 +17,46 @@
         (set-visited-file-name nil t))))
   (setq doom-modeline-project-detection value))
 
+(defvar luyangliuable/doom-modeline-state-icon-interval 1.0
+  "Seconds a buffer's state icon is reused while its in-memory state is unchanged.")
+
+(defvar-local luyangliuable/doom-modeline--state-icon-cache nil
+  "(TIME KEY . ICON) from the buffer's last full state icon update.")
+
+(defun luyangliuable/doom-modeline-throttle-state-icon (orig-fn &rest args)
+  "Call ORIG-FN with ARGS unless the buffer state icon was just computed.
+The icon is rebuilt on every redisplay, and each rebuild stats the visited
+file.  Changes to buffer state still show immediately; only on-disk changes
+\(file modified or deleted elsewhere) can lag, by at most
+`luyangliuable/doom-modeline-state-icon-interval' seconds."
+  (let ((key (list buffer-file-name buffer-read-only (buffer-modified-p)
+                   (buffer-narrowed-p)
+                   (and (bound-and-true-p fancy-narrow-mode)
+                        (fboundp 'fancy-narrow-active-p)
+                        (fancy-narrow-active-p))
+                   (bound-and-true-p dired-narrow-mode)
+                   doom-modeline-buffer-state-icon
+                   doom-modeline-buffer-modification-icon
+                   doom-modeline-icon doom-modeline-unicode-fallback))
+        (cache luyangliuable/doom-modeline--state-icon-cache)
+        (now (float-time)))
+    (if (and cache
+             (< (- now (car cache)) luyangliuable/doom-modeline-state-icon-interval)
+             (equal key (cadr cache)))
+        (setq doom-modeline--buffer-file-state-icon (cddr cache))
+      (let ((icon (apply orig-fn args)))
+        (setq luyangliuable/doom-modeline--state-icon-cache
+              (cons now (cons key icon)))
+        icon))))
+
 (with-eval-after-load 'doom-modeline
   (unless (advice-member-p
            #'luyangliuable/doom-modeline-safe-buffer-file-truename
            'doom-modeline--format-buffer-file-truename)
     (advice-add 'doom-modeline--format-buffer-file-truename :around
-                #'luyangliuable/doom-modeline-safe-buffer-file-truename)))
+                #'luyangliuable/doom-modeline-safe-buffer-file-truename))
+  (advice-add 'doom-modeline-update-buffer-file-state-icon :around
+              #'luyangliuable/doom-modeline-throttle-state-icon))
 
 (use-package! doom-modeline
   :init

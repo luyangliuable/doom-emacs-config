@@ -111,6 +111,11 @@
 ;; Reduce echo area message delay
 (setq echo-keystrokes 0.02)                   ; Show keystrokes immediately
 
+;; indent-bars: guides through blank lines cost ~5 ms per keystroke in large
+;; buffers (character mode on macOS).  Guides on non-blank lines are unchanged.
+(after! indent-bars
+  (setq indent-bars-display-on-blank-lines nil))
+
 ;;; ============================================================================
 ;;; IDLE LOADING
 ;;; ============================================================================

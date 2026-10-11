@@ -46,6 +46,7 @@
 (load! "config/packages/org")             ; daily task rollover
 (load! "config/packages/org-parallel-clock") ; overlapping/parallel org clocks
 (load! "config/packages/latex-preview")  ; LaTeX previews in org/markdown
+(load! "config/packages/valign")         ; visual table alignment in org/markdown
 (load! "config/packages/golden-ratio")    ; golden-ratio
 (load! "config/packages/centered-buffer") ; centered-buffer
 (load! "config/packages/persistent-scratch") ; persistent-scratch

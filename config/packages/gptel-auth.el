@@ -1,7 +1,11 @@
 ;;; config/packages/gptel-auth.el -*- lexical-binding: t; -*-
 
-(defconst luyangliuable/gptel-pi-auth-file
-  "/Users/blackfish/.pi/agent/auth.json"
+(require 'seq)
+
+(defvar luyangliuable/gptel-pi-auth-file
+  (let ((candidates (mapcar #'expand-file-name
+                            '("~/Dev/.pi/agent/auth.json" "~/.pi/agent/auth.json"))))
+    (or (seq-find #'file-exists-p candidates) (car candidates)))
   "Pi agent credential file used for GitHub Copilot authentication.")
 
 (defun luyangliuable/gptel--require-string (value field)

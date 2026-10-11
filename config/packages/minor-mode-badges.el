@@ -4,6 +4,7 @@
 ;; this file sets modes early and refreshes the segment after package load.
 
 (use-package! minor-mode-badges
+  :if (locate-library "minor-mode-badges")
   :demand t
   :init
   (setq minor-mode-badges-modes

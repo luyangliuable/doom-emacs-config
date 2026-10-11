@@ -7,7 +7,8 @@
 ;; trampolines would make each one a slow native compile that needs gcc.
 (setq native-comp-enable-subr-trampolines nil)
 
-(defmacro after! (&rest _))
+(defmacro after! (_feature &rest body)
+  `(progn ,@body))
 
 ;; Doom's version native-compiles in a blocking subprocess; it must never run.
 (defun doom-compile-functions (&rest _)
@@ -188,3 +189,7 @@ String elements of BODY are inserted verbatim."
       (fmakunbound 'pct-cube))))
 
 ;;; performance-config-test.el ends here
+
+(ert-deftest performance-config-test/indent-bars-skip-blank-lines ()
+  (should (boundp 'indent-bars-display-on-blank-lines))
+  (should-not indent-bars-display-on-blank-lines))
