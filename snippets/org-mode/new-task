@@ -1,6 +1,5 @@
 # -*- mode: snippet -*-
 # name: new-task
-# uuid:
 # key: new-task
 # condition: t
 # --

@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: coding-harness-small-operations
+# key: pb-coding-harness-small-operations
+# condition: t
+# --
+
+<generalToolUse>
+- Use SMALL OPERATIONS: max 50 lines per operation (create, find/replace, tool arguments)
+- ALL tool parameters must adhere to 50-line limit
+- Prefer multiple small operations over single large ones
+</generalToolUse>

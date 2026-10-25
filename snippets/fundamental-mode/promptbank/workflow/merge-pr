@@ -1,6 +1,5 @@
 # -*- mode: snippet -*-
 # name: promptbank/workflow/merge-pr
-# uuid:
 # key: merge pr
 # condition: t
 # --

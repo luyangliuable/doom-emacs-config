@@ -1,0 +1,73 @@
+# -*- mode: snippet -*-
+# name: ai-generate-patch-file
+# key: pb-ai-generate-patch-file
+# condition: t
+# --
+
+I need you to create a `.patch` file for my local Git repository.
+
+IMPORTANT PATCH REQUIREMENTS:
+
+1. Do NOT generate the patch from:
+   - files pasted earlier in the conversation,
+   - uploaded repository snapshots,
+   - remembered file contents,
+   - documentation examples,
+   - or assumptions about my current checkout.
+
+2. The patch MUST be based on the exact current contents of the target files.
+
+3. First determine which files need to change.
+
+4. If you have direct filesystem access to that repository:
+   - inspect the current files from disk;
+   - check `git status --short`;
+   - do not overwrite or discard unrelated existing changes;
+   - create temporary copies of the exact current files;
+   - make the requested modifications to temporary copies;
+   - generate a standard unified Git-compatible patch from the exact before/after files;
+   - do NOT require optional Python packages such as PyYAML merely to generate the patch.
+
+5. Before giving me the patch, VALIDATE IT against an untouched copy of the exact original files. A successful validation is mandatory.
+
+   At minimum, prove that:
+
+   `git apply --check <PATCH_FILE>`
+
+   succeeds against the exact original state.
+
+   Preferably also apply it to a temporary copy/worktree and verify that the resulting files contain the intended changes.
+
+6. If `git apply --check` fails:
+   - DO NOT give me the patch;
+   - inspect why it failed;
+   - regenerate it from the current files;
+   - repeat validation until it succeeds.
+
+7. Never use zero-context hunks or suggest `--reject`, `--3way`, `--unidiff-zero`, or other force-application techniques merely to make a bad patch apply.
+
+8. Preserve unrelated formatting, comments, YAML ordering, whitespace, and surrounding content. Do not deserialize and reserialize an entire YAML/JSON file unless that is explicitly required, because doing so creates unnecessary changes.
+
+9. The final `.patch` must contain ONLY the intended modifications.
+
+10. Save the validated patch as:
+
+   `${1:<ABSOLUTE_REPO_PATH>}/<PATCH_NAME>.patch`
+
+11. Before finishing, report:
+   - files modified by the patch;
+   - a concise description of each change;
+   - the exact validation command you ran;
+   - confirmation that `git apply --check` succeeded;
+   - the path to the patch.
+
+12. If you CANNOT access the live repository filesystem:
+   - STOP.
+   - Do not manufacture a patch from conversation context.
+   - Tell me you cannot guarantee a working patch without the exact current source files.
+   - Ask me to provide the current target files (or a fresh `git diff`/archive containing them).
+   - Only generate the patch once its exact source state is available.
+
+The success criterion is not “the diff looks correct.” The success criterion is:
+
+**The generated patch has actually passed `git apply --check` against the exact source state it is intended for.**

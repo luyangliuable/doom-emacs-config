@@ -12,6 +12,12 @@
                      (list (frame-char-height))))))
       (apply orig-fn args))))
 
+(defun luyangliuable/minimap-highlight-line-with-face (orig-fn &rest args)
+  "Highlight the minimap line without an unspecified foreground color."
+  (prog1 (apply orig-fn args)
+    (when (overlayp minimap-line-overlay)
+      (overlay-put minimap-line-overlay 'face 'minimap-current-line-face))))
+
 (use-package! minimap
   :defer t
   :init
@@ -44,6 +50,8 @@
     (and buffer-file-name
       (not (minibufferp))
       (not (derived-mode-p 'org-mode))
+      (not (derived-mode-p 'dired-mode))
+      (not (derived-mode-p 'vterm-mode))
       (not (derived-mode-p 'plantuml-mode))
       (not (derived-mode-p 'image-mode))
       (not (string= (buffer-name) " *MINIMAP*"))
@@ -92,6 +100,10 @@
   (run-with-idle-timer 0.5 t #'luyangliuable/minimap-auto-sync)
 
   :config
+  (unless (advice-member-p #'luyangliuable/minimap-highlight-line-with-face
+                           'minimap-highlight-line)
+    (advice-add 'minimap-highlight-line :around
+                #'luyangliuable/minimap-highlight-line-with-face))
   (unless (advice-member-p #'luyangliuable/minimap-new-minimap-safely
                            'minimap-new-minimap)
     (advice-add 'minimap-new-minimap :around

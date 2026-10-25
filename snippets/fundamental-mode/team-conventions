@@ -1,6 +1,5 @@
 # -*- mode: snippet -*-
 # name: promptbank/workflow/team-conventions
-# uuid:
 # key: merge pr
 # condition: t
 # --

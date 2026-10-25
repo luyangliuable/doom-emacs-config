@@ -31,6 +31,7 @@ brew install git ripgrep fd coreutils
 xcode-select --install                      # clang, make, git
 brew install emacs pkgconf zeromq           # Emacs (with modules) + libzmq
 brew install autoconf automake libtool      # zmq package runs `autoreconf -i`
+brew install cmake                          # vterm compiles vterm-module
 brew install rustup                         # workspace-hud builds a wasm bundle
 cargo install wasm-pack
 rustup target add wasm32-unknown-unknown
@@ -39,6 +40,7 @@ rustup target add wasm32-unknown-unknown
 | Tool | Needed by |
 |------|-----------|
 | `autoconf` `automake` `libtool` | `zmq` pre-build (`make` runs `autoreconf -i` to generate `configure`) |
+| `cmake` `libtool` | `vterm` (`:term vterm`) compiles `vterm-module` on first use |
 | `pkgconf` `zeromq` | `zmq` pre-build (pkg-config lookup of `libzmq`) |
 | `rustup` `wasm-pack` wasm32 target | `workspace-hud` pre-build (`wasm-pack build`) |
 | Emacs with module support | loading the built `emacs-zmq.dylib` (Homebrew formula has it) |
@@ -198,10 +200,13 @@ cd ~/.doom.d
 
 ### Project Management
 - **Projectile**: Enhanced project management with aggressive caching
-- **Project shell commands**:
-  - `SPC p$.` - Run shell in project
-  - `SPC p$v` / `SPC p$s` - Split and run shell
-  - `SPC p!.` - New shell for project
+- **Project terminal (vterm) commands**:
+  - `SPC p$.` - Open the project's vterm (reused)
+  - `SPC p$v` / `SPC p$s` - Split and open the project's vterm
+  - `SPC p!.` - Open a new vterm for the project
+  - `SPC p!v` / `SPC p!s` - Split and open a new project vterm
+  - `SPC p@` - New project vterm in a right split
+  - `SPC p|` - vterm below, in the treemacs node directory or project root
 - **Magit integration**: Git porcelain
   - `SPC gs.` - Open magit
   - `SPC gsv` / `SPC gss` - Split and open magit
@@ -236,9 +241,9 @@ cd ~/.doom.d
 - **Buffer operations**:
   - `SPC bY` - Copy entire buffer to clipboard
   - `SPC wm` - Toggle buffer maximization
-- **Window splitting with shell**:
-  - `SPC p$V` / `SPC p$S` - Split and run shell (stay in current)
-  - `SPC p!V` / `SPC p!S` - New shell split (stay in current)
+- **Window splitting with vterm**:
+  - `SPC p$V` / `SPC p$S` - Split and open project vterm (stay in current)
+  - `SPC p!V` / `SPC p!S` - Split and open new project vterm (stay in current)
 - **Mode line toggle**: Custom function to show/hide mode line
 
 ### Package Management
@@ -263,7 +268,7 @@ cd ~/.doom.d
 - **Web**: HTML/CSS/JavaScript with LSP
 - **Python**: Full LSP support with pyright/pylsp
 - **Emacs Lisp**: Enhanced with flycheck
-- **Markdown**: With live preview
+- **Markdown**: With live preview; Spacemacs-style `, i T` inserts a table and `, i t` generates a TOC
 - **Org mode**: Enhanced org support with org-jira
 - **Common Lisp**: With SLIME/SLY
 - **Shell scripting**: Bash/Zsh support with LSP
@@ -308,6 +313,7 @@ cd ~/.doom.d
 │       ├── lsp.el
 │       ├── lsp-vtsls.el
 │       ├── performance.el       #  Performance optimizations
+│       ├── vterm.el             # vterm project terminals (SPC p $ / p ! / p @ / p |)
 │       └── ...
 ├── elisp-functions/
 │   └── functions.el             # Custom Elisp functions

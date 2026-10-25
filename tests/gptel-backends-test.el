@@ -7,15 +7,26 @@
   (expand-file-name "../config/core.el"
                     (file-name-directory (or load-file-name buffer-file-name))))
 
+;; (defconst luyangliuable-test/gptel-auth-file
+;;   (expand-file-name "../config/packages/gptel-auth.el"
+;;                     (file-name-directory (or load-file-name buffer-file-name))))
+
 (defconst luyangliuable-test/gptel-auth-file
-  (expand-file-name "../config/packages/gptel-auth.el"
-                    (file-name-directory (or load-file-name buffer-file-name))))
+  (expand-file-name
+   "../config/packages/gptel/auth.el"
+   (file-name-directory (or load-file-name buffer-file-name))))
+
 
 (load luyangliuable-test/gptel-auth-file t t t)
 
+;; (defconst luyangliuable-test/gptel-config-file
+;;   (expand-file-name "../config/packages/gptel.el"
+;;                     (file-name-directory (or load-file-name buffer-file-name))))
+;;
 (defconst luyangliuable-test/gptel-config-file
-  (expand-file-name "../config/packages/gptel.el"
-                    (file-name-directory (or load-file-name buffer-file-name))))
+  (expand-file-name
+   "../config/packages/gptel/core.el"
+   (file-name-directory (or load-file-name buffer-file-name))))
 
 (cl-defstruct (gptel--gh (:constructor make-gptel--gh))
   github-token token)

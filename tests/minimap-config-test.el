@@ -35,6 +35,19 @@
             (should (timer--repeat-delay (car timers)))))
       (mapc #'cancel-timer timer-idle-list))))
 
+(ert-deftest luyangliuable-test/minimap-highlight-line-keeps-valid-face ()
+  (require 'minimap)
+  (with-temp-buffer
+    (insert "one\ntwo\n")
+    (goto-char (point-min))
+    (let ((minimap-line-overlay nil))
+      (luyangliuable/minimap-highlight-line-with-face #'minimap-highlight-line)
+      (unwind-protect
+          (should (eq (overlay-get minimap-line-overlay 'face)
+                      'minimap-current-line-face))
+        (when (overlayp minimap-line-overlay)
+          (delete-overlay minimap-line-overlay))))))
+
 (ert-deftest luyangliuable-test/minimap-excludes-all-image-mode-buffers ()
   (dolist (extension '("svg" "png" "jpg" "jpeg" "gif" "webp"))
     (with-temp-buffer

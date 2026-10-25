@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: security-champion
+# key: pb-security-champion
+# condition: t
+# --
+
+Before every submission, I must identify the exact vulnerable behavior, trace it through the relevant code and configuration, compare every marked candidate, and explain why the selected one
+ fits better. If that chain is incomplete, I must not submit. A remaining attempt is not a reason to guess

@@ -42,13 +42,13 @@
            :pre-build (("make"))))
 (package! beacon)
 (package! doom-modeline)
-(package! bongo-cat-mode
-  :recipe (:host github
-           :repo "luyangliuable/bongo-cat-model.el"
-           :files ("bongo-cat-mode.el" "img")))
 ;; (package! bongo-cat-mode
-;;   :recipe (:local-repo "~/Dev/bongo-cat-mode"
+;;   :recipe (:host github
+;;            :repo "luyangliuable/bongo-cat-model.el"
 ;;            :files ("bongo-cat-mode.el" "img")))
+(package! bongo-cat-mode
+  :recipe (:local-repo "/Users/blackfish/bongo-cat-model.el/"
+           :files ("bongo-cat-mode.el" "img")))
 (package! minor-mode-badges
   :recipe (:host github
            :repo "luyangliuable/minor-mode-badges.el"
@@ -84,13 +84,12 @@
 ;; explicit so Doom cannot reach `global-undo-tree-mode' without it installed.
 (package! queue)
 (package! terminal-here)
+(package! eat)
 (package! zone)
 ;; enime + its elisp deps (dash & s ship with Doom already)
 (package! mpv)
 (package! esxml)
 (package! request)
-;; (package! enime :recipe (:host github :repo "xl666/enime" :files ("*.el" "video_scrapping.sh")))
-;;(package! helm-projectile)  ; Removed: Switching to Vertico for better performance
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:

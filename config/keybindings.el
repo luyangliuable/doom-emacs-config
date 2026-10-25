@@ -8,21 +8,20 @@
 (autoload 'password-generator-numeric "password-generator" nil t)
 
 ;; Load individual keybinding files (standalone map!/after! blocks only)
-(ignore-errors
-  (load! "keybindings/gptel")
-  (load! "keybindings/evil")
-  (load! "keybindings/treemacs")
-  (load! "keybindings/lsp")
-  (load! "keybindings/shell")
-  (load! "keybindings/magit")
-  (load! "keybindings/emacs-lisp")
-  (load! "keybindings/zone")
-  (load! "keybindings/good-scroll")
-  (load! "keybindings/undo-tree")
-  (load! "keybindings/narrow")
-  (load! "keybindings/frames")
-  (load! "keybindings/snippets")
-  (load! "keybindings/workspaces"))
+(load! "keybindings/gptel")
+(load! "keybindings/evil")
+(load! "keybindings/treemacs")
+(load! "keybindings/lsp")
+(load! "keybindings/magit")
+(load! "keybindings/emacs-lisp")
+(load! "keybindings/zone")
+(load! "keybindings/good-scroll")
+(load! "keybindings/undo-tree")
+(load! "keybindings/narrow")
+(load! "keybindings/frames")
+(load! "keybindings/snippets")
+(load! "keybindings/workspaces")
+(load! "keybindings/markdown")
 
 ;;; ============================================================================
 ;;; KEYBINDINGS
@@ -83,32 +82,6 @@
   :desc "Open dashboard" "bh" #'+doom-dashboard/open
   :desc "Copy entire buffer to clipboard" "bY" #'luyangliuable/copy-whole-buffer-to-clipboard
 
-  :desc "Run shell in project" "p$." #'projectile-run-shell
-  :desc "Split window vertically and run shell"
-  "p$v" (lambda ()
-          (interactive)
-          (split-window-right)
-          (other-window 1)
-          (projectile-run-shell))
-
-  ;; :desc "Split window vertically and temp run shell"
-  ;; "p$t" (cmd! (split-window-right)
-  ;;             (other-window 1)
-  ;;             (projectile-run-shell)
-  ;;             (evil-local-set-key 'normal (kbd "q") 'kill-current-buffer)
-  ;;             (local-set-key (kbd "q") 'kill-current-buffer))
-  ;;
-  :desc "Split window horizontally and run shell" "p$s" (lambda () (interactive) (split-window-below) (other-window 1) (projectile-run-shell))
-  :desc "Split window vertically and run shell" "p$V" (lambda () (interactive) (split-window-right) (other-window 1) (projectile-run-shell) (other-window -1))
-  :desc "Split window horizontally and run shell" "p$S" (lambda () (interactive) (split-window-below) (other-window 1) (projectile-run-shell) (other-window -1))
-
-  ;; :desc "new shell for project" "p!" #'luyangliuable/new-shell-for-project
-  :desc "Run shell in project" "p!." #'luyangliuable/new-shell-for-project
-  :desc "Split window vertically and run shell" "p!v" (lambda () (interactive) (split-window-right) (other-window 1) (luyangliuable/new-shell-for-project))
-  :desc "Split window horizontally and run shell" "p!s" (lambda () (interactive) (split-window-below) (other-window 1) (luyangliuable/new-shell-for-project))
-  :desc "Split window vertically and run shell" "p!V" (lambda () (interactive) (split-window-right) (other-window 1) (luyangliuable/new-shell-for-project) (other-window -1))
-  :desc "Split window horizontally and run shell" "p!S" (lambda () (interactive) (split-window-below) (other-window 1) (luyangliuable/new-shell-for-project) (other-window -1))
-
   :desc "Resize window width %" "wrw" (lambda () (interactive)
                                         (let* ((pct (read-number "Window width %: "))
                                                 (target-width (round (* (frame-width) (/ pct 100.0)))))
@@ -118,8 +91,6 @@
                                                  (target-height (round (* (frame-height) (/ pct 100.0)))))
                                            (window-resize nil (- target-height (window-height)))))
 
-  :desc "Split window bottom and open shell" "p|" #'luyangliuable/treemacs-shell-here-horizontal
-  :desc "New shell for project (split)" "p@" #'luyangliuable/new-shell-for-project-split
   :desc "Maximize buffer" "wm" #'luyangliuable/toggle-maximize-buffer
   :desc "Ace window" "wW" #'ace-window
   :desc "Window management transient state" "w." #'hydra-window-management/body
@@ -235,3 +206,6 @@
     :desc "Fold menu" "." #'luyangliuable/origami-hydra/body))
 
 (map! :n "H" #'luyangliuable/close-fold-at-point)
+
+;; Load selected shell backend keybindings last.
+(load! "keybindings/shell/core")

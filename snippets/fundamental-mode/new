@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: log-solution-to-bug-db
+# key: pb-log-solution-to-bug-db
+# condition: t
+# --
+
+If using bug database rules or doing bug-resolution documentation, open @/Users/lucas.liu/Dev/claude-setup/claude-md/sections/04-bug-database-versioning.md.

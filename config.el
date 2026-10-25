@@ -10,6 +10,17 @@
 (setq debug-on-message
       "Invalid face attribute :foreground nil\\|Buffer is read-only")
 ;; ---------------------------------------------------------------------------
+;; SWITCH SETTINGS FOR SWITCHING DIFFERENT BACKENDS (e.g. ergot vs lsp, vterm vs eat)
+
+;; Shell backend: `shell', `vterm', or `eat'
+(defconst luyangliuable-shell-backend 'shell
+  "Shell backend to use.
+
+Valid values are:
+  `shell' - original shell implementation
+  `vterm' - vterm implementation
+  `eat'   - Eat implementation.")
+;; ---------------------------------------------------------------------------
 
 ;; Load existing custom modules
 (load! "elisp-functions/functions")
@@ -34,7 +45,8 @@
 (load! "config/packages/drag-stuff")      ; dragstuff
 (load! "config/packages/editorconfig")    ; editorconfig
 (load! "config/packages/copilot")         ; GitHub Copilot inline completions and chat
-(load! "config/packages/gptel")           ; gptel
+;; (load! "config/packages/gptel")           ; gptel
+(load! "config/packages/gptel/core")
 (load! "config/packages/lsp")             ; lsp
 (load! "config/packages/notebook")        ; Jupyter notebooks
 (load! "config/packages/projectile")      ; projectile
@@ -59,38 +71,13 @@
 (load! "config/packages/minor-mode-badges") ; minor-mode-badges (after doom-modeline)
 (load! "config/packages/good-scroll")     ; smooth scrolling
 (load! "config/packages/minimap")         ; code minimap
+(load! "config/packages/shell/core")
 (load! "config/ui")                       ; package-agnostic UI behaviors
 (ignore-errors
     (load! "config/packages/lsp-vtsls")) ; lsp-vtsls
+
 
 ; Source - https://stackoverflow.com/a
 ; Posted by Trey Jackson, modified by community. See post 'Timeline' for change history
 ; Retrieved 2026-01-06, License - CC BY-SA 4.0
 (setq debug-on-error nil)
-
-;; anki-editor configuration
-;; (use-package! anki-editor
-;;   :after org
-;;   :bind (("C-c a c" . anki-editor-cloze-region-auto-incr)
-;;          ("C-c a r" . anki-editor-retry-failure-notes)
-;;          ("C-c a p" . anki-editor-push-tree)
-;;          ("C-c a P" . anki-editor-push-notes)
-;;          ("C-c a b" . anki-editor-browse-notes)
-;;          ("C-c a g" . anki-editor-gui-browse))
-;;   :config
-;;   (setq anki-editor-create-decks t
-;;         anki-editor-org-tags-as-anki-tags t))
-
-;; enime - watch anime in emacs (https://github.com/xl666/enime)
-;; (use-package! enime
-;;   :commands (enime-main-transient enime-anime-transient)
-;;   :config
-;;   (setq enime-tmp-dir "/tmp"
-;;         enime-storage-file "/tmp/enime.db"))
-
-;; (map! :leader
-;;       (:prefix ("a a" . "anime/enime")
-;;        :desc "Enime main (search/followed)" "a" #'enime-main-transient
-;;        :desc "Enime current anime actions"  "c" #'enime-anime-transient
-;;        :desc "Search for anime"             "s" #'enime-main-transient
-;;        :desc "Followed animes"              "f" #'enime-main-transient))

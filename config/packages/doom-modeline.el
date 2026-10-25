@@ -58,6 +58,62 @@ file.  Changes to buffer state still show immediately; only on-disk changes
   (advice-add 'doom-modeline-update-buffer-file-state-icon :around
               #'luyangliuable/doom-modeline-throttle-state-icon))
 
+(defvar luyangliuable/doom-modeline--bongo-cat-candidate nil
+  "Bongo Cat string being measured, or nil when not measuring.")
+
+(defvar luyangliuable/doom-modeline--main-forms-cache nil
+  "(FORMAT-FN LHS-FORMS RHS-FORMS) of the main mode-line.")
+
+(defun luyangliuable/doom-modeline--main-forms ()
+  "Return the main mode-line's left and right segment forms.
+`doom-modeline-def-modeline' fixes them when it defines the mode-line, so
+they are only re-read after `doom-modeline-format--main' is redefined."
+  (let ((fn (symbol-function 'doom-modeline-format--main)))
+    (unless (eq fn (car luyangliuable/doom-modeline--main-forms-cache))
+      (let ((parts (funcall fn)))
+        (setq luyangliuable/doom-modeline--main-forms-cache
+              (list fn (nth 0 parts) (nth 2 parts)))))
+    (cdr luyangliuable/doom-modeline--main-forms-cache)))
+
+(defun luyangliuable/doom-modeline--bongo-cat-fits-p (cat)
+  "Return non-nil if the main mode-line, drawing CAT, fits the selected window.
+The width matches how `doom-modeline-def-modeline' right-aligns its right side."
+  (let* ((luyangliuable/doom-modeline--bongo-cat-candidate cat)
+         (line (format-mode-line (luyangliuable/doom-modeline--main-forms))))
+    (add-face-text-property 0 (length line) 'mode-line t line)
+    (<= (doom-modeline-string-pixel-width line)
+        (- (window-pixel-width)
+           (window-scroll-bar-width)
+           (window-right-divider-width)
+           (* (or (cdr (window-margins)) 1) (frame-char-width))))))
+
+(defvar luyangliuable/doom-modeline--bongo-cat-window nil
+  "Window whose main mode-line last drew Bongo Cat.")
+
+(defun luyangliuable/doom-modeline--bongo-cat-wanted-p ()
+  "Return non-nil if this mode-line should show Bongo Cat or its bar/HUD."
+  (and (bound-and-true-p bongo-cat-scroll-mode) (doom-modeline--active)))
+
+(defun luyangliuable/doom-modeline-bongo-cat ()
+  "Return Bongo Cat if the focused main mode-line fits it, else nil.
+doom-modeline evaluates the right side before the left, so this also
+records whether `luyangliuable/doom-modeline-bongo-cat-bar' should draw."
+  (or luyangliuable/doom-modeline--bongo-cat-candidate
+      (let ((cat (and (luyangliuable/doom-modeline--bongo-cat-wanted-p)
+                      (bongo-cat-scroll-mode-format))))
+        (setq luyangliuable/doom-modeline--bongo-cat-window
+              (and (> (length cat) 0)
+                   (luyangliuable/doom-modeline--bongo-cat-fits-p cat)
+                   (selected-window)))
+        (and luyangliuable/doom-modeline--bongo-cat-window cat))))
+
+(defun luyangliuable/doom-modeline-bongo-cat-bar ()
+  "Return Doom's bar/HUD in the focused main mode-line when Bongo Cat doesn't fit."
+  (and (not luyangliuable/doom-modeline--bongo-cat-candidate)
+       (luyangliuable/doom-modeline--bongo-cat-wanted-p)
+       (not (eq luyangliuable/doom-modeline--bongo-cat-window (selected-window)))
+       (doom-modeline-segment--bar)))
+
 (use-package! doom-modeline
   :init
   (setq doom-modeline-hud t) ;; Enable the HUD feature
@@ -66,7 +122,8 @@ file.  Changes to buffer state still show immediately; only on-disk changes
   (display-battery-mode 1)
   (display-time-mode 1)
 
-  (setq doom-modeline-height 24
+  ;; Height 1 sizes bars/HUDs to the mode-line text, so they never overflow it.
+  (setq doom-modeline-height 1
     doom-modeline-icon t
     doom-modeline-time-icon nil
     doom-modeline-buffer-encoding t
@@ -75,6 +132,7 @@ file.  Changes to buffer state still show immediately; only on-disk changes
     doom-modeline-major-mode-icon t
     doom-modeline-major-mode t
     doom-modeline-linenumber t
+    doom-modeline-display-misc-in-all-mode-lines nil
     doom-modeline-bar-width 6)
 
   (luyangliuable/doom-modeline-set-project-detection 'projectile)
@@ -97,8 +155,17 @@ file.  Changes to buffer state still show immediately; only on-disk changes
     (when (fboundp 'minor-mode-badges-format)
       (minor-mode-badges-format)))
 
+  (doom-modeline-def-segment bongo-cat
+    "Bongo Cat, when the mode-line has room for it."
+    (luyangliuable/doom-modeline-bongo-cat))
+
+  (doom-modeline-def-segment bongo-cat-bar
+    "Doom's bar/HUD, when Bongo Cat doesn't fit."
+    (luyangliuable/doom-modeline-bongo-cat-bar))
+
   (doom-modeline-def-modeline 'main
-    '(eldoc          ; Show eldoc/help text in the modeline
+    '(bongo-cat-bar  ; Doom's bar/HUD when Bongo Cat doesn't fit
+       eldoc          ; Show eldoc/help text in the modeline
        ;; bar            ; Doom's built-in modeline bar/HUD
        ;; parrot         ; Parrot mode indicator, if enabled
        window-state   ; Window state indicator
@@ -114,6 +181,7 @@ file.  Changes to buffer state still show immediately; only on-disk changes
     '(compilation    ; Compilation status
        objed-state    ; objed mode state indicator
        misc-info      ; Miscellaneous mode-line info
+       bongo-cat      ; Bongo Cat, when the mode-line has room for it
        project-name   ; Current project name
        persp-name     ; Current perspective/workspace name
        grip           ; Markdown preview/grip status
