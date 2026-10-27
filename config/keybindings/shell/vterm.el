@@ -82,18 +82,6 @@
 
 
 ;;; ---------------------------------------------------------------------------
-;;; Evil-snipe / comma localleader
-;;; ---------------------------------------------------------------------------
-
-(after! evil-snipe
-  ;; Comma is our Doom localleader. Remove evil-snipe's global comma binding
-  ;; instead of trying to bind `doom-localleader-map' directly.
-  (define-key evil-normal-state-map (kbd ",") nil)
-  (define-key evil-motion-state-map (kbd ",") nil)
-  (define-key evil-visual-state-map (kbd ",") nil))
-
-
-;;; ---------------------------------------------------------------------------
 ;;; Clean up obsolete advice from previous versions
 ;;; ---------------------------------------------------------------------------
 

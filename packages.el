@@ -84,7 +84,16 @@
 ;; explicit so Doom cannot reach `global-undo-tree-mode' without it installed.
 (package! queue)
 (package! terminal-here)
-(package! eat)
+;; Ship terminfo and the shell integration scripts, which the default recipe
+;; leaves out of the build directory.
+(package! eat
+  :recipe (:type git
+           :repo "https://codeberg.org/akib/emacs-eat"
+           :files ("*.el" ("term" "term/*.el") "*.texi"
+                   "*.ti" ("terminfo/e" "terminfo/e/*")
+                   ("terminfo/65" "terminfo/65/*")
+                   ("integration" "integration/*")
+                   (:exclude ".dir-locals.el" "*-tests.el"))))
 (package! zone)
 ;; enime + its elisp deps (dash & s ship with Doom already)
 (package! mpv)

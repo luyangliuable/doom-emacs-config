@@ -79,12 +79,6 @@
   (luyangliuable/eat-send-event ?\C-a))
 
 
-(defun luyangliuable/eat-end-of-command ()
-  "Move to the end of the current shell command."
-  (interactive)
-  (luyangliuable/eat-send-event ?\C-e))
-
-
 (defun luyangliuable/eat-send-C-c ()
   "Send C-c to the terminal."
   (interactive)
@@ -95,42 +89,6 @@
   "Send C-d to the terminal."
   (interactive)
   (luyangliuable/eat-send-event ?\C-d))
-
-
-(defun luyangliuable/eat-kill-to-end ()
-  "Kill from the shell cursor to the end of the current command."
-  (interactive)
-  (luyangliuable/eat-send-event ?\C-k))
-
-
-(defun luyangliuable/eat-kill-command ()
-  "Kill the entire current shell command."
-  (interactive)
-  ;; C-a followed by C-k.
-  (luyangliuable/eat-send-event ?\C-a)
-  (luyangliuable/eat-send-event ?\C-k))
-
-
-(defun luyangliuable/eat-change-command ()
-  "Kill the entire shell command and enter Evil insert state."
-  (interactive)
-  (luyangliuable/eat-kill-command)
-  (evil-insert-state))
-
-
-(defun luyangliuable/eat-change-to-end ()
-  "Kill to the end of the shell command and enter Evil insert state."
-  (interactive)
-  (luyangliuable/eat-kill-to-end)
-  (evil-insert-state))
-
-
-(defun luyangliuable/eat-delete-char (&optional count)
-  "Delete COUNT characters under the shell cursor."
-  (interactive "p")
-  (dotimes (_ (max 0 (or count 1)))
-    ;; Send a real Delete keyboard event through Eat.
-    (luyangliuable/eat-send-event 'delete)))
 
 
 ;;; ---------------------------------------------------------------------------
@@ -203,52 +161,18 @@
 
 
 ;;; ---------------------------------------------------------------------------
-;;; Evil-snipe / comma localleader
+;;; Evil normal-state editing
 ;;; ---------------------------------------------------------------------------
 
-(after! evil-snipe
-  ;; `,' is Doom's localleader in this configuration.
-  (define-key evil-normal-state-map (kbd ",") nil)
-  (define-key evil-motion-state-map (kbd ",") nil)
-  (define-key evil-visual-state-map (kbd ",") nil))
-
-
-;;; ---------------------------------------------------------------------------
-;;; Evil normal-state terminal editing
-;;; ---------------------------------------------------------------------------
-
+;; Edits themselves are translated by `luyangliuable/eat-evil-mode'
+;; (config/packages/shell/eat-evil.el); these keys need shell-specific commands.
 (after! eat
-  ;; Eat installs its terminal-input bindings through
-  ;; `eat-semi-char-mode-map'.  Bind our Evil terminal operations there
-  ;; instead of treating Eat's rendered buffer as editable text.
-  ;;
-  ;; Each command below operates on the shell's live input by sending
-  ;; keyboard events through Eat.
-  (evil-define-key 'normal eat-semi-char-mode-map
-
-    ;; `0' -> shell C-a.
-    (kbd "0")
-    #'luyangliuable/eat-beginning-of-command
-
-    ;; `$' -> shell C-e.
-    (kbd "$")
-    #'luyangliuable/eat-end-of-command
-
-    ;; `x' -> terminal Delete.
-    (kbd "x")
-    #'luyangliuable/eat-delete-char
-
-    ;; `dd' -> C-a followed by C-k.
-    (kbd "dd")
-    #'luyangliuable/eat-kill-command
-
-    ;; `D' -> shell C-k.
-    (kbd "D")
-    #'luyangliuable/eat-kill-to-end
-
-    ;; `C' -> shell C-k, then Evil insert state.
-    (kbd "C")
-    #'luyangliuable/eat-change-to-end))
+  (map! :map eat-mode-map
+        :n [remap evil-undo]           #'luyangliuable/eat-evil-undo
+        :n [remap evil-redo]           #'luyangliuable/eat-evil-redo
+        :n [remap evil-paste-pop]      #'luyangliuable/eat-evil-previous-input
+        :n [remap evil-paste-pop-next] #'luyangliuable/eat-evil-next-input
+        :n "RET"                       #'luyangliuable/eat-evil-send-return))
 
 
 ;;; ---------------------------------------------------------------------------

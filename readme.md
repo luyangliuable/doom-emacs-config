@@ -186,6 +186,14 @@ cd ~/.doom.d
   - `s(` / `s[` / `s{` - Wrap with brackets
   - `s*` - Wrap with asterisks
 - **Enhanced undo**: Persistent undo with undo-tree/vundo
+- **Evil in Eat terminals**: Normal and visual state edit the shell command line
+  (`config/packages/shell/eat-evil.el`). Every edit (`x`, `dd`, `cw`, `ciw`, `p`,
+  `~`, `.`, surround, `:s`, ...) is replayed to the shell as keystrokes; `0`/`^`/`$`
+  stay inside the command, `u`/`C-r` undo whole edits and insert sessions, `RET`
+  runs the command. Needs eat's zsh integration sourced in `~/.zshrc`. eat's
+  `eat-256color`/`eat-truecolor` terminfo is unreadable by macOS's ncurses, so
+  `config/packages/shell/eat-terminfo.el` recompiles it with the system `tic`; run the
+  suite with `emacs -Q --batch -l ert -l tests/eat-evil-test.el -f ert-run-tests-batch-and-exit`
 - **Code folding**: Universal code folding support
 - **Snippets**: YASnippet integration
 

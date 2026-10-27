@@ -4,11 +4,11 @@
 (require 'ert)
 
 (defconst luyangliuable-test/vterm-config-file
-  (expand-file-name "../config/packages/vterm.el"
+  (expand-file-name "../config/packages/shell/vterm.el"
                     (file-name-directory (or load-file-name buffer-file-name))))
 
 (defconst luyangliuable-test/keybindings-file
-  (expand-file-name "../config/keybindings.el"
+  (expand-file-name "../config/keybindings/shell/vterm.el"
                     (file-name-directory (or load-file-name buffer-file-name))))
 
 (load luyangliuable-test/vterm-config-file nil t)
@@ -63,11 +63,11 @@
     (should-not (string-match-p "treemacs-shell-here-horizontal" source))
     (dolist (key '("p$." "p$v" "p$s" "p$V" "p$S"))
       (should (string-match-p
-               (format "\"%s\" .*luyangliuable/project-vterm\\b" (regexp-quote key))
+               (format "\"%s\"[^\"]*luyangliuable/project-vterm\\b" (regexp-quote key))
                source)))
     (dolist (key '("p!." "p!v" "p!s" "p!V" "p!S"))
       (should (string-match-p
-               (format "\"%s\" .*luyangliuable/project-vterm-new" (regexp-quote key))
+               (format "\"%s\"[^\"]*luyangliuable/project-vterm-new" (regexp-quote key))
                source)))))
 
 ;;; vterm-config-test.el ends here

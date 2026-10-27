@@ -13,7 +13,7 @@
 ;; SWITCH SETTINGS FOR SWITCHING DIFFERENT BACKENDS (e.g. ergot vs lsp, vterm vs eat)
 
 ;; Shell backend: `shell', `vterm', or `eat'
-(defconst luyangliuable-shell-backend 'shell
+(defconst luyangliuable-shell-backend 'vterm
   "Shell backend to use.
 
 Valid values are:
